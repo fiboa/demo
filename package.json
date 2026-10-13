@@ -1,0 +1,20 @@
+{
+  "name": "fiboa-demo",
+  "private": true,
+  "type": "module",
+  "description": "Web demos and dashboards built on the Fields of the World harmonized field data",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "chart.js": "4.5.1",
+    "ol": "10.11.0",
+    "proj4": "2.22.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.4"
+  }
+}

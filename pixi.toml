@@ -1,0 +1,18 @@
+[workspace]
+name = "fiboa-demo-scripts"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+python = "3.13.*"
+numpy = "*"
+scipy = "*"
+rasterio = "*"
+geopandas = "*"
+pyarrow = "*"
+duckdb = "*"
+libgdal-arrow-parquet = "*"
+pytest = "*"
+
+[tasks]
+test = "pytest scripts"

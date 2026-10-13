@@ -1,0 +1,355 @@
+:root {
+  --farmed: #9db893;
+}
+
+main {
+  padding-bottom: 4rem;
+}
+
+.intro,
+.section {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.intro {
+  padding-top: clamp(2rem, 6vw, 4.5rem);
+  padding-bottom: 2rem;
+}
+.intro h1 {
+  max-width: 20ch;
+}
+#lost-ha {
+  color: #8b3918;
+}
+.lede {
+  font-size: 1.15rem;
+  color: var(--ink-secondary);
+}
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.figures div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+}
+.figures dt {
+  color: var(--ink-secondary);
+  font-size: 0.95rem;
+}
+.figures dd {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* ---------------------------------------------------------------- main map */
+
+.map-section {
+  position: relative;
+  margin: 1rem 0 0;
+}
+.map {
+  height: min(78vh, 52rem);
+  min-height: 26rem;
+  background: #e9ece9;
+}
+.map-panel {
+  position: absolute;
+  top: 1rem;
+  left: var(--gutter);
+  width: min(22rem, calc(100% - 2 * var(--gutter)));
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.map-panel label {
+  font-weight: 700;
+}
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0.75rem;
+}
+.slider-row input {
+  flex: 1;
+  accent-color: #8b3918;
+}
+.slider-row output {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 3ch;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+#play {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 500;
+}
+#play:hover {
+  background: var(--ink);
+  color: var(--surface);
+}
+.legend {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.legend-ramp {
+  height: 0.75rem;
+  border-radius: 2px;
+  background: var(--ramp);
+}
+.legend-ends {
+  display: flex;
+  justify-content: space-between;
+}
+.legend-farmed {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+.swatch {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 2px;
+  background: var(--farmed);
+}
+.hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+.map-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------------- sections */
+
+.section {
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.chart {
+  position: relative;
+  margin: 1.5rem 0 0.5rem;
+}
+.chart-wide {
+  height: 20rem;
+}
+.chart-provinces {
+  height: 24rem;
+  max-width: 48rem;
+}
+.chart-crops {
+  height: 30rem;
+  max-width: 56rem;
+}
+details {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+summary {
+  cursor: pointer;
+  color: var(--link);
+}
+details table,
+.top-table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.75rem;
+}
+details td,
+details th,
+.top-table td,
+.top-table th {
+  padding: 0.3rem 0.9rem 0.3rem 0;
+  text-align: left;
+  border-bottom: 1px solid var(--grid);
+}
+details td:last-child,
+.top-table td:nth-child(n + 4),
+.top-table th:nth-child(n + 4) {
+  text-align: right;
+}
+.note {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+/* ---------------------------------------------------------------- clusters */
+
+.cluster-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: 1.75rem 1.5rem;
+  margin: 1.5rem 0 0.5rem;
+}
+.cluster {
+  margin: 0;
+}
+.cluster-map {
+  aspect-ratio: 4 / 3;
+  background: #e9ece9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.cluster figcaption {
+  display: grid;
+  gap: 0.1rem;
+  margin-top: 0.6rem;
+}
+.cluster-facts {
+  color: var(--ink-secondary);
+  font-size: 0.95rem;
+}
+.link-button {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-size: 0.95rem;
+}
+
+/* ---------------------------------------------------------------- municipalities */
+
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0 1.25rem;
+}
+.toggle button {
+  padding: 0.4rem 0.9rem;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+}
+.toggle button + button {
+  border-left: 1px solid var(--ink);
+}
+.toggle button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--surface);
+}
+.municipality-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+.choropleth-wrap {
+  position: relative;
+}
+.choropleth {
+  aspect-ratio: 5 / 6;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.choropleth-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.choropleth-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.choropleth-legend li::before {
+  content: '';
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 2px;
+  background: var(--swatch);
+}
+.top-table {
+  width: 100%;
+  margin-top: 0;
+  font-size: 0.92rem;
+}
+.top-table caption {
+  text-align: left;
+  font-weight: 700;
+  padding-bottom: 0.4rem;
+}
+.top-table th {
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+.top-table tr.is-highlighted td {
+  background: #e4eefb;
+}
+
+/* ---------------------------------------------------------------- about */
+
+.about dl {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, var(--measure));
+  gap: 0.75rem 1.5rem;
+  margin: 1rem 0 0;
+}
+.about dt {
+  font-weight: 700;
+}
+.about dd {
+  margin: 0;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 52rem) {
+  .municipality-grid,
+  .about dl {
+    grid-template-columns: 1fr;
+  }
+  .about dl {
+    gap: 0.25rem;
+  }
+  .about dd {
+    margin-bottom: 0.75rem;
+  }
+  .map-panel {
+    position: static;
+    width: auto;
+    margin: 0.75rem var(--gutter) 0;
+  }
+}

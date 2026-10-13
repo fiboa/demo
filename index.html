@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fiboa demos</title>
+    <meta name="description" content="Web demos and dashboards built on the Fields of the World harmonized field data." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./shared/base.css" />
+    <style>
+      main {
+        max-width: var(--wide);
+        margin: 0 auto;
+        padding: clamp(2rem, 6vw, 4.5rem) var(--gutter) 4rem;
+      }
+      .lede {
+        font-size: 1.15rem;
+        color: var(--ink-secondary);
+      }
+      .demos {
+        list-style: none;
+        padding: 0;
+        margin: 2.5rem 0 0;
+        border-top: 1px solid var(--rule);
+      }
+      .demos li {
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--rule);
+      }
+      .demos a {
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+      .demos p {
+        margin: 0.35rem 0 0;
+        color: var(--ink-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="./" class="site-name">fiboa demos</a>
+      <nav aria-label="Elsewhere">
+        <a href="https://fiboa.org/">fiboa</a>
+        <a href="https://source.coop/ftw/harmonized-field-data">Field data catalog</a>
+        <a href="https://github.com/fiboa/demo">Source code</a>
+      </nav>
+    </header>
+    <main>
+      <h1>What you can build on open field boundaries</h1>
+      <p class="lede">
+        Small, working examples on top of the Fields of the World harmonized field data: agricultural field
+        boundaries from many countries in one schema, published as GeoParquet, PMTiles and Cloud-Optimized
+        GeoTIFF. Every demo runs in the browser and reads the data straight from the catalog.
+      </p>
+      <ul class="demos">
+        <li>
+          <a href="./nl_raster/">Disappearing Dutch farmland</a>
+          <p>
+            Eighteen years of the Dutch parcel register on one 2 m raster: how much land left farming, where, and
+            what grew there last.
+          </p>
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>

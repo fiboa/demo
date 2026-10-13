@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Disappearing Dutch farmland</title>
+    <meta name="description" content="Where agricultural fields left the Dutch parcel register (BRP) between 2009 and 2026, from one Cloud-Optimized GeoTIFF read straight in the browser." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#years">Per year</a>
+        <a href="#clusters">Hotspots</a>
+        <a href="#municipalities">Municipalities</a>
+        <a href="#crops">Crops</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1><span id="lost-ha">…</span> hectares of Dutch farmland have dropped out of the field register since 2009</h1>
+        <p class="lede">
+          Every year, Dutch farmers declare their fields to the government for subsidies. Those declarations form the
+          BRP, the national register of agricultural parcels. Stack eighteen editions of it on a 2-metre grid and
+          you can see, for every patch of land, the last year it was farmed. Where that year is before 2026, the
+          land has left the register: built over, turned into nature, or no longer declared.
+        </p>
+        <dl class="figures">
+          <div><dt>Hectares gone, 2009–2025</dt><dd id="fig-lost">…</dd></div>
+          <div><dt>Of all land farmed in that time</dt><dd id="fig-share">…</dd></div>
+          <div><dt>Hectares lost per year, on average</dt><dd id="fig-per-year">…</dd></div>
+          <div><dt>Hectares still farmed in 2026</dt><dd id="fig-farmed">…</dd></div>
+        </dl>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of the last year each pixel was farmed">
+        <div id="map" class="map" tabindex="0"></div>
+        <div id="map-tooltip" class="map-tooltip" role="status" hidden></div>
+        <form class="map-panel" onsubmit="return false">
+          <label for="year">Show land that left the register by</label>
+          <div class="slider-row">
+            <input type="range" id="year" step="1" />
+            <output id="year-out" for="year">2025</output>
+            <button type="button" id="play">Play</button>
+          </div>
+          <div id="legend" class="legend">
+            <span class="legend-ramp" aria-hidden="true"></span>
+            <span class="legend-ends"><span>2009</span><span>last farmed</span><span>2025</span></span>
+            <span class="legend-farmed"><span class="swatch" aria-hidden="true"></span>Farmed after the chosen year</span>
+          </div>
+          <p class="hint">Click the map, then scroll to zoom. Zoom in far enough and every 2 × 2 m pixel shows.</p>
+        </form>
+      </section>
+
+      <section id="years" class="section">
+        <h2>Year by year</h2>
+        <p>
+          Each bar is the land whose <em>last</em> year as a declared field was that year. The colours are the
+          ones on the map. Two bars need care. The 2009 bar holds land that was a field in 2009 and never again,
+          but loss before 2009 is not in this data at all. And <span id="fig-2025">…</span> hectares were
+          declared in 2025 but are missing from the 2026 edition, which is still a concept: some of it may
+          return when the final edition comes out.
+        </p>
+        <div class="chart chart-wide"><canvas id="chart-years" aria-label="Hectares per last year farmed, 2009 to 2025" role="img"></canvas></div>
+        <details id="table-years"><summary>Show as a table</summary></details>
+      </section>
+
+      <section id="clusters" class="section">
+        <h2>Where whole areas went</h2>
+        <p>
+          Much of the lost land is scattered: an edge here, a field there. These six areas are different. They are
+          the largest stretches where at least half of every 128 × 128 m cell left the register, the
+          kind of change a new housing estate, business park or nature project leaves behind.
+        </p>
+        <div id="cluster-list" class="cluster-list"></div>
+        <p class="note">Background maps: PDOK BRT-Achtergrondkaart (CC BY 4.0).</p>
+      </section>
+
+      <section id="municipalities" class="section">
+        <h2>Per municipality</h2>
+        <p>
+          Large rural municipalities lose the most hectares; cities such as Nijmegen, Eindhoven and
+          Rotterdam, and the greenhouse area of Westland, lose the largest share of their farmland. Switch between the two to see both stories.
+        </p>
+        <div class="toggle" role="group" aria-label="Measure">
+          <button type="button" data-metric="lostHa" aria-pressed="true">Hectares gone</button>
+          <button type="button" data-metric="share" aria-pressed="false">Share of its farmland</button>
+        </div>
+        <div class="municipality-grid">
+          <div class="choropleth-wrap">
+            <div id="choropleth" class="choropleth" tabindex="0" aria-label="Map of municipalities"></div>
+            <div id="choropleth-tooltip" class="map-tooltip" role="status" hidden></div>
+            <ul id="choropleth-legend" class="choropleth-legend" aria-label="Legend"></ul>
+          </div>
+          <table id="top-municipalities" class="top-table">
+            <caption>Top 20</caption>
+            <thead>
+              <tr><th scope="col">#</th><th scope="col">Municipality</th><th scope="col">Province</th><th scope="col">Hectares gone</th><th scope="col">Share</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <h3>Per province</h3>
+        <div class="chart chart-provinces"><canvas id="chart-provinces" aria-label="Hectares gone per province" role="img"></canvas></div>
+        <details id="table-provinces"><summary>Show as a table</summary></details>
+        <p class="note">
+          Municipal boundaries of 2025 (CBS, via PDOK). <span id="outside-ha">…</span> hectares of lost land lie outside any
+          municipality boundary and are left out of this map.
+        </p>
+      </section>
+
+      <section id="crops" class="section">
+        <h2>What grew there last</h2>
+        <p>
+          The crop declared on the land in its last year, using the HCAT crop classification. Grassland
+          dominates, as it does in Dutch farming overall. In the early editions not every Dutch crop code has an
+          HCAT match; <span id="crop-unmapped">…</span> of the lost land has no mapped crop.
+        </p>
+        <div class="chart chart-crops"><canvas id="chart-crops" aria-label="Hectares gone by last crop" role="img"></canvas></div>
+        <details id="table-crops"><summary>Show as a table</summary></details>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Source</dt>
+          <dd>
+            The BRP (Basisregistratie Gewaspercelen) by RVO, published through PDOK, editions 2009 to 2026, as
+            harmonized in the <a href="https://source.coop/ftw/harmonized-field-data/nl">Fields of the World
+            catalog</a> (CC0).
+          </dd>
+          <dt>The raster</dt>
+          <dd>
+            One <a data-cog-url href="#">Cloud-Optimized GeoTIFF</a> of 314 MB in RD New (EPSG:28992) with
+            2 m pixels. A pixel holds the last edition in which a field covered its centre, as year − 2000; 0
+            means never. This page reads it with HTTP range requests: only the tiles you look at are downloaded.
+            See its <a href="https://data.source.coop/ftw/harmonized-field-data/_demo/nl/README.md">README</a>
+            and <a href="https://data.source.coop/ftw/harmonized-field-data/_demo/nl/AGENTS.md">AGENTS.md</a>.
+          </dd>
+          <dt>What "gone" means</dt>
+          <dd>
+            Last declared in 2025 or earlier, so not in the 2026 edition. Leaving the register is not the same as
+            being built over: the land may have become nature, a garden or a horse paddock, or may simply no longer
+            be declared. Small shifts of field boundaries between editions also add thin strips along field edges
+            to the total.
+          </dd>
+          <dt>Caveats</dt>
+          <dd>
+            The 2026 edition is still a concept. Loss before 2009 is invisible. Hotspots, municipalities and crops
+            are all counted on the same 2 m grid, so their totals add up to the national figure.
+          </dd>
+          <dt>Built with</dt>
+          <dd>
+            OpenLayers, Chart.js and GDAL. Statistics computed on <span id="generated">…</span>; code on
+            <a href="https://github.com/fiboa/demo">GitHub</a>.
+          </dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>
