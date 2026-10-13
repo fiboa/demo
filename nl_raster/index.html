@@ -50,11 +50,17 @@
             <output id="year-out" for="year">2025</output>
             <button type="button" id="play">Play</button>
           </div>
+          <div class="toggle toggle-small" role="group" aria-label="Colour the lost land by">
+            <button type="button" data-colour-by="year" aria-pressed="true">Last year farmed</button>
+            <button type="button" data-colour-by="landuse" aria-pressed="false">What it is now</button>
+          </div>
           <div id="legend" class="legend">
             <span class="legend-ramp" aria-hidden="true"></span>
             <span class="legend-ends"><span>2009</span><span>last farmed</span><span>2025</span></span>
             <span class="legend-farmed"><span class="swatch" aria-hidden="true"></span>Farmed after the chosen year</span>
           </div>
+          <ul id="legend-landuse" class="swatch-legend swatch-legend-stacked" aria-label="Legend" hidden></ul>
+          <label class="check"><input type="checkbox" id="lgn-background" /> Show all LGN2025 land use underneath</label>
           <p class="hint">Click the map, then scroll to zoom. Zoom in far enough and every 2 × 2 m pixel shows.</p>
         </form>
       </section>
@@ -70,6 +76,40 @@
         </p>
         <div class="chart chart-wide"><canvas id="chart-years" aria-label="Hectares per last year farmed, 2009 to 2025" role="img"></canvas></div>
         <details id="table-years"><summary>Show as a table</summary></details>
+      </section>
+
+      <section id="landuse" class="section">
+        <h2>What the land became</h2>
+        <p>
+          The national land use map <a href="https://lgn.nl/">LGN2025</a> records what covers every 5 × 5 m of the
+          Netherlands today. Laid over the land that left the register, it shows what took the place of farming:
+          <span id="landuse-built">…</span> hectares are now buildings, greenhouses or building sites,
+          <span id="landuse-roads">…</span> roads and rail, <span id="landuse-solar">…</span> solar parks and
+          <span id="landuse-nature">…</span> forest or nature. More common still is grass that is no longer
+          farmed, in and around towns (<span id="landuse-grass">…</span> hectares), and
+          <span id="landuse-farmland">…</span> hectares still look like farmland: no longer declared, or not
+          changed yet.
+        </p>
+        <div class="chart chart-groups"><canvas id="chart-landuse" aria-label="Hectares of lost farmland by what it is now" role="img"></canvas></div>
+        <details id="table-landuse"><summary>Show as a table</summary></details>
+
+        <h3>Year by year</h3>
+        <p>
+          Of the land that left the register up to 2020, about one hectare in eight is now built on. For recent
+          years that share falls to a few percent: building takes time. Recent losses are mostly still farmland
+          according to LGN. Partly nothing has happened there yet, and partly LGN2025 itself uses the 2025 field
+          register, so land last declared in 2025 shows as farmland almost by definition.
+        </p>
+        <ul id="legend-landuse-years" class="swatch-legend" aria-label="Legend"></ul>
+        <div class="chart chart-wide"><canvas id="chart-landuse-years" aria-label="Share of each year's lost farmland by what it is now" role="img"></canvas></div>
+        <details id="table-landuse-years"><summary>Show as a table</summary></details>
+        <p class="note">
+          LGN2025 by Wageningen Environmental Research (CC BY 4.0), built from the BRP of May 2025, BAG buildings
+          (February 2026), TOP10NL (November 2025) and satellite images of summer 2025. "Forest and nature" includes
+          grassland under nature management (LGN class 45); building sites are in LGN class 27, other rural land use.
+          Narrow strips along field edges take the class of the road or ditch next to them, which adds a little to
+          roads and water.
+        </p>
       </section>
 
       <section id="clusters" class="section">
@@ -97,7 +137,7 @@
           <div class="choropleth-wrap">
             <div id="choropleth" class="choropleth" tabindex="0" aria-label="Map of municipalities"></div>
             <div id="choropleth-tooltip" class="map-tooltip" role="status" hidden></div>
-            <ul id="choropleth-legend" class="choropleth-legend" aria-label="Legend"></ul>
+            <ul id="choropleth-legend" class="swatch-legend" aria-label="Legend"></ul>
           </div>
           <table id="top-municipalities" class="top-table">
             <caption>Top 20</caption>

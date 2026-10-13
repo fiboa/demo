@@ -27,5 +27,9 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   does not know. Fit map views with `keepFitted` from `map.js`, not a one-off `fit`.
 - Colours: `nl_raster/src/colors.js` is the only place a year colour is defined; the bar chart reuses it as
   the map legend. The ramp is validated as a one-hue ordinal ramp; re-validate if you change it.
+- "What it is now" comes from LGN2025 (CC BY 4.0, Wageningen Environmental Research): `stats.py landuse` writes
+  `landuse.json` and `nl_landuse_lgn2025.tif`, a COG on exactly the grid of `nl_years.tif` that the map reads as a
+  second band. Upload it next to `nl_years.tif` in `_demo/nl/`. Group ids, names and colours live in
+  `LANDUSE_GROUPS` (stats.py) and `LANDUSE_COLORS` (colors.js); change them together.
 - Regenerate the data on terra:
-  `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --work <scratch> --out nl_raster/data`
+  `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --lgn /opt/ca_reference/data/raster/LGN2025/LGN2025.tif --work <scratch> --out nl_raster/data`

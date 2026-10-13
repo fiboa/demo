@@ -6,13 +6,15 @@ import WebGLTileLayer from 'ol/layer/WebGLTile.js';
 import { register } from 'ol/proj/proj4.js';
 import { get as getProjection } from 'ol/proj.js';
 import GeoTIFF from 'ol/source/GeoTIFF.js';
+import TileWMS from 'ol/source/TileWMS.js';
 import XYZ from 'ol/source/XYZ.js';
 import TileGrid from 'ol/tilegrid/TileGrid.js';
 import proj4 from 'proj4';
 
-import { yearPalette } from './colors.js';
+import { FARMED_MUTED, FIRST_YEAR, hexToRgba, landusePalette, yearPalette } from './colors.js';
 
 export const COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif';
+export const LANDUSE_COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_landuse_lgn2025.tif';
 
 proj4.defs(
   'EPSG:28992',
@@ -55,11 +57,55 @@ export function yearsLayer(maxYear) {
       attributions: 'Fields: RVO BRP via <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World</a> (CC0)',
     }),
     style: yearStyle(maxYear),
+    // While new tiles load, OpenLayers draws the nearest coarser level it has. Without preloading
+    // that is often the overview of the whole country; with it, one level coarser (a quarter of the tiles).
+    preload: Infinity,
   });
 }
 
 export function yearStyle(maxYear) {
   return { color: ['palette', ['band', 1], yearPalette(maxYear)] };
+}
+
+/**
+ * Both COGs as two bands of one source (same grid, same tiles): band 1 the last year, band 2 the LGN2025
+ * group. Land gone by `maxYear` takes its group colour; land farmed after it is muted.
+ */
+export function landuseLayer(maxYear) {
+  return new WebGLTileLayer({
+    source: new GeoTIFF({
+      sources: [{ url: COG_URL, nodata: 0 }, { url: LANDUSE_COG_URL }],
+      normalize: false,
+      interpolate: false,
+      projection: RD,
+      attributions: 'Land use: LGN2025, <a href="https://lgn.nl/">Wageningen Environmental Research</a> (CC BY 4.0)',
+    }),
+    style: landuseStyle(maxYear),
+    preload: Infinity,
+    visible: false,
+  });
+}
+
+export function landuseStyle(maxYear) {
+  const lost = ['all', ['>=', ['band', 1], FIRST_YEAR - 2000], ['<=', ['band', 1], maxYear - 2000]];
+  return {
+    color: ['case', lost, ['palette', ['band', 2], landusePalette()], ['>', ['band', 1], 0], hexToRgba(FARMED_MUTED), [0, 0, 0, 0]],
+  };
+}
+
+/** All of LGN2025 from the PDOK WMS, as context under the fields. */
+export function lgnBackground() {
+  return new TileLayer({
+    source: new TileWMS({
+      url: 'https://service.pdok.nl/wur/landelijk-grondgebruik-nederland/wms/v1_0',
+      params: { LAYERS: 'lgn-actueel', FORMAT: 'image/png', TRANSPARENT: true },
+      projection: RD,
+      tileGrid: PDOK_GRID,
+      attributions: 'LGN2025 via <a href="https://www.pdok.nl/">PDOK</a>, Wageningen Environmental Research (CC BY 4.0)',
+    }),
+    opacity: 0.6,
+    visible: false,
+  });
 }
 
 /**
@@ -95,10 +141,4 @@ export function keepFitted(map, extent, padding) {
   const stop = () => observer.disconnect();
   for (const type of ['pointerdown', 'wheel', 'keydown']) target.addEventListener(type, stop, { once: true });
   return stop;
-}
-
-/** Pixel value of the year layer under a screen pixel, or null outside the data. */
-export function valueAt(layer, pixel) {
-  const data = layer.getData(pixel);
-  return data ? data[0] : null;
 }

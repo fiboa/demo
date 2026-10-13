@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { FARMED, LOST_RAMP, hexToRgba, yearColor, yearPalette } from '../nl_raster/src/colors.js';
+import {
+  FARMED,
+  LANDUSE_COLORS,
+  LOST_RAMP,
+  hexToRgba,
+  landusePalette,
+  yearColor,
+  yearPalette,
+} from '../nl_raster/src/colors.js';
 
 const TRANSPARENT = [0, 0, 0, 0];
 
@@ -31,4 +39,10 @@ test('the palette has one colour per pixel value', () => {
   assert.equal(palette.length, 27);
   assert.deepEqual(palette[20], hexToRgba(LOST_RAMP[11]));
   assert.deepEqual(palette[21], hexToRgba(FARMED));
+});
+
+test('the land-use palette is indexed by group id', () => {
+  const palette = landusePalette();
+  assert.equal(palette.length, Object.keys(LANDUSE_COLORS).length);
+  for (const [id, hex] of Object.entries(LANDUSE_COLORS)) assert.deepEqual(palette[id], hexToRgba(hex));
 });

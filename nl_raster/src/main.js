@@ -12,18 +12,40 @@ import { Fill, Stroke, Style } from 'ol/style.js';
 
 import clusters from '../data/clusters.json';
 import crops from '../data/crops.json';
+import landuse from '../data/landuse.json';
 import municipalities from '../data/municipalities.json';
 import shapesUrl from '../data/municipalities.geojson?url';
 import years from '../data/years.json';
-import { barChart, fmt, pct, tableInto } from './charts.js';
-import { FIRST_YEAR, LAST_YEAR, LOST_RAMP, yearColor } from './colors.js';
-import { COG_URL, RD, createMap, keepFitted, valueAt, yearStyle } from './map.js';
+import { barChart, fmt, pct, shareChart, tableInto } from './charts.js';
+import { FIRST_YEAR, LANDUSE_COLORS, LAST_YEAR, LOST_RAMP, yearColor } from './colors.js';
+import {
+  COG_URL,
+  RD,
+  createMap,
+  keepFitted,
+  landuseLayer,
+  landuseStyle,
+  lgnBackground,
+  yearStyle,
+} from './map.js';
 
 const LOST_YEARS = Array.from({ length: years.lost_max_year - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i);
 const sum = (values) => values.reduce((a, b) => a + b, 0);
 const lostOf = (byYear) => sum(LOST_YEARS.map((y) => byYear[y] ?? 0));
 const everOf = (byYear) => sum(Object.values(byYear));
 const $ = (selector) => document.querySelector(selector);
+
+/** Fill a .swatch-legend list with [color, label] items. */
+function fillLegend(list, items) {
+  list.replaceChildren(
+    ...items.map(([color, label]) => {
+      const li = document.createElement('li');
+      li.style.setProperty('--swatch', color);
+      li.textContent = label;
+      return li;
+    }),
+  );
+}
 
 // ------------------------------------------------------------------ key figures
 
@@ -42,15 +64,38 @@ for (const el of document.querySelectorAll('[data-cog-url]')) el.href = COG_URL;
 // ------------------------------------------------------------------ main map + slider
 
 const { map, layer, stopFitting } = createMap('map', { maxYear: years.lost_max_year });
+const nowLayer = landuseLayer(years.lost_max_year);
+const lgnLayer = lgnBackground();
+map.getLayers().insertAt(1, lgnLayer);
+map.addLayer(nowLayer);
 const slider = $('#year');
 const sliderOutput = $('#year-out');
 const tooltip = $('#map-tooltip');
+const groupName = new Map(landuse.groups.map((g) => [g.id, g.name]));
 
 function showYear(maxYear) {
   layer.setStyle(yearStyle(maxYear));
+  nowLayer.setStyle(landuseStyle(maxYear));
   sliderOutput.textContent = maxYear;
   slider.value = maxYear;
 }
+
+const colourButtons = document.querySelectorAll('[data-colour-by]');
+for (const button of colourButtons) {
+  button.addEventListener('click', () => {
+    const byLanduse = button.dataset.colourBy === 'landuse';
+    for (const b of colourButtons) b.setAttribute('aria-pressed', String(b === button));
+    layer.setVisible(!byLanduse);
+    nowLayer.setVisible(byLanduse);
+    $('#legend').hidden = byLanduse;
+    $('#legend-landuse').hidden = !byLanduse;
+  });
+}
+fillLegend(
+  $('#legend-landuse'),
+  landuse.groups.filter((g) => g.id !== 0).map((g) => [LANDUSE_COLORS[g.id], g.name]),
+);
+$('#lgn-background').addEventListener('change', (event) => lgnLayer.setVisible(event.currentTarget.checked));
 slider.min = FIRST_YEAR;
 slider.max = years.lost_max_year;
 slider.addEventListener('input', () => showYear(Number(slider.value)));
@@ -80,13 +125,16 @@ $('#play').addEventListener('click', (event) => {
 });
 
 map.on('pointermove', (event) => {
-  const value = event.dragging ? null : valueAt(layer, event.pixel);
+  const byLanduse = nowLayer.getVisible();
+  const data = event.dragging ? null : (byLanduse ? nowLayer : layer).getData(event.pixel);
+  const value = data?.[0];
   if (!value) {
     tooltip.hidden = true;
     return;
   }
   const year = 2000 + value;
-  tooltip.textContent = year === LAST_YEAR ? 'Still a field in 2026' : `Last a field in ${year}`;
+  const when = year === LAST_YEAR ? 'Still a field in 2026' : `Last a field in ${year}`;
+  tooltip.textContent = byLanduse && year < LAST_YEAR ? `${when}, now: ${groupName.get(data[1])}` : when;
   tooltip.style.transform = `translate(${event.pixel[0] + 14}px, ${event.pixel[1] + 14}px)`;
   tooltip.hidden = false;
 });
@@ -101,6 +149,36 @@ barChart($('#chart-years'), {
   values: LOST_YEARS.map((y) => years.ha_by_last_year[y]),
   colors: LOST_YEARS.map((y) => `rgb(${yearColor(y - 2000, years.lost_max_year).slice(0, 3)})`),
   details: $('#table-years'),
+});
+
+// ------------------------------------------------------------------ what the land became
+
+const lostByGroup = new Map(landuse.groups.map((g) => [g.id, lostOf(landuse.ha_by_group[g.id])]));
+$('#landuse-built').textContent = fmt.format(lostByGroup.get(1));
+$('#landuse-roads').textContent = fmt.format(lostByGroup.get(2));
+$('#landuse-solar').textContent = fmt.format(lostByGroup.get(3));
+$('#landuse-nature').textContent = fmt.format(lostByGroup.get(4));
+$('#landuse-grass').textContent = fmt.format(lostByGroup.get(5));
+$('#landuse-farmland').textContent = fmt.format(lostByGroup.get(7));
+
+barChart($('#chart-landuse'), {
+  labels: landuse.groups.map((g) => g.name),
+  values: landuse.groups.map((g) => lostByGroup.get(g.id)),
+  colors: landuse.groups.map((g) => LANDUSE_COLORS[g.id]),
+  horizontal: true,
+  details: $('#table-landuse'),
+});
+
+fillLegend($('#legend-landuse-years'), landuse.groups.map((g) => [LANDUSE_COLORS[g.id], g.name]));
+// Stacked from the bottom in group order: built-up first, still farmland and "not in LGN" on top.
+shareChart($('#chart-landuse-years'), {
+  labels: LOST_YEARS.map(String),
+  series: landuse.groups.map((g) => ({
+    label: g.name,
+    color: LANDUSE_COLORS[g.id],
+    values: LOST_YEARS.map((y) => landuse.ha_by_group[g.id][y] ?? 0),
+  })),
+  details: $('#table-landuse-years'),
 });
 
 // ------------------------------------------------------------------ clusters
@@ -201,13 +279,12 @@ function setHighlight(code) {
 function renderLegend() {
   const format = metric === 'share' ? (v) => pct.format(v) : (v) => `${fmt.format(v)} ha`;
   const edges = [0, ...classBreaks];
-  $('#choropleth-legend').replaceChildren(
-    ...BLUES.map((color, i) => {
-      const item = document.createElement('li');
-      item.style.setProperty('--swatch', color);
-      item.textContent = i < classBreaks.length ? `${format(edges[i])} – ${format(edges[i + 1])}` : `over ${format(edges[i])}`;
-      return item;
-    }),
+  fillLegend(
+    $('#choropleth-legend'),
+    BLUES.map((color, i) => [
+      color,
+      i < classBreaks.length ? `${format(edges[i])} – ${format(edges[i + 1])}` : `over ${format(edges[i])}`,
+    ]),
   );
 }
 

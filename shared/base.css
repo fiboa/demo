@@ -23,6 +23,11 @@
   box-sizing: border-box;
 }
 
+/* Components that set `display` would otherwise ignore the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   font-family: var(--font);
   font-size: 100%;

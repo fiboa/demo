@@ -4,7 +4,10 @@ Every number is counted on the 2 m grid of the COG, so all totals add up. Run on
 close to the data (terra), e.g.:
 
     pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif \
-        --source '/data/.../nl/year={year}/nl-{year}.parquet' --work /data/tmp --out nl_raster/data
+        --source '/data/.../nl/year={year}/nl-{year}.parquet' --lgn /opt/.../LGN2025.tif \
+        --work /data/tmp --out nl_raster/data
+
+The landuse step also writes nl_landuse_lgn2025.tif to --work, for upload next to nl_years.tif.
 """
 
 from __future__ import annotations
@@ -26,6 +29,8 @@ import duckdb
 import geopandas as gpd
 import numpy as np
 import rasterio
+from rasterio.enums import Resampling
+from rasterio.vrt import WarpedVRT
 from rasterio.windows import Window
 from scipy import ndimage
 
@@ -41,6 +46,21 @@ RD = "http://www.opengis.net/def/crs/EPSG/0/28992"
 PDOK = "https://api.pdok.nl/cbs/gebiedsindelingen/ogc/v1/collections"
 BOUNDARY_YEAR = 2025  # latest year with non-generalised municipality boundaries at PDOK
 WORKERS = os.cpu_count() or 4
+BLOCK = 512
+
+LANDUSE_COG_URL = "https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_landuse_lgn2025.tif"
+# LGN2025 classes grouped by what happened to the land; 0 = not in LGN. Class 27 ("other rural land use")
+# is where LGN puts building sites; 45 is naturally managed grassland (ANLb).
+LANDUSE_GROUPS: dict[int, tuple[str, tuple[int, ...]]] = {
+    1: ("Buildings, greenhouses and building sites", (8, 18, 19, 26, 27)),
+    2: ("Roads and rail", (251, 252, 253)),
+    3: ("Solar parks", (29,)),
+    4: ("Forest and nature", (11, 12, 20, 22, *range(30, 44), 45, 321, 322, 323, 331, 332, 333)),
+    5: ("Grass and green in and around towns", (23, 28, 46, 47)),
+    6: ("Water", (16, 17)),
+    7: ("Still farmland according to LGN", (1, 2, 3, 4, 5, 6, 9, 10, 61, 62)),
+}
+N_GROUPS = len(LANDUSE_GROUPS) + 1
 
 
 # ---------------------------------------------------------------- pure counting functions
@@ -121,6 +141,19 @@ def merge_overlapping(clusters: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return merged
 
 
+def group_lookup() -> np.ndarray:
+    """Lookup table from every UInt16 LGN value to its LANDUSE_GROUPS id; unknown values and nodata give 0."""
+    lut = np.zeros(2**16, np.uint8)
+    for group, (_, codes) in LANDUSE_GROUPS.items():
+        lut[list(codes)] = group
+    return lut
+
+
+def landuse_block(years: np.ndarray, lgn: np.ndarray, lut: np.ndarray) -> np.ndarray:
+    """The LGN group on every pixel that was ever a field, 0 elsewhere."""
+    return np.where(years >= FIRST_YEAR - 2000, lut[lgn], 0).astype(np.uint8)
+
+
 # ---------------------------------------------------------------- raster plumbing
 
 
@@ -158,6 +191,33 @@ def _codes_chunk(cog: Path, codes: Path, value: int, windows: list[Window]) -> d
 def _cells_chunk(cog: Path, windows: list[Window]) -> list[tuple[int, int, np.ndarray]]:
     with rasterio.open(cog) as y:
         return [(w.row_off // CELL, w.col_off // CELL, cell_counts(y.read(1, window=w))) for w in windows]
+
+
+def _landuse_stripe(cog: Path, lgn: Path, out: Path, rows: tuple[int, int]) -> np.ndarray:
+    """Write the LGN groups for rows [start, stop) of the COG grid to `out`; return counts per (group, year)."""
+    lut = group_lookup()
+    total = np.zeros((N_GROUPS, N_VALUES), np.int64)
+    start, stop = rows
+    with rasterio.open(cog) as y, rasterio.open(lgn) as src, WarpedVRT(
+        src, crs=y.crs, transform=y.transform, width=y.width, height=y.height, resampling=Resampling.nearest
+    ) as vrt:
+        stripe = Window(0, start, y.width, stop - start)
+        profile = {
+            "driver": "GTiff", "dtype": "uint8", "count": 1, "nodata": 0, "crs": y.crs,
+            "width": y.width, "height": stop - start, "transform": y.window_transform(stripe),
+            "tiled": True, "blockxsize": BLOCK, "blockysize": BLOCK, "compress": "deflate",
+        }
+        with rasterio.open(out, "w", **profile) as dst:
+            for row in range(start, stop, BLOCK):
+                for col in range(0, y.width, BLOCK):
+                    w = Window(col, row, min(BLOCK, y.width - col), min(BLOCK, stop - row))
+                    years = y.read(1, window=w)
+                    if not years.any():
+                        continue
+                    groups = landuse_block(years, vrt.read(1, window=w), lut)
+                    dst.write(groups, 1, window=Window(col, row - start, w.width, w.height))
+                    total += count_pairs(groups, years, N_GROUPS)
+    return total
 
 
 def _parallel(fn: Callable, cog: Path, *args: Any) -> Iterable:
@@ -319,11 +379,47 @@ def step_clusters(cog: Path, work: Path, out: Path) -> None:
     write_json(out / "clusters.json", {"cell_m": size, "threshold": 0.5, "clusters": clusters})
 
 
+def step_landuse(cog: Path, work: Path, out: Path, lgn: Path) -> None:
+    with rasterio.open(cog) as ds:
+        height = ds.height
+        overviews = ds.overviews(1)
+    step = -(-height // BLOCK // (WORKERS * 2)) * BLOCK
+    stripes = [(start, min(start + step, height)) for start in range(0, height, step)]
+    parts = [work / f"landuse-{i:03}.tif" for i in range(len(stripes))]
+    with ProcessPoolExecutor(WORKERS) as pool:
+        counts = sum(pool.map(_landuse_stripe, [cog] * len(parts), [lgn] * len(parts), parts, stripes))
+
+    vrt, result = work / "landuse.vrt", work / "nl_landuse_lgn2025.tif"
+    subprocess.run(["gdalbuildvrt", "-q", str(vrt), *map(str, parts)], check=True)
+    subprocess.run(
+        ["gdal_translate", "-q", "-of", "COG", "-co", "COMPRESS=DEFLATE", "-co", f"BLOCKSIZE={BLOCK}",
+         "-co", "OVERVIEW_RESAMPLING=MODE", "-co", "NUM_THREADS=ALL_CPUS", "-co", "BIGTIFF=IF_SAFER",
+         str(vrt), str(result)],
+        check=True,
+    )
+    with rasterio.open(result) as ds:
+        # The page reads both COGs as two bands of one source, which needs the same tiles at every level.
+        assert ds.overviews(1) == overviews, (ds.overviews(1), overviews)
+    print(f"wrote {result} ({result.stat().st_size // 2**20} MB)")
+
+    groups = {**{g: name for g, (name, _) in LANDUSE_GROUPS.items()}, 0: "Not in LGN"}
+    write_json(out / "landuse.json", {
+        "source": "LGN2025, Wageningen Environmental Research (CC BY 4.0)",
+        "cog": LANDUSE_COG_URL,
+        "groups": [
+            {"id": g, "name": name, "lgn_codes": list(LANDUSE_GROUPS[g][1]) if g else []}
+            for g, name in groups.items()
+        ],
+        "ha_by_group": {g: {2000 + v: ha(counts[g, v]) for v in YEAR_VALUES} for g in groups},
+    })
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("step", choices=["years", "regions", "crops", "clusters", "all"])
+    parser.add_argument("step", choices=["years", "regions", "crops", "clusters", "landuse", "all"])
     parser.add_argument("--cog", type=Path, required=True, help="local copy of nl_years.tif")
     parser.add_argument("--source", help="parquet path per edition, with {year}; needed for crops")
+    parser.add_argument("--lgn", type=Path, help="LGN2025.tif (5 m, EPSG:28992); needed for landuse")
     parser.add_argument("--work", type=Path, required=True, help="scratch directory for rasters")
     parser.add_argument("--out", type=Path, required=True, help="output directory for the JSON")
     args = parser.parse_args()
@@ -335,6 +431,7 @@ def main() -> None:
         "regions": lambda: step_regions(args.cog, args.work, args.out),
         "crops": lambda: step_crops(args.cog, args.work, args.out, args.source),
         "clusters": lambda: step_clusters(args.cog, args.work, args.out),
+        "landuse": lambda: step_landuse(args.cog, args.work, args.out, args.lgn),
     }
     for name in steps if args.step == "all" else [args.step]:
         print(f"== {name}")

@@ -32,3 +32,23 @@ export function yearColor(value, maxYear) {
 export function yearPalette(maxYear) {
   return Array.from({ length: LAST_YEAR - 2000 + 1 }, (_, value) => yearColor(value, maxYear));
 }
+
+// What the lost land is now, per LGN2025 group id (landuse.json). Six hues validated for a map (all pairs,
+// CVD in the warning band, so the map tooltip and the chart legend name the group), plus greys.
+export const LANDUSE_COLORS = {
+  1: '#e34948', // buildings, greenhouses and building sites
+  2: '#4a3aa7', // roads and rail
+  3: '#eda100', // solar parks
+  4: '#008300', // forest and nature
+  5: '#1baf7a', // grass and green in and around towns
+  6: '#2a78d6', // water
+  7: '#8f9690', // still farmland according to LGN
+  0: '#c4c9c3', // not in LGN
+};
+// Land still farmed, behind the land-use colours: quiet, so the lost land stands out.
+export const FARMED_MUTED = '#dde2da';
+
+/** One colour per group id 0 … 7, for the map's palette expression. */
+export function landusePalette() {
+  return Object.keys(LANDUSE_COLORS).map(Number).sort((a, b) => a - b).map((id) => hexToRgba(LANDUSE_COLORS[id]));
+}

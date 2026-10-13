@@ -135,6 +135,26 @@ button {
   border-radius: 2px;
   background: var(--farmed);
 }
+.toggle.toggle-small {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+}
+.toggle.toggle-small button {
+  padding: 0.3rem 0.6rem;
+}
+.swatch-legend-stacked {
+  flex-direction: column;
+  margin: 0;
+}
+.map-panel .check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ink-secondary);
+}
 .hint {
   margin: 0.75rem 0 0;
   font-size: 0.85rem;
@@ -169,6 +189,10 @@ button {
 .chart-provinces {
   height: 24rem;
   max-width: 48rem;
+}
+.chart-groups {
+  height: 18rem;
+  max-width: 56rem;
 }
 .chart-crops {
   height: 30rem;
@@ -280,7 +304,8 @@ details td:last-child,
   border: 1px solid var(--rule);
   border-radius: 4px;
 }
-.choropleth-legend {
+/* A list of colour swatches with labels; each li sets --swatch. */
+.swatch-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1rem;
@@ -290,12 +315,12 @@ details td:last-child,
   font-size: 0.85rem;
   color: var(--ink-secondary);
 }
-.choropleth-legend li {
+.swatch-legend li {
   display: flex;
   align-items: center;
   gap: 0.35rem;
 }
-.choropleth-legend li::before {
+.swatch-legend li::before {
   content: '';
   width: 0.9rem;
   height: 0.9rem;

@@ -58,6 +58,60 @@ export function barChart(canvas, { labels, values, colors, unit = 'ha', horizont
   return chart;
 }
 
+/**
+ * 100 % stacked bars: per label, the share of each series. `series` is [{ label, color, values }] in
+ * hectares; the tooltip shows share and hectares, the table in `details` the hectares.
+ */
+export function shareChart(canvas, { labels, series, details }) {
+  const totals = labels.map((_, i) => series.reduce((sum, s) => sum + s.values[i], 0));
+  const chart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: series.map((s) => ({
+        label: s.label,
+        data: s.values.map((v, i) => (totals[i] ? v / totals[i] : 0)),
+        backgroundColor: s.color,
+        borderColor: token('--paper'),
+        borderWidth: { top: 2 },
+        borderSkipped: false,
+        barPercentage: 0.9,
+        categoryPercentage: 0.9,
+      })),
+    },
+    options: {
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { stacked: true, grid: { display: false }, border: { color: token('--baseline') } },
+        y: {
+          stacked: true,
+          max: 1,
+          grid: { color: token('--grid'), drawTicks: false },
+          border: { display: false },
+          ticks: { callback: (v) => pct.format(v).replace('.0', ''), padding: 8, stepSize: 0.25 },
+        },
+      },
+      plugins: {
+        tooltip: {
+          backgroundColor: token('--ink'),
+          padding: 10,
+          itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
+          callbacks: {
+            label: (item) =>
+              `${item.dataset.label}: ${pct.format(item.raw)} (${fmt.format(series[item.datasetIndex].values[item.dataIndex])} ha)`,
+          },
+        },
+      },
+    },
+  });
+  if (details) {
+    tableInto(details, ['', ...series.map((s) => s.label)], labels.map((l, i) => [l, ...series.map((s) => fmt.format(s.values[i]))]));
+  }
+  return chart;
+}
+
 export function tableInto(details, headers, rows) {
   const table = document.createElement('table');
   const row = (cells, tag) => {

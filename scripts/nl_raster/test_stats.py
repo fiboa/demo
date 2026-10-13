@@ -1,6 +1,24 @@
 import numpy as np
 
-from stats import CELL, FIRST_YEAR, YEAR_VALUES, cell_counts, count_codes, count_pairs, find_clusters, merge_overlapping
+from stats import (
+    CELL,
+    FIRST_YEAR,
+    LANDUSE_GROUPS,
+    YEAR_VALUES,
+    cell_counts,
+    count_codes,
+    count_pairs,
+    find_clusters,
+    group_lookup,
+    landuse_block,
+    merge_overlapping,
+)
+
+# Every class in the LGN2025 legend (LGN2025.sld).
+LGN2025_CODES = [
+    1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 16, 17, 18, 19, 20, 22, 23, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+    37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 61, 62, 251, 252, 253, 321, 322, 323, 331, 332, 333,
+]
 
 
 def test_count_pairs_counts_each_zone_and_value() -> None:
@@ -53,3 +71,18 @@ def test_merge_overlapping_joins_boxes_that_overlap_also_after_growing() -> None
     assert len(merged) == 2
     big = next(m for m in merged if m["lost_px"] == 7)
     assert big["rows"] == (0, 5) and big["cols"] == (0, 5) and big["lost_px_by_year"] == {2009: 7}
+
+
+def test_every_lgn_class_belongs_to_exactly_one_group_and_nodata_to_none() -> None:
+    lut = group_lookup()
+    assert all(lut[code] > 0 for code in LGN2025_CODES)
+    grouped = [code for _, codes in LANDUSE_GROUPS.values() for code in codes]
+    assert sorted(grouped) == sorted(set(grouped)) == LGN2025_CODES
+    assert lut[65535] == 0 and lut[0] == 0
+    assert lut[29] == 3 and lut[27] == 1 and lut[16] == 6
+
+
+def test_landuse_block_keeps_the_group_only_where_there_ever_was_a_field() -> None:
+    years = np.array([[0, 9], [26, 25]], np.uint8)
+    lgn = np.array([[18, 18], [1, 65535]], np.uint16)
+    assert landuse_block(years, lgn, group_lookup()).tolist() == [[0, 1], [7, 0]]
