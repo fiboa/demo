@@ -47,16 +47,30 @@ function basemap() {
   });
 }
 
+let sharedYears = null;
+
+/**
+ * The years COG as one source for every layer that shows it (main map, the LGN mask, the hotspot maps).
+ * Source Coop answers slowly and caches nothing, so the file header is read once and the 64 kB blocks
+ * geotiff.js fetches are shared: a second layer asking for the same tile waits for the same request.
+ * The block cache is larger than the default 100 so those layers do not evict each other's blocks.
+ */
+function yearsSource() {
+  sharedYears ??= new GeoTIFF({
+    sources: [{ url: COG_URL, nodata: 0 }],
+    sourceOptions: { cacheSize: 400 },
+    normalize: false,
+    interpolate: false,
+    projection: RD,
+    attributions: 'Fields: RVO BRP via <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World</a> (CC0)',
+  });
+  return sharedYears;
+}
+
 /** The COG itself, read with HTTP range requests; colours come from yearPalette. */
 export function yearsLayer(maxYear) {
   return new WebGLTileLayer({
-    source: new GeoTIFF({
-      sources: [{ url: COG_URL, nodata: 0 }],
-      normalize: false,
-      interpolate: false,
-      projection: RD,
-      attributions: 'Fields: RVO BRP via <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World</a> (CC0)',
-    }),
+    source: yearsSource(),
     style: yearStyle(maxYear),
     // While new tiles load, OpenLayers draws the nearest coarser level it has. Without preloading
     // that is often the overview of the whole country; with it, one level coarser (a quarter of the tiles).
@@ -72,7 +86,7 @@ export function yearStyle(maxYear, showFarmed = true) {
  * Both COGs as two bands of one source (same grid, same tiles): band 1 the last year, band 2 the LGN2025
  * group. Land gone by `maxYear` takes its group colour; land farmed after it is muted.
  */
-export function landuseLayer(maxYear) {
+export function landuseLayer(maxYear, showFarmed = true) {
   return new WebGLTileLayer({
     source: new GeoTIFF({
       sources: [{ url: COG_URL, nodata: 0 }, { url: LANDUSE_COG_URL }],
@@ -81,9 +95,8 @@ export function landuseLayer(maxYear) {
       projection: RD,
       attributions: 'Land use: LGN2025, <a href="https://lgn.nl/">Wageningen Environmental Research</a> (CC BY 4.0)',
     }),
-    style: landuseStyle(maxYear),
+    style: landuseStyle(maxYear, showFarmed),
     preload: Infinity,
-    visible: false,
   });
 }
 
@@ -105,13 +118,15 @@ function lostMaskStyle(maxYear) {
 
 /**
  * LGN2025 in its own colours (PDOK WMS), cut out to the land gone by `maxYear`. The cut-out is a second
- * WebGL layer on the years COG, drawn to its own hidden canvas (own className); after each frame of the
- * WMS layer its canvas keeps only the pixels where that mask is opaque. Add both layers, mask first.
+ * WebGL layer, drawn to its own hidden canvas (own className); after each frame of the WMS layer its
+ * canvas keeps only the pixels where that mask is opaque. Add both layers, mask first.
+ * The mask reads band 1, the last year, from `source`: give it the source of the colour layer on show
+ * (setSource), so its tiles are the ones that layer already fetched.
  */
-export function lgnOnLostLand(maxYear) {
+export function lgnOnLostLand(maxYear, source) {
   const mask = new WebGLTileLayer({
     className: 'lgn-mask',
-    source: new GeoTIFF({ sources: [{ url: COG_URL, nodata: 0 }], normalize: false, interpolate: false, projection: RD }),
+    source,
     style: lostMaskStyle(maxYear),
     preload: Infinity,
     visible: false,
@@ -145,6 +160,9 @@ export function lgnOnLostLand(maxYear) {
     },
     setMaxYear(year) {
       mask.setStyle(lostMaskStyle(year));
+    },
+    setSource(source) {
+      mask.setSource(source);
     },
   };
 }

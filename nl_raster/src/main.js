@@ -69,10 +69,11 @@ for (const el of document.querySelectorAll('[data-cog-url]')) el.href = COG_URL;
 // ------------------------------------------------------------------ main map + slider
 
 const { map, layer, stopFitting } = createMap('map', { maxYear: years.lost_max_year });
-const nowLayer = landuseLayer(years.lost_max_year);
-const lgn = lgnOnLostLand(years.lost_max_year);
-map.addLayer(nowLayer);
+const lgn = lgnOnLostLand(years.lost_max_year, layer.getSource());
 for (const l of lgn.layers) map.addLayer(l);
+// Made on the first switch to "What it is now": its source opens both COGs straight away, and at page
+// load those header reads would compete with the tiles of the years layer.
+let nowLayer = null;
 const slider = $('#year');
 const sliderOutput = $('#year-out');
 const tooltip = $('#map-tooltip');
@@ -82,7 +83,7 @@ const showFarmed = $('#show-farmed');
 
 function showYear(maxYear) {
   layer.setStyle(yearStyle(maxYear, showFarmed.checked));
-  nowLayer.setStyle(landuseStyle(maxYear, showFarmed.checked));
+  nowLayer?.setStyle(landuseStyle(maxYear, showFarmed.checked));
   lgn.setMaxYear(maxYear);
   sliderOutput.textContent = maxYear;
   slider.value = maxYear;
@@ -94,7 +95,12 @@ for (const button of colourButtons) {
     const byLanduse = button.dataset.colourBy === 'landuse';
     for (const b of colourButtons) b.setAttribute('aria-pressed', String(b === button));
     layer.setVisible(!byLanduse);
-    nowLayer.setVisible(byLanduse);
+    if (byLanduse && !nowLayer) {
+      nowLayer = landuseLayer(Number(slider.value), showFarmed.checked);
+      map.getLayers().insertAt(map.getLayers().getArray().indexOf(layer) + 1, nowLayer);
+    }
+    nowLayer?.setVisible(byLanduse);
+    lgn.setSource((byLanduse ? nowLayer : layer).getSource());
     $('#legend').hidden = byLanduse;
     $('#legend-landuse').hidden = !byLanduse;
   });
@@ -139,7 +145,7 @@ $('#play').addEventListener('click', (event) => {
 });
 
 map.on('pointermove', (event) => {
-  const byLanduse = nowLayer.getVisible();
+  const byLanduse = !!nowLayer?.getVisible();
   const data = event.dragging ? null : (byLanduse ? nowLayer : layer).getData(event.pixel);
   const value = data?.[0];
   const year = 2000 + value;
@@ -302,13 +308,26 @@ shareChart($('#chart-landuse-years'), {
 
 // ------------------------------------------------------------------ clusters
 
+// The hotspot maps load only when they come near the screen; at page load their tiles would queue up
+// in front of the main map's on the slow data server.
+const clusterMaps = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      clusterMaps.unobserve(entry.target);
+      const cluster = clusters.clusters[Number(entry.target.dataset.cluster)];
+      createMap(entry.target, { maxYear: years.lost_max_year, extent: cluster.bbox, interactive: false });
+    }
+  },
+  { rootMargin: '300px' },
+);
 const clusterList = $('#cluster-list');
 for (const [i, cluster] of clusters.clusters.entries()) {
   const peak = Object.entries(cluster.lost_ha_by_last_year).sort((a, b) => b[1] - a[1])[0][0];
   const figure = document.createElement('figure');
   figure.className = 'cluster';
   figure.innerHTML = `
-    <div class="cluster-map" id="cluster-${i}"></div>
+    <div class="cluster-map" data-cluster="${i}"></div>
     <figcaption>
       <strong></strong>
       <span class="cluster-facts"></span>
@@ -323,7 +342,7 @@ for (const [i, cluster] of clusters.clusters.entries()) {
     $('#map').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
   clusterList.append(figure);
-  createMap(`cluster-${i}`, { maxYear: years.lost_max_year, extent: cluster.bbox, interactive: false });
+  clusterMaps.observe(figure.querySelector('.cluster-map'));
 }
 
 // ------------------------------------------------------------------ municipalities
