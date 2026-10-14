@@ -12,6 +12,7 @@ import TileGrid from 'ol/tilegrid/TileGrid.js';
 import proj4 from 'proj4';
 
 import { FARMED_MUTED, FIRST_YEAR, hexToRgba, landusePalette, yearPalette } from './colors.js';
+import { LGN_WMS_URL } from './lgn.js';
 
 export const COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif';
 export const LANDUSE_COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_landuse_lgn2025.tif';
@@ -63,8 +64,8 @@ export function yearsLayer(maxYear) {
   });
 }
 
-export function yearStyle(maxYear) {
-  return { color: ['palette', ['band', 1], yearPalette(maxYear)] };
+export function yearStyle(maxYear, showFarmed = true) {
+  return { color: ['palette', ['band', 1], yearPalette(maxYear, showFarmed)] };
 }
 
 /**
@@ -86,26 +87,66 @@ export function landuseLayer(maxYear) {
   });
 }
 
-export function landuseStyle(maxYear) {
-  const lost = ['all', ['>=', ['band', 1], FIRST_YEAR - 2000], ['<=', ['band', 1], maxYear - 2000]];
+/** Style expression: band 1 (the last year) says the land was gone by `maxYear`. */
+function lostBy(maxYear) {
+  return ['all', ['>=', ['band', 1], FIRST_YEAR - 2000], ['<=', ['band', 1], maxYear - 2000]];
+}
+
+export function landuseStyle(maxYear, showFarmed = true) {
+  const farmed = showFarmed ? hexToRgba(FARMED_MUTED) : [0, 0, 0, 0];
   return {
-    color: ['case', lost, ['palette', ['band', 2], landusePalette()], ['>', ['band', 1], 0], hexToRgba(FARMED_MUTED), [0, 0, 0, 0]],
+    color: ['case', lostBy(maxYear), ['palette', ['band', 2], landusePalette()], ['>', ['band', 1], 0], farmed, [0, 0, 0, 0]],
   };
 }
 
-/** All of LGN2025 from the PDOK WMS, as context under the fields. */
-export function lgnBackground() {
-  return new TileLayer({
+function lostMaskStyle(maxYear) {
+  return { color: ['case', lostBy(maxYear), [0, 0, 0, 1], [0, 0, 0, 0]] };
+}
+
+/**
+ * LGN2025 in its own colours (PDOK WMS), cut out to the land gone by `maxYear`. The cut-out is a second
+ * WebGL layer on the years COG, drawn to its own hidden canvas (own className); after each frame of the
+ * WMS layer its canvas keeps only the pixels where that mask is opaque. Add both layers, mask first.
+ */
+export function lgnOnLostLand(maxYear) {
+  const mask = new WebGLTileLayer({
+    className: 'lgn-mask',
+    source: new GeoTIFF({ sources: [{ url: COG_URL, nodata: 0 }], normalize: false, interpolate: false, projection: RD }),
+    style: lostMaskStyle(maxYear),
+    preload: Infinity,
+    visible: false,
+  });
+  const lgn = new TileLayer({
+    className: 'lgn-layer',
     source: new TileWMS({
-      url: 'https://service.pdok.nl/wur/landelijk-grondgebruik-nederland/wms/v1_0',
+      url: LGN_WMS_URL,
       params: { LAYERS: 'lgn-actueel', FORMAT: 'image/png', TRANSPARENT: true },
       projection: RD,
       tileGrid: PDOK_GRID,
       attributions: 'LGN2025 via <a href="https://www.pdok.nl/">PDOK</a>, Wageningen Environmental Research (CC BY 4.0)',
     }),
-    opacity: 0.6,
     visible: false,
   });
+  lgn.on('postrender', (event) => {
+    const maskCanvas = mask.getRenderer()?.helper?.getCanvas();
+    const ctx = event.context;
+    if (!maskCanvas || !ctx) return;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.drawImage(maskCanvas, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.restore();
+  });
+  return {
+    layers: [mask, lgn],
+    setVisible(visible) {
+      mask.setVisible(visible);
+      lgn.setVisible(visible);
+    },
+    setMaxYear(year) {
+      mask.setStyle(lostMaskStyle(year));
+    },
+  };
 }
 
 /**
@@ -119,6 +160,10 @@ export function createMap(target, { maxYear, extent = NL_EXTENT, interactive = t
     layers: [basemap(), layer],
     interactions: interactive ? defaultInteractions({ onFocusOnly: true }) : [],
     controls: interactive ? undefined : [],
+    // By default OpenLayers loads no tiles during a zoom or drag; land that comes into view then shows the
+    // coarsest cached level until the gesture ends.
+    loadTilesWhileAnimating: true,
+    loadTilesWhileInteracting: true,
     view: new View({ projection: RD, extent: RD_EXTENT, constrainOnlyCenter: true, maxResolution: 3440.64, minResolution: 0.25 }),
   });
   const stopFitting = keepFitted(map, extent, [16, 16, 16, 16]);

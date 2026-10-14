@@ -2,9 +2,12 @@ import 'ol/ol.css';
 import '../../shared/base.css';
 import './style.css';
 
+import Feature from 'ol/Feature.js';
 import OlMap from 'ol/Map.js';
+import Overlay from 'ol/Overlay.js';
 import View from 'ol/View.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
+import MultiLineString from 'ol/geom/MultiLineString.js';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
@@ -25,9 +28,11 @@ import {
   keepFitted,
   landuseLayer,
   landuseStyle,
-  lgnBackground,
+  lgnOnLostLand,
   yearStyle,
 } from './map.js';
+import { countClasses, LGN_LEGEND_URL, lgnImage } from './lgn.js';
+import { outline, readPatch } from './patch.js';
 
 const LOST_YEARS = Array.from({ length: years.lost_max_year - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i);
 const sum = (values) => values.reduce((a, b) => a + b, 0);
@@ -65,17 +70,20 @@ for (const el of document.querySelectorAll('[data-cog-url]')) el.href = COG_URL;
 
 const { map, layer, stopFitting } = createMap('map', { maxYear: years.lost_max_year });
 const nowLayer = landuseLayer(years.lost_max_year);
-const lgnLayer = lgnBackground();
-map.getLayers().insertAt(1, lgnLayer);
+const lgn = lgnOnLostLand(years.lost_max_year);
 map.addLayer(nowLayer);
+for (const l of lgn.layers) map.addLayer(l);
 const slider = $('#year');
 const sliderOutput = $('#year-out');
 const tooltip = $('#map-tooltip');
 const groupName = new Map(landuse.groups.map((g) => [g.id, g.name]));
 
+const showFarmed = $('#show-farmed');
+
 function showYear(maxYear) {
-  layer.setStyle(yearStyle(maxYear));
-  nowLayer.setStyle(landuseStyle(maxYear));
+  layer.setStyle(yearStyle(maxYear, showFarmed.checked));
+  nowLayer.setStyle(landuseStyle(maxYear, showFarmed.checked));
+  lgn.setMaxYear(maxYear);
   sliderOutput.textContent = maxYear;
   slider.value = maxYear;
 }
@@ -95,10 +103,16 @@ fillLegend(
   $('#legend-landuse'),
   landuse.groups.filter((g) => g.id !== 0).map((g) => [LANDUSE_COLORS[g.id], g.name]),
 );
-$('#lgn-background').addEventListener('change', (event) => lgnLayer.setVisible(event.currentTarget.checked));
+$('#lgn-legend img').src = LGN_LEGEND_URL;
+$('#lgn-classes').addEventListener('change', (event) => {
+  const on = event.currentTarget.checked;
+  lgn.setVisible(on);
+  $('#lgn-legend').hidden = !on;
+});
 slider.min = FIRST_YEAR;
 slider.max = years.lost_max_year;
 slider.addEventListener('input', () => showYear(Number(slider.value)));
+showFarmed.addEventListener('change', () => showYear(Number(slider.value)));
 showYear(years.lost_max_year);
 
 let playing = null;
@@ -128,17 +142,122 @@ map.on('pointermove', (event) => {
   const byLanduse = nowLayer.getVisible();
   const data = event.dragging ? null : (byLanduse ? nowLayer : layer).getData(event.pixel);
   const value = data?.[0];
-  if (!value) {
+  const year = 2000 + value;
+  const hiddenFarmed = !showFarmed.checked && year > Number(slider.value);
+  if (!value || hiddenFarmed) {
     tooltip.hidden = true;
     return;
   }
-  const year = 2000 + value;
   const when = year === LAST_YEAR ? 'Still a field in 2026' : `Last a field in ${year}`;
   tooltip.textContent = byLanduse && year < LAST_YEAR ? `${when}, now: ${groupName.get(data[1])}` : when;
   tooltip.style.transform = `translate(${event.pixel[0] + 14}px, ${event.pixel[1] + 14}px)`;
   tooltip.hidden = false;
 });
 map.getViewport().addEventListener('pointerleave', () => (tooltip.hidden = true));
+
+// Click on lost land: outline the patch that disappeared in the same year and list its LGN2025 classes.
+const popup = $('#map-popup');
+const popupBody = $('#map-popup-body');
+const popupOverlay = new Overlay({ element: popup, positioning: 'bottom-center', offset: [0, -14], stopEvent: true });
+map.addOverlay(popupOverlay);
+const patchOutline = new VectorSource();
+map.addLayer(
+  new VectorLayer({
+    source: patchOutline,
+    style: [
+      new Style({ stroke: new Stroke({ color: '#fff', width: 5 }) }),
+      new Style({ stroke: new Stroke({ color: '#23332b', width: 2 }) }),
+    ],
+    zIndex: 10,
+  }),
+);
+const MAX_CLASSES = 8;
+let clickRequest = null;
+
+function closePopup() {
+  clickRequest?.abort();
+  clickRequest = null;
+  popupOverlay.setPosition(undefined);
+  patchOutline.clear();
+}
+$('#map-popup-close').addEventListener('click', closePopup);
+popup.addEventListener('keydown', (event) => event.key === 'Escape' && closePopup());
+
+function popupText(...lines) {
+  popupBody.replaceChildren(
+    ...lines.map(([className, text]) => Object.assign(document.createElement('p'), { className, textContent: text })),
+  );
+}
+
+function showClasses(patch, rows) {
+  const ha = (pixels) => (pixels * patch.cell * patch.cell) / 1e4;
+  const total = sum(rows.map((r) => r.pixels));
+  const shown = rows.slice(0, MAX_CLASSES);
+  const rest = sum(rows.slice(MAX_CLASSES).map((r) => r.pixels));
+  if (rest) shown.push({ label: `${rows.length - MAX_CLASSES} other classes`, color: null, pixels: rest });
+  const list = document.createElement('ul');
+  list.className = 'popup-classes';
+  for (const row of shown) {
+    const li = document.createElement('li');
+    li.style.setProperty('--swatch', row.color ?? 'transparent');
+    li.append(
+      Object.assign(document.createElement('span'), { className: 'popup-class', textContent: row.label }),
+      Object.assign(document.createElement('span'), {
+        className: 'popup-num',
+        textContent: `${fmtHa(ha(row.pixels))} ha · ${pct.format(row.pixels / total)}`,
+      }),
+    );
+    list.append(li);
+  }
+  popupBody.append(Object.assign(document.createElement('p'), { className: 'popup-head', textContent: 'Now, according to LGN2025' }), list);
+}
+
+const fmtHa = (ha) => (ha < 10 ? ha.toFixed(1) : fmt.format(Math.round(ha)));
+
+map.on('singleclick', async (event) => {
+  closePopup();
+  const request = new AbortController();
+  clickRequest = request;
+  const { signal } = request;
+  popupText(['popup-title', 'Reading the land here…']);
+  popupOverlay.setPosition(event.coordinate);
+  try {
+    const patch = await readPatch(COG_URL, event.coordinate, signal);
+    if (signal.aborted) return;
+    if (!patch) {
+      closePopup();
+      return;
+    }
+    const year = 2000 + patch.value;
+    if (!showFarmed.checked && year > Number(slider.value)) {
+      closePopup();
+      return;
+    }
+    if (year === LAST_YEAR) {
+      popupText(['popup-title', 'Still a field in 2026']);
+      return;
+    }
+    patchOutline.addFeature(new Feature(new MultiLineString(outline(patch))));
+    const area = (patch.count * patch.cell * patch.cell) / 1e4;
+    popupText(
+      ['popup-title', `Last a field in ${year}`],
+      [
+        'popup-sub',
+        `${fmtHa(area)} ha of connected land last farmed in ${year} (outlined)` +
+          (patch.truncated ? '. It runs on beyond the 4 × 4 km read here; the numbers cover that part.' : '.'),
+      ],
+      ['popup-sub', 'Loading LGN2025…'],
+    );
+    const rgba = await lgnImage(patch.bbox, patch.width, patch.height, signal);
+    if (signal.aborted) return;
+    popupBody.lastChild.remove();
+    showClasses(patch, countClasses(rgba, patch.mask));
+  } catch (error) {
+    if (signal.aborted) return;
+    console.error(error);
+    popupText(['popup-title', 'Could not load this place'], ['popup-sub', 'The data server did not answer in time. Click again to retry.']);
+  }
+});
 
 $('#legend').style.setProperty('--ramp', `linear-gradient(to right, ${LOST_RAMP.join(', ')})`);
 

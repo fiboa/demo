@@ -43,6 +43,10 @@
       <section id="map-section" class="map-section" aria-label="Map of the last year each pixel was farmed">
         <div id="map" class="map" tabindex="0"></div>
         <div id="map-tooltip" class="map-tooltip" role="status" hidden></div>
+        <div id="map-popup" class="map-popup" role="dialog" aria-label="This place">
+          <button type="button" id="map-popup-close" class="map-popup-close" aria-label="Close">×</button>
+          <div id="map-popup-body" aria-live="polite"></div>
+        </div>
         <form class="map-panel" onsubmit="return false">
           <label for="year">Show land that left the register by</label>
           <div class="slider-row">
@@ -60,8 +64,16 @@
             <span class="legend-farmed"><span class="swatch" aria-hidden="true"></span>Farmed after the chosen year</span>
           </div>
           <ul id="legend-landuse" class="swatch-legend swatch-legend-stacked" aria-label="Legend" hidden></ul>
-          <label class="check"><input type="checkbox" id="lgn-background" /> Show all LGN2025 land use underneath</label>
-          <p class="hint">Click the map, then scroll to zoom. Zoom in far enough and every 2 × 2 m pixel shows.</p>
+          <label class="check"><input type="checkbox" id="show-farmed" checked /> Show land farmed after the chosen year</label>
+          <label class="check"><input type="checkbox" id="lgn-classes" /> Show new LGN2025 land use categories</label>
+          <details id="lgn-legend" class="lgn-legend" hidden>
+            <summary>LGN2025 legend (in Dutch)</summary>
+            <div class="lgn-legend-scroll"><img alt="LGN2025 classes and their colours, as served by PDOK" /></div>
+          </details>
+          <p class="hint">
+            Click the map, then scroll to zoom. Zoom in far enough and every 2 × 2 m pixel shows. Click lost land to
+            see what LGN2025 records there now.
+          </p>
         </form>
       </section>
 

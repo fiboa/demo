@@ -22,15 +22,16 @@ export function hexToRgba(hex, alpha = 1) {
  * value: the pixel value, 0 (no field ever) or year − 2000 (9 = 2009 … 26 = 2026).
  * maxYear: the slider year, 2009 … 2025.
  */
-export function yearColor(value, maxYear) {
+export function yearColor(value, maxYear, showFarmed = true) {
   const year = 2000 + value;
   if (year < FIRST_YEAR || year > LAST_YEAR) return [0, 0, 0, 0];
-  return year <= maxYear ? hexToRgba(LOST_RAMP[year - FIRST_YEAR]) : hexToRgba(FARMED);
+  if (year <= maxYear) return hexToRgba(LOST_RAMP[year - FIRST_YEAR]);
+  return showFarmed ? hexToRgba(FARMED) : [0, 0, 0, 0];
 }
 
 /** One colour per pixel value 0 … 26, for the map's palette expression. */
-export function yearPalette(maxYear) {
-  return Array.from({ length: LAST_YEAR - 2000 + 1 }, (_, value) => yearColor(value, maxYear));
+export function yearPalette(maxYear, showFarmed = true) {
+  return Array.from({ length: LAST_YEAR - 2000 + 1 }, (_, value) => yearColor(value, maxYear, showFarmed));
 }
 
 // What the lost land is now, per LGN2025 group id (landuse.json). Six hues validated for a map (all pairs,

@@ -155,6 +155,31 @@ button {
   font-weight: 400;
   color: var(--ink-secondary);
 }
+.map-panel .check + .check {
+  margin-top: 0.35rem;
+}
+.lgn-legend {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.lgn-legend summary {
+  cursor: pointer;
+}
+.lgn-legend-scroll {
+  max-height: 14rem;
+  margin-top: 0.4rem;
+  overflow: auto;
+}
+/* Native size: scaled down to the panel width the labels become unreadable. */
+.lgn-legend img {
+  display: block;
+  max-width: none;
+}
+/* Only the cut-out mask for the LGN layer; drawn, never shown. ol.css resets `.ol-viewport canvas`. */
+.ol-viewport canvas.lgn-mask {
+  visibility: hidden;
+}
 .hint {
   margin: 0.75rem 0 0;
   font-size: 0.85rem;
@@ -172,6 +197,84 @@ button {
   font-size: 0.85rem;
   white-space: nowrap;
   z-index: 2;
+}
+.map-popup {
+  position: relative;
+  width: min(24rem, calc(100vw - 2rem));
+  padding: 0.7rem 0.9rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.15);
+}
+.map-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: calc(50% - 7px);
+  width: 12px;
+  height: 12px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+  transform: rotate(45deg);
+}
+.map-popup-close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.35rem;
+  padding: 0.1rem 0.4rem;
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.map-popup-close:hover {
+  color: var(--ink);
+}
+.map-popup p {
+  margin: 0;
+}
+.map-popup .popup-title {
+  padding-right: 1.5rem;
+  font-weight: 600;
+}
+.map-popup .popup-sub {
+  margin-top: 0.2rem;
+  color: var(--ink-secondary);
+}
+.map-popup .popup-head {
+  margin-top: 0.6rem;
+  font-weight: 600;
+}
+.popup-classes {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.popup-classes li {
+  display: grid;
+  grid-template-columns: 0.9rem 1fr auto;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+.popup-classes li::before {
+  content: '';
+  width: 0.9rem;
+  height: 0.9rem;
+  align-self: center;
+  border-radius: 2px;
+  background: var(--swatch);
+}
+.popup-num {
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* ---------------------------------------------------------------- sections */

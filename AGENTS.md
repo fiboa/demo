@@ -31,5 +31,9 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   `landuse.json` and `nl_landuse_lgn2025.tif`, a COG on exactly the grid of `nl_years.tif` that the map reads as a
   second band. Upload it next to `nl_years.tif` in `_demo/nl/`. Group ids, names and colours live in
   `LANDUSE_GROUPS` (stats.py) and `LANDUSE_COLORS` (colors.js); change them together.
+- A click on lost land (`patch.js`, `lgn.js`) reads the years COG at full resolution with geotiff.js, takes the
+  4-connected cells with the same last year, and counts the LGN2025 classes in one PDOK WMS image requested on
+  exactly that 2 m grid. That works because the WMS draws the exact colours of `LGN2025.sld`; `LGN_CLASSES` is
+  copied from it. Four colours are shared by several classes and are reported as one.
 - Regenerate the data on terra:
   `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --lgn /opt/ca_reference/data/raster/LGN2025/LGN2025.tif --work <scratch> --out nl_raster/data`

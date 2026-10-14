@@ -13,6 +13,12 @@ import {
 
 const TRANSPARENT = [0, 0, 0, 0];
 
+test('with farmed land switched off, only the lost land keeps a colour', () => {
+  assert.deepEqual(yearColor(26, 2025, false), TRANSPARENT);
+  assert.deepEqual(yearColor(15, 2014, false), TRANSPARENT);
+  assert.deepEqual(yearColor(14, 2014, false), hexToRgba(LOST_RAMP[5]));
+});
+
 test('nodata is transparent', () => {
   assert.deepEqual(yearColor(0, 2025), TRANSPARENT);
 });
