@@ -3,49 +3,17 @@ import View from 'ol/View.js';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
 import TileLayer from 'ol/layer/Tile.js';
 import WebGLTileLayer from 'ol/layer/WebGLTile.js';
-import { register } from 'ol/proj/proj4.js';
-import { get as getProjection } from 'ol/proj.js';
 import GeoTIFF from 'ol/source/GeoTIFF.js';
 import TileWMS from 'ol/source/TileWMS.js';
-import XYZ from 'ol/source/XYZ.js';
-import TileGrid from 'ol/tilegrid/TileGrid.js';
-import proj4 from 'proj4';
 
+import { NL_EXTENT, PDOK_GRID, RD, RD_EXTENT, basemap, keepFitted } from '../../shared/rd.js';
 import { FARMED_MUTED, FIRST_YEAR, hexToRgba, landusePalette, yearPalette } from './colors.js';
 import { LGN_WMS_URL } from './lgn.js';
 
+export { RD, keepFitted };
+
 export const COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif';
 export const LANDUSE_COG_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_landuse_lgn2025.tif';
-
-proj4.defs(
-  'EPSG:28992',
-  '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 ' +
-    '+ellps=bessel +towgs84=565.417,50.3319,465.552,-0.398957,0.343988,-1.8774,4.0725 +units=m +no_defs',
-);
-register(proj4);
-
-// The PDOK tiling scheme for RD New (NL:SR EPSG:28992).
-const RD_EXTENT = [-285401.92, 22598.08, 595401.92, 903401.92];
-export const RD = getProjection('EPSG:28992');
-RD.setExtent(RD_EXTENT);
-const PDOK_GRID = new TileGrid({
-  extent: RD_EXTENT,
-  origin: [RD_EXTENT[0], RD_EXTENT[3]],
-  resolutions: Array.from({ length: 15 }, (_, z) => 3440.64 / 2 ** z),
-  tileSize: 256,
-});
-const NL_EXTENT = [13652, 306850, 277838, 613650];
-
-function basemap() {
-  return new TileLayer({
-    source: new XYZ({
-      url: 'https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:28992/{z}/{x}/{y}.png',
-      projection: RD,
-      tileGrid: PDOK_GRID,
-      attributions: 'Background: <a href="https://www.pdok.nl/">PDOK</a> BRT-Achtergrondkaart (CC BY 4.0)',
-    }),
-  });
-}
 
 let sharedYears = null;
 
@@ -186,22 +154,4 @@ export function createMap(target, { maxYear, extent = NL_EXTENT, interactive = t
   });
   const stopFitting = keepFitted(map, extent, [16, 16, 16, 16]);
   return { map, layer, stopFitting };
-}
-
-/**
- * Fit the view to `extent`, and fit again whenever the map's box changes size (late CSS, fonts, a
- * scrollbar), until someone pans or zooms the map themselves.
- */
-export function keepFitted(map, extent, padding) {
-  const fit = () => {
-    map.updateSize();
-    map.getView().fit(extent, { padding });
-  };
-  fit();
-  const target = map.getTargetElement();
-  const observer = new ResizeObserver(fit);
-  observer.observe(target);
-  const stop = () => observer.disconnect();
-  for (const type of ['pointerdown', 'wheel', 'keydown']) target.addEventListener(type, stop, { once: true });
-  return stop;
 }

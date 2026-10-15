@@ -1,0 +1,185 @@
+main {
+  padding-bottom: 4rem;
+}
+
+.intro,
+.section {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.intro {
+  padding-top: clamp(2rem, 6vw, 4.5rem);
+  padding-bottom: 1.5rem;
+}
+.lede {
+  font-size: 1.15rem;
+  color: var(--ink-secondary);
+}
+
+/* ---------------------------------------------------------------- map */
+
+.map-section {
+  position: relative;
+}
+.map {
+  height: min(80vh, 54rem);
+  min-height: 28rem;
+  background: #e9ece9;
+}
+.relief-panel {
+  position: absolute;
+  top: 1rem;
+  right: var(--gutter);
+  width: min(21rem, calc(100% - 2 * var(--gutter)));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.relief-panel p {
+  margin: 0;
+}
+.panel-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.panel-note {
+  margin-top: 0.3rem !important;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.panel-status {
+  margin-top: 0.75rem !important;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+.panel-status.is-error {
+  color: #a3341c;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.6rem 0 0.9rem;
+}
+.examples button {
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+.examples button:hover {
+  border-color: var(--ink);
+}
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.85rem;
+}
+.toggle button {
+  padding: 0.3rem 0.7rem;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+}
+.toggle button + button {
+  border-left: 1px solid var(--ink);
+}
+.toggle button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--surface);
+}
+.field-range {
+  font-size: 0.95rem;
+}
+.field-range strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.histogram {
+  margin: 0.6rem 0 0.5rem;
+}
+.histogram svg {
+  display: block;
+  width: 100%;
+  height: 5.5rem;
+}
+.histogram rect {
+  shape-rendering: crispEdges;
+}
+.histogram-axis {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.2rem;
+  border-top: 1px solid var(--baseline);
+  font-size: 0.8rem;
+  color: var(--ink-secondary);
+}
+.histogram figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+.map-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------------- about */
+
+.section {
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.about dl {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, var(--measure));
+  gap: 0.75rem 1.5rem;
+  margin: 1rem 0 0;
+}
+.about dt {
+  font-weight: 700;
+}
+.about dd {
+  margin: 0;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 52rem) {
+  .about dl {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+  .about dd {
+    margin-bottom: 0.75rem;
+  }
+  .relief-panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 0.75rem var(--gutter) 0;
+  }
+}

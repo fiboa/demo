@@ -11,7 +11,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   demos read those from `https://data.source.coop/ftw/harmonized-field-data/...` with range requests.
 - `scripts/<demo>/`: Python that produces `<demo>/data/` (pixi env in `pixi.toml`). Heavy runs happen on
   a machine near the data, not in CI.
-- `shared/base.css`: tokens and page frame shared by all demos.
+- `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
+  BRT basemap and `keepFitted` for the Dutch demos.
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster
@@ -24,7 +25,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   Claims in the page copy (who loses most, which crop dominates) must match the JSON; recheck them after
   regenerating the data.
 - GeoJSON for the page is RFC 7946 without a `crs` member: OpenLayers skips reprojection for crs names it
-  does not know. Fit map views with `keepFitted` from `map.js`, not a one-off `fit`.
+  does not know. Fit map views with `keepFitted` from `shared/rd.js`, not a one-off `fit`.
 - Colours: `nl_raster/src/colors.js` is the only place a year colour is defined; the bar chart reuses it as
   the map legend. The ramp is validated as a one-hue ordinal ramp; re-validate if you change it.
 - "What it is now" comes from LGN2025 (CC BY 4.0, Wageningen Environmental Research): `stats.py landuse` writes
@@ -37,3 +38,14 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   copied from it. Four colours are shared by several classes and are reported as one.
 - Regenerate the data on terra:
   `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --lgn /opt/ca_reference/data/raster/LGN2025/LGN2025.tif --work <scratch> --out nl_raster/data`
+
+## nl_ahn
+
+- Reads only live PDOK services, nothing precomputed: BRP Gewaspercelen (OGC API Features, outline and crop
+  of the clicked field) and AHN4 (WCS `dtm_05m` / `dsm_05m`, float32 GeoTIFF, nodata 3.4e38 → NaN).
+- `relief.js` holds the pure steps (request grid, polygon mask, 2–98 % stretch, hillshade, colours) and is
+  tested in `tests/relief.test.js`; `pdok.js` the two requests; `main.js` the page.
+- Fields wider than 600 m are read coarser (`requestGrid`, longest side ≤ 1200 cells) via WCS `scalesize`.
+- The example buttons are RD points, not parcel ids: BRP ids change with every edition. The address keeps the
+  shown field as `#x,y`.
+
