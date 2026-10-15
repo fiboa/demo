@@ -9,8 +9,8 @@ export const RAMP = ['#440154', '#482878', '#3e4a89', '#31688e', '#26828e', '#1f
 const MAX_SIDE = 1200;
 
 /**
- * The cell size to ask the WCS for: AHN's own 0.5 m, or coarser so the longest side stays within
- * `maxSide` pixels. Returns { cell, width, height } for the given RD bbox.
+ * The cell size to ask a height service for: its own `native` cell, or coarser so the longest side stays
+ * within `maxSide` pixels. Returns { cell, width, height } for the bbox, in the service's coordinates.
  */
 export function requestGrid(bbox, native = 0.5, maxSide = MAX_SIDE) {
   const span = Math.max(bbox[2] - bbox[0], bbox[3] - bbox[1]);
@@ -57,6 +57,16 @@ export function polygonMask(rings, bbox, width, height) {
       const to = Math.min(width - 1, Math.floor((xs[k + 1] - bbox[0]) / cw - 0.5));
       for (let col = from; col <= to; col++) mask[row * width + col] = 1;
     }
+  }
+  return mask;
+}
+
+/** Cells inside any of `polygons` (each a list of rings): the union of their masks. */
+export function unionMask(polygons, bbox, width, height) {
+  const mask = new Uint8Array(width * height);
+  for (const rings of polygons) {
+    const part = polygonMask(rings, bbox, width, height);
+    for (let i = 0; i < mask.length; i++) mask[i] |= part[i];
   }
   return mask;
 }

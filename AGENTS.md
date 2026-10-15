@@ -12,7 +12,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - `scripts/<demo>/`: Python that produces `<demo>/data/` (pixi env in `pixi.toml`). Heavy runs happen on
   a machine near the data, not in CI.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
-  BRT basemap and `keepFitted` for the Dutch demos.
+  BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster
@@ -39,13 +39,26 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Regenerate the data on terra:
   `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --lgn /opt/ca_reference/data/raster/LGN2025/LGN2025.tif --work <scratch> --out nl_raster/data`
 
-## nl_ahn
+## relief
 
-- Reads only live PDOK services, nothing precomputed: BRP Gewaspercelen (OGC API Features, outline and crop
-  of the clicked field) and AHN4 (WCS `dtm_05m` / `dsm_05m`, float32 GeoTIFF, nodata 3.4e38 → NaN).
-- `relief.js` holds the pure steps (request grid, polygon mask, 2–98 % stretch, hillshade, colours) and is
-  tested in `tests/relief.test.js`; `pdok.js` the two requests; `main.js` the page.
-- Fields wider than 600 m are read coarser (`requestGrid`, longest side ≤ 1200 cells) via WCS `scalesize`.
-- The example buttons are RD points, not parcel ids: BRP ids change with every edition. The address keeps the
-  shown field as `#x,y`.
-
+- Fields come from the catalog's global PMTiles (`harmonized-field-data.pmtiles`, layer `fields`, z3–14), drawn
+  with ol-pmtiles, only the collections in `COLLECTIONS` (`relief/src/dems.js`). The archive thins its low
+  zooms to keep tiles ≤ ~500 KB (z7 holds 2 % of the fields, z11 22 %, z4 almost none), so the map draws
+  them from zoom 8 as dots that show where fields are, and as clickable outlines from zoom 12.
+- A field is cut at every tile edge, and tiles carry a ~76 m buffer. `fields.js` gathers all pieces with the
+  same `collection` + `id` from the z14 tiles around the click; `unionMask` rasterises each piece apart and ORs
+  them (rasterising the rings together lets the even-odd rule punch out the overlaps). Some collections have
+  no `metrics:area` in the tiles; the page then counts the cells inside the mask.
+- Heights are read live from each publisher, in the model's own CRS; OpenLayers reprojects the image.
+  `dems.js` has one entry per model (`url(bbox, w, h)` for services answering one GeoTIFF, `read()` for COGs)
+  and per collection the models to try in order: the first with heights for ≥ 50 % of the field wins (LiDAR HD
+  → RGE ALTI in France, Styria and both Tyrol zones in Austria). Several ArcGIS WCS servers wrap 2.0.1 answers
+  in multipart, so use 1.0.0 there.
+- swissALTI3D: the STAC search takes 3–8 s, so `readSwissAlti3d` sends a HEAD per year for each 1 km tile and
+  keeps the newest file found.
+- Checked as not usable from a browser (2026-10): Niedersachsen, Bayern, BEV Austria, Poland, Slovenia (no CORS);
+  Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
+  Czechia, Finland (2 m). A small CORS proxy would open the first two groups.
+- `relief.js` holds the pure steps (request grid, masks, 2–98 % stretch, hillshade, colours), tested in
+  `tests/relief.test.js`.
+- The example buttons are lon/lat points, not field ids; the address keeps the shown field as `#lon,lat`.

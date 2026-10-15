@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The relief of a field</title>
+    <meta name="description" content="Click a field from the Fields of the World harmonized field data and see its height map from an open 1 m elevation model, with the colours stretched over that one field." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>No field is flat</h1>
+        <p class="lede">
+          Click a field. This page takes its outline from the Fields of the World harmonized field data and its
+          heights, every metre or half metre, from the open elevation model of that country or state, and stretches
+          the colours over that one field. Differences of a few centimetres show up: old creek beds, ridges and
+          furrows, hollows, banks of hedges long gone.
+        </p>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of fields and the relief of the chosen one">
+        <div id="map" class="map" tabindex="0"></div>
+        <p id="zoom-hint" class="zoom-hint">Zoom in to see the fields</p>
+        <div id="map-tooltip" class="map-tooltip" role="status" hidden></div>
+        <aside class="relief-panel" aria-live="polite">
+          <div id="panel-start">
+            <p class="panel-title">Click any outlined field</p>
+            <p class="panel-note">Zoom in until the outlines show, or start with one of these:</p>
+          </div>
+          <div class="examples" role="group" aria-label="Example fields">
+            <button type="button" data-lon="3.92287" data-lat="51.67521">Creeks on Schouwen</button>
+            <button type="button" data-lon="3.14607" data-lat="51.27048">Ridges in Flanders</button>
+            <button type="button" data-lon="4.2149" data-lat="49.0038">Champagne beet</button>
+            <button type="button" data-lon="-2.49508" data-lat="48.30777">Banks in Brittany</button>
+            <button type="button" data-lon="7.50584" data-lat="51.89244">Münsterland barley</button>
+            <button type="button" data-lon="7.05158" data-lat="46.97875">Seeland sunflowers</button>
+            <button type="button" data-lon="24.79949" data-lat="59.20767">Estonian grass</button>
+            <button type="button" data-lon="-117.18651" data-lat="46.89919">Palouse hills</button>
+          </div>
+          <div id="panel-result" hidden>
+            <p id="field-title" class="panel-title"></p>
+            <p id="field-facts" class="panel-note"></p>
+            <div id="field-heights">
+              <p id="field-range" class="field-range"></p>
+              <figure class="histogram">
+                <svg id="histogram" role="img" aria-labelledby="histogram-caption"></svg>
+                <div class="histogram-axis"><span id="axis-low"></span><span id="axis-high"></span></div>
+                <figcaption id="histogram-caption">
+                  Area of the field at each height, in the colours of the map. The colours run from the lowest 2 % to
+                  the highest 2 % of the field.
+                </figcaption>
+              </figure>
+              <p id="field-gaps" class="panel-note"></p>
+            </div>
+          </div>
+          <p id="panel-status" class="panel-status" hidden></p>
+        </aside>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            The newest edition of each collection in the
+            <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>,
+            read from its single PMTiles archive. Only the collections an open height model covers are drawn; in
+            some (Germany's states, Luxembourg) a field is a block that several crops can share. Outlines are those
+            the farmers or the authorities declared, and can be off by a few metres.
+          </dd>
+          <dt>Heights</dt>
+          <dd>
+            Open terrain models of 1 m or finer, only laser points on the ground, read from each publisher's own
+            service while you watch:
+            <ul id="coverage" class="coverage"></ul>
+            Fields over 600 m across are read at a coarser cell size, to keep the download small.
+          </dd>
+          <dt>Colours</dt>
+          <dd>
+            Each field gets its own scale: the lowest 2 % of its cells are dark blue, the highest 2 % yellow, and a
+            light from the north-west adds shading. Two fields in the same colours can differ by metres; read the
+            heights under the histogram, or hover over the field.
+          </dd>
+          <dt>Caveats</dt>
+          <dd>
+            Fields and heights are from different years: a field that was levelled, dug or built on since the flight
+            does not match. Heights are above each country's own sea level, so they do not compare across borders.
+          </dd>
+          <dt>Built with</dt>
+          <dd>OpenLayers, ol-pmtiles and geotiff.js; everything is computed in your browser. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.</dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

@@ -13,7 +13,8 @@ import {
   rampColor,
   requestGrid,
   snapBbox,
-} from '../nl_ahn/src/relief.js';
+  unionMask,
+} from '../relief/src/relief.js';
 
 test('small fields are read at 0.5 m, large ones coarser', () => {
   assert.deepEqual(requestGrid([0, 0, 200, 100]), { cell: 0.5, width: 400, height: 200 });
@@ -33,6 +34,15 @@ test('the mask holds the cells whose centre is inside, holes excluded', () => {
   // The diagonal runs through the centres of the cells on it; a centre on the edge counts as inside.
   const triangle = polygonMask([[[0, 0], [4, 0], [0, 4], [0, 0]]], [0, 0, 4, 4], 4, 4);
   assert.deepEqual(Array.from(triangle), [1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1]);
+});
+
+test('overlapping pieces of one field add up instead of cancelling', () => {
+  // Two pieces of a 10 x 4 field cut at x = 5, each reaching 2 cells into the other (a tile buffer).
+  const left = [[[0, 0], [7, 0], [7, 4], [0, 4], [0, 0]]];
+  const right = [[[3, 0], [10, 0], [10, 4], [3, 4], [3, 0]]];
+  const sum = (m) => m.reduce((a, b) => a + b, 0);
+  assert.equal(sum(unionMask([left, right], [0, 0, 10, 4], 10, 4)), 40);
+  assert.equal(sum(polygonMask([...left, ...right], [0, 0, 10, 4], 10, 4)), 24);
 });
 
 test('quantiles interpolate between sorted values', () => {
