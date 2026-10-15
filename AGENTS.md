@@ -9,7 +9,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - `<demo>/index.html`, `<demo>/src/`: one directory per demo; register it in `vite.config.js`.
 - `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Never commit rasters or parquet;
   demos read those from `https://data.source.coop/ftw/harmonized-field-data/...` with range requests.
-- `scripts/<demo>/`: Python that produces `<demo>/data/` (pixi env in `pixi.toml`). Heavy runs happen on
+- `scripts/<demo>/`: Python or GDAL scripts that produce `<demo>/data/` or a `_demo/` file (pixi env in `pixi.toml`). Heavy runs happen on
   a machine near the data, not in CI.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
   BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
@@ -44,7 +44,10 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Fields come from the catalog's global PMTiles (`harmonized-field-data.pmtiles`, layer `fields`, z3–14), drawn
   with ol-pmtiles, only the collections in `COLLECTIONS` (`relief/src/dems.js`). The archive thins its low
   zooms to keep tiles ≤ ~500 KB (z7 holds 2 % of the fields, z11 22 %, z4 almost none), so the map draws
-  them from zoom 8 as dots that show where fields are, and as clickable outlines from zoom 12.
+  them from zoom 9 as dots, and as clickable outlines from zoom 12. Below zoom 9 the map shows
+  `_demo/relief/field_share.tif` instead: per zoom 8 cell (611.5 m, EPSG:3857) the share covered by fields of
+  `COLLECTIONS`, made on terra by `scripts/relief/field_share.sh` from the catalog's `_root_tiles/*.parquet`
+  (~11 min). Rerun and upload it (with `scripts/relief/README.md`) when `COLLECTIONS` changes.
 - A field is cut at every tile edge, and tiles carry a ~76 m buffer. `fields.js` gathers all pieces with the
   same `collection` + `id` from the z14 tiles around the click; `unionMask` rasterises each piece apart and ORs
   them (rasterising the rings together lets the even-odd rule punch out the overlaps). Some collections have
@@ -58,7 +61,17 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   keeps the newest file found.
 - Checked as not usable from a browser (2026-10): Niedersachsen, Bayern, BEV Austria, Poland, Slovenia (no CORS);
   Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
-  Czechia, Finland (2 m). A small CORS proxy would open the first two groups.
+  Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open, neither started yet
+  (the demo first takes the sources that are open and browser-readable as they are):
+  - Ask the publisher to send `Access-Control-Allow-Origin: *`; free, often one line of server or bucket
+    config, but weeks and uncertain. Most promising: LGLN Niedersachsen (COGs in an IBM COS bucket, OPTIONS 403)
+    and BEV Austria (perfect national COGs, no ACAO).
+  - A Cloudflare Worker as a narrow CORS proxy: forwards only to an allow-list of DEM hosts (never an open proxy),
+    keeps tokens (Denmark's free Dataforsyningen token) as Worker secrets, free tier 100k requests/day. Opens
+    Niedersachsen, Bayern's open tiles, Poland, Slovenia, BEV Austria and Denmark. Needs someone at fiboa to own
+    the Cloudflare account; a `dem.fiboa.org` route only if fiboa.org's DNS moves to Cloudflare, else
+    `*.workers.dev`. Sweden would mean sharing one personal Geotorget login through it: ask Lantmäteriet first.
+  - Mirroring the models on Source Coop is not worth it: hundreds of GB per country, and it is the slowest link.
 - `relief.js` holds the pure steps (request grid, masks, 2–98 % stretch, hillshade, colours), tested in
   `tests/relief.test.js`.
 - The example buttons are lon/lat points, not field ids; the address keeps the shown field as `#lon,lat`.

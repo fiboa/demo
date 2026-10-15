@@ -9,8 +9,10 @@ import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
 import ImageLayer from 'ol/layer/Image.js';
 import TileLayer from 'ol/layer/Tile.js';
 import VectorTileLayer from 'ol/layer/VectorTile.js';
+import WebGLTileLayer from 'ol/layer/WebGLTile.js';
 import { fromLonLat, getTransform, toLonLat, transformExtent } from 'ol/proj.js';
 import { getDistance } from 'ol/sphere.js';
+import GeoTIFF from 'ol/source/GeoTIFF.js';
 import ImageStatic from 'ol/source/ImageStatic.js';
 import XYZ from 'ol/source/XYZ.js';
 import { Fill, Stroke, Style } from 'ol/style.js';
@@ -28,9 +30,10 @@ const oneDecimal = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });
 const cellSize = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 });
 const pct = new Intl.NumberFormat('en-GB', { style: 'percent', maximumFractionDigits: 0 });
 const BINS = 40;
-// Fields show from this zoom on: further out the global archive keeps under 1 % of them. Up to
-// CLICK_MIN_ZOOM they are a sample (the archive thins its tiles) drawn as dots that show where fields are.
-const FIELDS_MIN_ZOOM = 8;
+// Fields show from this zoom on; further out the global archive keeps only a few % of them, so the map
+// shows the precomputed share of the land in fields instead. Up to CLICK_MIN_ZOOM the fields are a sample
+// (the archive thins its tiles), drawn as dots.
+const FIELDS_MIN_ZOOM = 9;
 const CLICK_MIN_ZOOM = 12;
 const clickResolution = 156543.03392804097 / 2 ** CLICK_MIN_ZOOM; // Web Mercator, at that zoom
 // A height model is taken when it has heights for at least this share of the field.
@@ -66,6 +69,15 @@ const fields = new VectorTileLayer({
     return `${collection}/${feature.get('id')}` === selected ? selectedStyle : fieldStyle;
   },
 });
+// Share of each 611 m cell covered by fields of COLLECTIONS, 1-255 (scripts/relief/field_share.sh).
+const SHARE_URL = 'https://data.source.coop/ftw/harmonized-field-data/_demo/relief/field_share.tif';
+const share = new WebGLTileLayer({
+  source: new GeoTIFF({ sources: [{ url: SHARE_URL, nodata: 0 }], normalize: false }),
+  maxZoom: FIELDS_MIN_ZOOM,
+  style: {
+    color: ['interpolate', ['linear'], ['band', 1], 1, [35, 51, 43, 0.08], 64, [35, 51, 43, 0.35], 255, [35, 51, 43, 0.7]],
+  },
+});
 const relief = new ImageLayer();
 const map = new OlMap({
   target: 'map',
@@ -77,6 +89,7 @@ const map = new OlMap({
         maxZoom: 16,
       }),
     }),
+    share,
     relief,
     fields,
   ],
@@ -104,7 +117,8 @@ const zoomHint = $('#zoom-hint');
 const updateHint = () => {
   const zoom = map.getView().getZoom();
   zoomHint.hidden = zoom >= CLICK_MIN_ZOOM;
-  zoomHint.textContent = zoom < FIELDS_MIN_ZOOM ? 'Zoom in to see the fields' : 'Zoom in further to pick a field';
+  zoomHint.textContent =
+    zoom < FIELDS_MIN_ZOOM ? 'Darker where more of the land is fields; zoom in to see them' : 'Zoom in further to pick a field';
 };
 map.getView().on('change:resolution', updateHint);
 updateHint();
