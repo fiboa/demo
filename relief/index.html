@@ -15,6 +15,7 @@
       <a href="../" class="site-name">fiboa demos</a>
       <nav aria-label="Sections">
         <a href="#map-section">Map</a>
+        <a href="#examples">Examples</a>
         <a href="#about">About the data</a>
       </nav>
     </header>
@@ -39,16 +40,7 @@
             <p class="panel-title">Click any outlined field</p>
             <p class="panel-note">Zoom in until the outlines show, or start with one of these:</p>
           </div>
-          <div class="examples" role="group" aria-label="Example fields">
-            <button type="button" data-lon="3.92287" data-lat="51.67521">Creeks on Schouwen</button>
-            <button type="button" data-lon="3.14607" data-lat="51.27048">Ridges in Flanders</button>
-            <button type="button" data-lon="4.2149" data-lat="49.0038">Champagne beet</button>
-            <button type="button" data-lon="-2.49508" data-lat="48.30777">Banks in Brittany</button>
-            <button type="button" data-lon="7.50584" data-lat="51.89244">Münsterland barley</button>
-            <button type="button" data-lon="7.05158" data-lat="46.97875">Seeland sunflowers</button>
-            <button type="button" data-lon="24.79949" data-lat="59.20767">Estonian grass</button>
-            <button type="button" data-lon="-117.18651" data-lat="46.89919">Palouse hills</button>
-          </div>
+          <div id="panel-examples" class="examples" role="group" aria-label="Example fields"></div>
           <div id="panel-result" hidden>
             <p id="field-title" class="panel-title"></p>
             <p id="field-facts" class="panel-note"></p>
@@ -67,6 +59,15 @@
           </div>
           <p id="panel-status" class="panel-status" hidden></p>
         </aside>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        <p class="section-lede">
+          Fields from the map, each in its own colours. The facts under each picture are measured from the same
+          data the map reads; click one to see it there.
+        </p>
+        <div id="example-cards" class="example-cards"></div>
       </section>
 
       <section id="about" class="section about">

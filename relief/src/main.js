@@ -4,23 +4,24 @@ import './style.css';
 
 import OlMap from 'ol/Map.js';
 import View from 'ol/View.js';
-import { containsExtent, getCenter } from 'ol/extent.js';
+import { containsExtent } from 'ol/extent.js';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
 import ImageLayer from 'ol/layer/Image.js';
 import TileLayer from 'ol/layer/Tile.js';
 import VectorTileLayer from 'ol/layer/VectorTile.js';
 import WebGLTileLayer from 'ol/layer/WebGLTile.js';
-import { fromLonLat, getTransform, toLonLat, transformExtent } from 'ol/proj.js';
-import { getDistance } from 'ol/sphere.js';
+import { fromLonLat, getTransform, toLonLat } from 'ol/proj.js';
 import GeoTIFF from 'ol/source/GeoTIFF.js';
 import ImageStatic from 'ol/source/ImageStatic.js';
 import XYZ from 'ol/source/XYZ.js';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { PMTilesVectorSource } from 'ol-pmtiles';
 
-import { COLLECTIONS, demsFor, heights } from './dems.js';
-import { FIELDS_PMTILES, fieldAt, piecesRings } from './fields.js';
-import { colorize, heightStats, hillshade, histogram, rampColor, requestGrid, snapBbox, unionMask } from './relief.js';
+import { COLLECTIONS } from './dems.js';
+import { FIELDS_PMTILES, fieldAt } from './fields.js';
+import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
+import { fieldRelief } from './read.js';
+import { colorize, hillshade, histogram, rampColor } from './relief.js';
 
 const $ = (selector) => document.querySelector(selector);
 const twoDecimals = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -36,8 +37,6 @@ const BINS = 40;
 const FIELDS_MIN_ZOOM = 9;
 const CLICK_MIN_ZOOM = 12;
 const clickResolution = 156543.03392804097 / 2 ** CLICK_MIN_ZOOM; // Web Mercator, at that zoom
-// A height model is taken when it has heights for at least this share of the field.
-const ENOUGH = 0.5;
 
 // ------------------------------------------------------------------ map
 
@@ -136,18 +135,6 @@ function status(text, isError = false) {
   el.classList.toggle('is-error', isError);
 }
 
-/**
- * The cell size, in `crs` units, of `metres` on the ground at map coordinate `at`. Most height models are
- * read in a metric grid of their own, where this is close to `metres`; in Web Mercator it is larger.
- */
-function cellIn(crs, at, metres) {
-  const toCrs = getTransform('EPSG:3857', crs);
-  const fromCrs = getTransform(crs, 'EPSG:4326');
-  const [x, y] = toCrs(at);
-  const ground = getDistance(fromCrs([x, y]), fromCrs([x + 100, y]));
-  return (metres * 100) / ground;
-}
-
 async function showField(coordinate, { fit = true } = {}) {
   request?.abort();
   const controller = new AbortController();
@@ -176,28 +163,17 @@ async function showField(coordinate, { fit = true } = {}) {
   }
 }
 
-/** Try the height models for this field in order; keep the first that measured most of it. */
+/** Read the field's heights, show them on the map and in the panel. */
 async function loadHeights(field, signal) {
-  const centre = getCenter(field.extent);
-  const dems = demsFor(field.collection, toLonLat(centre));
-  let best = null;
-  for (const dem of dems) {
-    status(`Loading the heights from ${dem.name}…`);
-    let result;
-    try {
-      result = await readField(field, dem, centre, signal);
-    } catch (error) {
-      if (signal.aborted) return;
-      console.warn(dem.name, error);
-      continue;
-    }
-    if (signal.aborted) return;
-    if (!best || result.share > best.share) best = result;
-    if (result.share >= ENOUGH) break;
-  }
-  if (!best || best.share < ENOUGH) {
+  const best = await fieldRelief(field, {
+    signal,
+    onTry: (dem) => status(`Loading the heights from ${dem.name}…`),
+  });
+  if (signal.aborted) return;
+  if (!best) {
+    const { region, partly } = COLLECTIONS[field.collection];
     showPanel(field, null);
-    status(`No height model of 1 m or finer covers this field${COLLECTIONS[field.collection].partly ? `; in ${COLLECTIONS[field.collection].region} only ${COLLECTIONS[field.collection].partly} publish one` : ''}.`);
+    status(`No height model of 1 m or finer covers this field${partly ? `; in ${region} only ${partly} has one` : ''}.`);
     return;
   }
   const { dem, grid, mask, stats, cell } = best;
@@ -207,19 +183,6 @@ async function loadHeights(field, signal) {
   current = { field, dem, grid: { ...grid, mask }, toDem: getTransform('EPSG:3857', dem.crs) };
   showPanel(field, { dem, stats, cell, counts: histogram(grid.values, mask, stats.low, stats.high, BINS) });
   status(null);
-}
-
-async function readField(field, dem, centre, signal) {
-  const native = cellIn(dem.crs, centre, dem.res);
-  const bbox = snapBbox(transformExtent(field.extent, 'EPSG:3857', dem.crs), native, 2 * native);
-  const size = requestGrid(bbox, native);
-  const grid = await heights(dem, bbox, size.width, size.height, signal);
-  const toDem = getTransform('EPSG:3857', dem.crs);
-  const mask = unionMask(piecesRings(field.pieces, (c) => toDem(c)), grid.bbox, grid.width, grid.height);
-  const stats = heightStats(grid.values, mask);
-  const inside = stats.count + stats.missing;
-  const cellCrs = (grid.bbox[2] - grid.bbox[0]) / grid.width;
-  return { dem, grid, mask, stats, cell: (cellCrs * dem.res) / native, share: inside ? stats.count / inside : 0 };
 }
 
 async function drawRelief(rgba, grid, dem) {
@@ -333,9 +296,9 @@ map.on('singleclick', (event) => {
   showField(event.coordinate, { fit: false });
 });
 
-for (const button of document.querySelectorAll('.examples button')) {
-  button.addEventListener('click', () => showField(fromLonLat([Number(button.dataset.lon), Number(button.dataset.lat)])));
-}
+renderExamples($('#panel-examples'), $('#example-cards'), () =>
+  $('#map-section').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }),
+);
 
 const tooltip = $('#map-tooltip');
 map.on('pointermove', (event) => {
@@ -370,4 +333,4 @@ window.addEventListener('hashchange', () => {
 });
 const start = pointFromHash();
 if (start) showField(start);
-else $('.examples button').click();
+else showField(fromLonLat([FIRST_EXAMPLE.lon, FIRST_EXAMPLE.lat]));

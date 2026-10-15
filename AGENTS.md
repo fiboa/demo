@@ -7,7 +7,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 
 - `index.html`: landing page; lists every demo.
 - `<demo>/index.html`, `<demo>/src/`: one directory per demo; register it in `vite.config.js`.
-- `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Never commit rasters or parquet;
+- `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Small pre-rendered pictures (as
+  `relief/examples/`, ~100 KB each) are fine; never commit data rasters or parquet;
   demos read those from `https://data.source.coop/ftw/harmonized-field-data/...` with range requests.
 - `scripts/<demo>/`: Python or GDAL scripts that produce `<demo>/data/` or a `_demo/` file (pixi env in `pixi.toml`). Heavy runs happen on
   a machine near the data, not in CI.
@@ -59,6 +60,13 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   in multipart, so use 1.0.0 there.
 - swissALTI3D: the STAC search takes 3–8 s, so `readSwissAlti3d` sends a HEAD per year for each 1 km tile and
   keeps the newest file found.
+- COGs (`mosaic`): read the full-resolution image and let geotiff.js shrink the window; letting it pick an
+  overview fetches every overview header first, one request after the other (LINZ in Sydney: 17 s for a large
+  field instead of 5 s). Only windows over `MAX_FULL_RES` pixels go through the overviews.
+- New Zealand: one LINZ COG (LERC) per NZTopo50 sheet; `relief/data/nz_dem_1m.json` holds their EPSG:2193
+  extents, made by `node scripts/relief/nz_sheets.mjs` (rerun when LINZ adds sheets).
+- Japan: GSI `dem1a_png` tiles at z17, heights coded in RGB (`gsiHeight`); a 404 means no 1 m data there.
+- Saxony-Anhalt's WCS sends CORS headers to https origins only, so that model fails on the http dev server.
 - Checked as not usable from a browser (2026-10): Niedersachsen, Bayern, BEV Austria, Poland, Slovenia (no CORS);
   Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
   Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open, neither started yet
@@ -74,4 +82,11 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   - Mirroring the models on Source Coop is not worth it: hundreds of GB per country, and it is the slowest link.
 - `relief.js` holds the pure steps (request grid, masks, 2–98 % stretch, hillshade, colours), tested in
   `tests/relief.test.js`.
-- The example buttons are lon/lat points, not field ids; the address keeps the shown field as `#lon,lat`.
+- Examples live in `relief/src/examples.js` (lon/lat point inside the field, not a field id; country; one word
+  for the panel, `panel: true` for the six shown there; title and text of the card). `node
+  scripts/relief/examples.mjs [id…]` pre-renders them with the page's own code (`read.js`) into
+  `relief/examples/<id>.png` (256-colour PNG via ImageMagick, ~100 KB) and the measured facts into
+  `relief/data/examples.json`; rerun it after adding or moving an example. Write the card text from what the
+  picture shows; say "probably" for causes you cannot check. Flags come from `flag-icons`, imported one by one in
+  `gallery.js`: add a country there with its first example. GSI (Japan) cannot render in node.
+- The address keeps the shown field as `#lon,lat`; panel and card links set it, the page follows `hashchange`.

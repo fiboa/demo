@@ -70,16 +70,28 @@ button {
   gap: 0.35rem;
   margin: 0.6rem 0 0.9rem;
 }
-.examples button {
+.examples a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.25rem 0.6rem;
   border: 1px solid var(--rule);
   border-radius: 999px;
   background: var(--surface);
   color: var(--ink);
   font-size: 0.85rem;
+  text-decoration: none;
 }
-.examples button:hover {
+.examples a:hover {
   border-color: var(--ink);
+}
+.flag {
+  display: inline-block;
+  width: 1.25em;
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(35, 51, 43, 0.15);
+  vertical-align: -0.1em;
 }
 .toggle {
   display: inline-flex;
@@ -146,6 +158,61 @@ button {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   z-index: 2;
+}
+
+/* ---------------------------------------------------------------- examples */
+
+.section-lede {
+  max-width: var(--measure);
+  color: var(--ink-secondary);
+}
+.example-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 2rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.example-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.example-picture {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.example-picture img {
+  position: absolute;
+  inset: 0.75rem;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 1.5rem);
+  object-fit: contain;
+}
+.example-card:hover .example-picture {
+  border-color: var(--ink);
+}
+.example-card h3 {
+  margin: 0.75rem 0 0.3rem;
+  font-size: 1.05rem;
+}
+.example-card:hover h3 {
+  text-decoration: underline;
+}
+.example-card p {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  color: var(--ink-secondary);
+}
+.example-card .example-facts {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+.example-facts strong {
+  color: var(--ink);
 }
 
 /* ---------------------------------------------------------------- about */
