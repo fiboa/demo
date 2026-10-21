@@ -7,13 +7,22 @@ import { createEmpty, extend, getIntersection } from 'ol/extent.js';
 import MVT from 'ol/format/MVT.js';
 import { createXYZ } from 'ol/tilegrid.js';
 
+import COLLECTIONS from './collections.json' with { type: 'json' };
+
 export const FIELDS_PMTILES = 'https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles';
 const Z = 14;
 
 /** Collections of field blocks repeat the fields of a country, without crops. */
 export const isFields = (collection) => !!collection && !collection.endsWith('_block');
+/** Field collections of the published catalog, not the copies the archive also holds (as EuroCrops `ec_fr`). */
+export const inCatalog = (collection) => isFields(collection) && !!COLLECTIONS[collection];
 /** For `fieldAt`'s `prefer`: where collections overlap (Spain and its regions), the field that names its crop. */
 export const hasCrop = (feature) => (feature.get('crop:name') || feature.get('hcat:name_en') ? 1 : 0);
+/**
+ * For `fieldAt`'s `prefer`: a collection of the published catalog over a copy the archive also holds (as the
+ * EuroCrops `ec_fr` over France), then the field that names its crop.
+ */
+export const preferred = (feature) => (COLLECTIONS[feature.get('collection')] ? 2 : 0) + hasCrop(feature);
 
 const MAX_TILES = 25;
 const grid = createXYZ({ maxZoom: Z });

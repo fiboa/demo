@@ -2,27 +2,13 @@
  * The weather at a field through one season and the 1991–2020 normal, from the Open-Meteo historical
  * weather API (ERA5 reanalysis): rain and growing degree days, both summed from the start of the season.
  */
-const ARCHIVE = 'https://archive-api.open-meteo.com/v1/archive';
+import { daily } from '../../shared/openmeteo.js';
+
 export const GDD_BASE = 5; // °C: the usual base for cereals and grass in a temperate climate
 const NORMAL_YEARS = [1991, 2020];
 const DAY = 86400000;
 
 const isoDay = (date) => date.toISOString().slice(0, 10);
-
-async function daily(lon, lat, from, to, signal) {
-  const params = new URLSearchParams({
-    latitude: lat.toFixed(3),
-    longitude: lon.toFixed(3),
-    start_date: from,
-    end_date: to,
-    daily: 'temperature_2m_mean,precipitation_sum',
-    timezone: 'UTC',
-  });
-  const response = await fetch(`${ARCHIVE}?${params}`, { signal });
-  if (!response.ok) throw new Error(`Open-Meteo: ${response.status}`);
-  const { daily: d } = await response.json();
-  return { time: d.time, temp: d.temperature_2m_mean, rain: d.precipitation_sum };
-}
 
 /**
  * Sums from the first day on, stopping at the first missing value (the archive runs a few days behind):

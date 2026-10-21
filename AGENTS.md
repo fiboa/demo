@@ -15,11 +15,14 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   pre-rendered pictures.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
   BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
-- For the demos that are a map of the global PMTiles where you click a field (relief, season, history):
+- For the demos that are a map of the global PMTiles where you click a field (relief, season, history, flood):
   `shared/fields.js` (gather a field from the z14 tiles, `isFields` drops the `_block` collections, `hasCrop`
-  prefers a field that names its crop where collections overlap, as Spain and its regions), `shared/mask.js`
+  prefers a field that names its crop where collections overlap, as Spain and its regions; `inCatalog` and
+  `preferred` also drop the copies the archive holds outside the catalog, as EuroCrops `ec_fr`), `shared/mask.js`
   (rasterise its pieces), `shared/map-page.css` (map, floating panel, example cards, about section),
   `shared/collections.json` (title and edition year per collection, `node scripts/collections.mjs`).
+- `shared/planetary.js`: Planetary Computer STAC search, the anonymous SAS token per collection (shared, renewed
+  before it expires), a COG window, a small `pool` (season, flood). `shared/openmeteo.js`: daily weather.
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster
@@ -102,7 +105,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Same map of the global PMTiles as relief, every collection but the `_block` ones. A click reads the field's
   year from Sentinel-2 and the weather, all in the browser.
 - Imagery: Microsoft Planetary Computer `sentinel-2-l2a` (STAC search, anonymous SAS token from
-  `/api/sas/v1/token/sentinel-2-l2a`, shared and renewed in `s2.js`). Not Earth Search: its 10 m COGs have
+  `/api/sas/v1/token/sentinel-2-l2a`, shared and renewed in `shared/planetary.js`). Not Earth Search: its 10 m COGs have
   1024 px tiles of ~1.3 MB; PC's are 512 px, ~300–450 KB, and the SCL tiles ~10 KB. PC is not harmonised: from
   processing baseline 04.00 the numbers carry +1000 (`dnOffset`).
 - One MGRS tile per field (`chooseTile`). Scenes over 60 % cloud are skipped; the rest are read clearest first,
@@ -141,3 +144,20 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Address `#lon,lat,zoom,map[,year]`. Examples in `history/src/examples.js`; `node scripts/history/examples.mjs
   [id…]` renders their split pictures from the same sources (tiles decoded and the JPEG written with `magick`),
   `--at lon,lat,zoom,map[,year] file.jpg` renders any place, handy to scout new examples.
+
+## flood
+
+- Click a field, see per Sentinel-1 image of a year the share of it that is open water, and the rain of each day.
+  Radar from Planetary Computer `sentinel-1-rtc` (gamma0, linear power, float32 COGs with 512 px tiles: ~1 MB per
+  image whatever the field's size). A cell is water below −18 dB VV (`WATER_DB` in `flood/src/s1.js`).
+- `scenes` keeps one slice per pass (the one holding the whole field) and drops HH/HV-only scenes; `thin` keeps
+  at most one image per two days (~200 a year since S1C in 2025, ~60–110 before); `readingOrder` reads coarse to
+  fine (bit-reversed index) so the curve spans the year early.
+- A click on a point shows `waterMap` (2 km around the field) on the map. Year menu 2015–now, default the year
+  shown last, else the last full year. Address `#lon,lat,year`.
+- Rain: Open-Meteo daily precipitation (ERA5), drawn as bars on the same axis.
+- Examples in `flood/src/examples.js` (`picture`: the image date for the card when not the wettest);
+  `node scripts/flood/examples.mjs [id…]` renders the radar picture (water blue, field outlined) and the curve.
+  Flooded fields were found by scanning a few km around known floods for the wettest scene and ranking the
+  fields in it by water share; a flash flood (Valencia, October 2024) drains before the next pass and shows
+  nothing.

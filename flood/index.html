@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fields under water</title>
+    <meta name="description" content="Click a field from the Fields of the World harmonized field data and see, in every Sentinel-1 radar image of a year, how much of it stood under water, next to the rain of each day." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#examples">Examples</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>Fields under water</h1>
+        <p class="lede">
+          Click a field. This page takes its outline from the Fields of the World harmonized field data and reads
+          every Sentinel-1 radar image of the year over it. Radar sees through cloud, and calm water mirrors it
+          away: the dark cells are open water. You see when the field flooded, for how long, and the rain that came
+          before.
+        </p>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of fields and the water around the chosen one">
+        <div id="map" class="map flood-map" tabindex="0"></div>
+        <p id="map-date" class="map-date" hidden></p>
+        <p id="zoom-hint" class="zoom-hint">Zoom in to pick a field</p>
+        <aside class="map-panel" aria-live="polite">
+          <div id="panel-start">
+            <p class="panel-title">Click any outlined field</p>
+            <p class="panel-note">Zoom in until the outlines show, or start with one of these:</p>
+          </div>
+          <div id="panel-examples" class="examples" role="group" aria-label="Example fields"></div>
+          <div id="panel-result" hidden>
+            <p id="field-title" class="panel-title"></p>
+            <p id="field-facts" class="panel-note"></p>
+            <label class="year-select">
+              Year
+              <select id="year"></select>
+            </label>
+            <p id="flood-summary" class="flood-summary"></p>
+          </div>
+          <p id="panel-status" class="panel-status" hidden></p>
+        </aside>
+      </section>
+
+      <section id="flood" class="flood" aria-label="Water on the chosen field through the year" hidden>
+        <figure class="flood-chart">
+          <figcaption><strong>Under water</strong>: share of the field that is open water in each radar image</figcaption>
+          <svg id="chart-water" role="img" aria-label="Share of the field under water through the year"></svg>
+        </figure>
+        <figure class="flood-chart">
+          <figcaption><strong>Rain</strong> of each day, mm</figcaption>
+          <svg id="chart-rain" role="img" aria-label="Rain of each day"></svg>
+        </figure>
+        <div id="chart-tooltip" class="chart-tooltip" role="status" hidden></div>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        <p class="section-lede">
+          Fields from the map in a year with a flood. Each picture is the radar image of one day around the field:
+          open water in blue, the field outlined. The stems under it are the water on the field through the year. Click a card to see the field on the map.
+        </p>
+        <div id="example-cards" class="example-cards"></div>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            The newest edition of each collection in the
+            <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>,
+            read from its single PMTiles archive. The crop belongs to the year of that edition; in other years the
+            field may have grown something else, or had another outline.
+          </dd>
+          <dt>Radar</dt>
+          <dd>
+            <a href="https://planetarycomputer.microsoft.com/dataset/sentinel-1-rtc">Sentinel-1 radiometric terrain
+            corrected backscatter</a> from Microsoft's Planetary Computer, read while you watch: 10 m cells, a pass
+            every few days from rising and setting orbits (fewer from 2022 to 2024, when only one satellite flew). To
+            keep the download down, at most one image every two days is read, about 1 MB each, spread over the year
+            first and then filled in.
+          </dd>
+          <dt>Water</dt>
+          <dd>
+            A cell counts as open water when its VV backscatter is below −18 dB; the curve shows the share of the
+            field's cells that do. The map shows the same for 2 km around the field.
+          </dd>
+          <dt>Rain</dt>
+          <dd>
+            Daily precipitation from the
+            <a href="https://open-meteo.com/en/docs/historical-weather-api">Open-Meteo historical weather API</a>
+            (ERA5 reanalysis, cells of about 10–25 km): the rain of a grid cell, not of the field. A flood often comes
+            from rain far upstream.
+          </dd>
+          <dt>Caveats</dt>
+          <dd>
+            Wind ruffles water and makes it look like land; water under a crop or among trees scatters the radar back
+            and is missed. Smooth bare soil after rain, tarmac and radar shadow behind slopes can look like water.
+            A single high point is worth a second look on the map.
+          </dd>
+          <dt>Built with</dt>
+          <dd>OpenLayers, ol-pmtiles and geotiff.js; everything is computed in your browser. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.</dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

@@ -3,16 +3,15 @@
  * in each clear one, and a true-colour picture on demand. Everything is read straight from the COGs, a small
  * window around the field.
  */
-import { fromUrl } from 'geotiff';
 import { getTransform, transformExtent } from 'ol/proj.js';
-import { register } from 'ol/proj/proj4.js';
-import proj4 from 'proj4';
 
 import { piecesRings } from '../../shared/fields.js';
 import { quantile, unionMask } from '../../shared/mask.js';
+import { pool, readWindow as readCog, search, utm } from '../../shared/planetary.js';
 
-const STAC = 'https://planetarycomputer.microsoft.com/api/stac/v1/search';
-const TOKEN = 'https://planetarycomputer.microsoft.com/api/sas/v1/token/sentinel-2-l2a';
+export { pool, utm };
+
+const COLLECTION = 'sentinel-2-l2a';
 // Scenes this cloudy are left unread: the field is almost never clear in them.
 export const MAX_SCENE_CLOUD = 60;
 // A field counts as clear in a scene when this share of it has a clear scene classification.
@@ -22,43 +21,6 @@ export const SPACING_DAYS = 4;
 // Scene classification (SCL) classes that see the ground: vegetation, bare soil, water, unclassified.
 const CLEAR = new Set([4, 5, 6, 7]);
 const DAY = 86400000;
-
-// ------------------------------------------------------------------ access
-
-let token = null; // Promise of { token, expires (ms) }
-
-async function fetchToken() {
-  for (let attempt = 0; ; attempt++) {
-    const response = await fetch(TOKEN);
-    if (response.ok) {
-      const json = await response.json();
-      return { token: json.token, expires: Date.parse(json['msft:expiry']) };
-    }
-    if (attempt === 2) throw new Error(`Planetary Computer token: ${response.status}`);
-    await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
-  }
-}
-
-/** The anonymous read token for the Sentinel-2 container, shared and renewed a few minutes before it runs out. */
-async function sasToken() {
-  const current = token && (await token.catch(() => null));
-  if (!current || current.expires - Date.now() < 5 * 60000) {
-    token = fetchToken();
-    return (await token).token;
-  }
-  return current.token;
-}
-
-/** Register the UTM zone of a scene (EPSG:326xx north, 327xx south) with OpenLayers. */
-export function utm(epsg) {
-  const code = `EPSG:${epsg}`;
-  if (!proj4.defs(code)) {
-    const zone = epsg % 100;
-    proj4.defs(code, `+proj=utm +zone=${zone}${epsg >= 32700 ? ' +south' : ''} +datum=WGS84 +units=m +no_defs`);
-    register(proj4);
-  }
-  return code;
-}
 
 // ------------------------------------------------------------------ scenes
 
@@ -94,7 +56,7 @@ export function dnOffset(baseline) {
  */
 export async function scenes(bbox, start, end, signal) {
   const body = {
-    collections: ['sentinel-2-l2a'],
+    collections: [COLLECTION],
     bbox,
     datetime: `${start.toISOString()}/${end.toISOString()}`,
     limit: 1000,
@@ -107,14 +69,7 @@ export async function scenes(bbox, start, end, signal) {
       exclude: ['links', 'geometry'],
     },
   };
-  const response = await fetch(STAC, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-    signal,
-  });
-  if (!response.ok) throw new Error(`Planetary Computer search: ${response.status}`);
-  const { features } = await response.json();
+  const features = await search(body, signal);
   const tile = chooseTile(features, bbox);
   const byDate = new Map(); // reprocessed scenes repeat a date: keep one
   for (const f of features) {
@@ -162,18 +117,7 @@ export function fieldGrid(field, epsg) {
   return { crs, bbox, width, height, mask };
 }
 
-async function readWindow(href, bbox, cell, signal) {
-  const tiff = await fromUrl(`${href}?${await sasToken()}`, {}, signal);
-  const image = await tiff.getImage();
-  const [ox, oy] = image.getOrigin();
-  const window = [
-    Math.round((bbox[0] - ox) / cell),
-    Math.round((oy - bbox[3]) / cell),
-    Math.round((bbox[2] - ox) / cell),
-    Math.round((oy - bbox[1]) / cell),
-  ];
-  return image.readRasters({ window, interleave: false, signal, fillValue: 0 });
-}
+const readWindow = (href, bbox, cell, signal) => readCog(href, COLLECTION, bbox, cell, signal);
 
 /** Per 10 m cell: whether the scene classification sees the ground there. */
 export function clearCells(scl, grid) {
@@ -345,13 +289,4 @@ export function closeUp(pic, margin = 4) {
     width: side,
     height: side,
   };
-}
-
-/** Run `task` over `items` with at most `n` at a time; resolves when all are done. */
-export async function pool(items, n, task) {
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) await task(items[next++]);
-  };
-  await Promise.all(Array.from({ length: Math.min(n, items.length) }, worker));
 }
