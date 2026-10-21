@@ -1,0 +1,82 @@
+/**
+ * Example places: the centre and zoom of the map, the old map and edition to show, the country for its flag,
+ * a one-word label for the map panel and the title and text of its card. The split pictures are pre-rendered
+ * by scripts/history/examples.mjs into history/examples/<id>.jpg; rerun it after changing this list.
+ */
+export const EXAMPLES = [
+  {
+    id: 'urk',
+    lon: 5.66,
+    lat: 52.68,
+    zoom: 12,
+    map: 'topotijdreis',
+    year: 1930,
+    country: 'nl',
+    short: 'Urk',
+    title: 'Urk, an island until 1942',
+    text: 'In 1930 Urk was an island in the Zuiderzee. The Noordoostpolder fell dry around it in 1942; its fields lie on the former sea floor, in the regular blocks of the polder plan.',
+  },
+  {
+    id: 'haarlemmermeer',
+    lon: 4.68,
+    lat: 52.31,
+    zoom: 12,
+    map: 'topotijdreis',
+    year: 1850,
+    country: 'nl',
+    short: 'Haarlemmermeer',
+    title: 'A lake pumped dry',
+    text: 'On the map of 1850 the Haarlemmermeer is still water inside its new ring canal. Pumped dry by 1852, it was laid out in straight farm plots; today Schiphol takes part of it, the fields the rest.',
+  },
+  {
+    id: 'wortel',
+    lon: 4.843,
+    lat: 51.398,
+    zoom: 14,
+    map: 'ferraris',
+    year: null,
+    country: 'be',
+    short: 'Wortel',
+    title: 'A colony on the heath',
+    text: 'Ferraris drew open heath here in 1777. In 1822 the Society of Benevolence founded a colony for the poor at Wortel and turned the heath into a grid of fields and lanes, which still shape the fields of today.',
+  },
+  {
+    id: 'beauce',
+    lon: 1.55,
+    lat: 48.3,
+    zoom: 14,
+    map: 'fr-1950',
+    year: null,
+    country: 'fr',
+    short: 'Beauce',
+    title: 'Strips merged in the Beauce',
+    text: 'On the aerial photos of the 1950s the land is still cut into long, narrow strips, one per owner. Land consolidation (remembrement) merged them into the large blocks the fields follow now.',
+  },
+  {
+    id: 'moos',
+    lon: 7.08,
+    lat: 47.0,
+    zoom: 13,
+    map: 'zeitreihen',
+    year: 1870,
+    country: 'ch',
+    short: 'Grosses Moos',
+    title: 'The Grosses Moos, drained',
+    text: 'In 1870 the shore of Lake Neuchâtel lay further inland and the Grosses Moos behind it was marsh. The Jura water correction lowered the lakes by about 2.5 m; vegetable fields now reach over the old shore.',
+  },
+  {
+    id: 'garzweiler',
+    lon: 6.505,
+    lat: 51.064,
+    zoom: 14.5,
+    map: 'tk25',
+    year: null,
+    country: 'de',
+    short: 'Garzweiler',
+    title: 'Fields where a village stood',
+    text: 'Garzweiler on the map of 1936–1945. The village was moved in the 1980s and dug away by the lignite mine that took its name; the pit was filled again and is farmed, while to the east the mine still works.',
+  },
+];
+
+/** The address of a place on the page: #lon,lat,zoom,map[,year]. */
+export const hashOf = ({ lon, lat, zoom, map, year }) => `#${[lon, lat, zoom, map, ...(year ? [year] : [])].join(',')}`;

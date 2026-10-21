@@ -1,13 +1,13 @@
 /**
- * The title and newest edition year of every collection in the published catalog, for the season demo:
+ * The title and newest edition year of every collection in the published catalog, for the season and history demos:
  * the global PMTiles hold the newest edition of each, and its crops belong to that year.
  *
- *   node scripts/season/collections.mjs   # writes season/data/collections.json
+ *   node scripts/collections.mjs   # writes shared/collections.json
  */
 import { writeFileSync } from 'node:fs';
 
 const CATALOG = 'https://data.source.coop/ftw/harmonized-field-data/catalog.json';
-const OUT = new URL('../../season/data/collections.json', import.meta.url);
+const OUT = new URL('../shared/collections.json', import.meta.url);
 
 const json = async (url) => {
   const response = await fetch(url);

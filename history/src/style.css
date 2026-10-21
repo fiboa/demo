@@ -1,0 +1,170 @@
+/* Old maps under today's fields: the swipe line over the map, the map menu and year slider in the panel. */
+:root {
+  --field: #ff3dbb;
+}
+
+.history-map {
+  position: relative;
+}
+
+/* ---------------------------------------------------------------- swipe */
+
+/* A strip as tall as the map, centred on the line; only the strip catches the pointer, the map pans around it. */
+.swipe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+  width: 2.75rem;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  touch-action: none;
+  outline: none;
+}
+.swipe-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(35, 51, 43, 0.35);
+}
+.swipe-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 4px rgba(35, 51, 43, 0.35);
+}
+.swipe-grip svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.swipe:hover .swipe-grip,
+.swipe.is-dragging .swipe-grip {
+  background: var(--ink);
+  color: #fff;
+}
+.swipe:focus-visible .swipe-grip {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+/* The names of the two sides, against the line at the top. */
+.swipe-label {
+  position: absolute;
+  top: 0.75rem;
+  max-width: 40vw;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+.swipe-label-old {
+  right: calc(50% + 0.6rem);
+}
+.swipe-label-today {
+  left: calc(50% + 0.6rem);
+}
+.swipe.at-left .swipe-label-old,
+.swipe.at-right .swipe-label-today {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- panel */
+
+.old-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.panel-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.old-map select {
+  font: inherit;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.year-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+.year-row input {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--ink);
+}
+.year-row output {
+  min-width: 3ch;
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.show-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+.show-fields input {
+  accent-color: var(--field);
+}
+#panel-field {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+.examples-note {
+  margin-top: 0.9rem !important;
+}
+
+/* ---------------------------------------------------------------- examples and about */
+
+.example-split {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.example-split img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.example-card:hover .example-split {
+  border-color: var(--ink);
+}
+.sources {
+  margin: 0.4rem 0 0.5rem;
+  padding-left: 1.1rem;
+}
+.sources li {
+  margin-bottom: 0.3rem;
+}

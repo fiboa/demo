@@ -17,7 +17,7 @@ import { Fill, Stroke, Style } from 'ol/style.js';
 import { PMTilesVectorSource } from 'ol-pmtiles';
 
 import { FIELDS_PMTILES, fieldAt, hasCrop, isFields } from '../../shared/fields.js';
-import COLLECTIONS from '../data/collections.json' with { type: 'json' };
+import COLLECTIONS from '../../shared/collections.json' with { type: 'json' };
 import { SeasonCharts } from './charts.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { closeUp, flagDips, monthlyBest, pool, season, trueColour } from './s2.js';

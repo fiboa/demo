@@ -8,17 +8,18 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - `index.html`: landing page; lists every demo.
 - `<demo>/index.html`, `<demo>/src/`: one directory per demo; register it in `vite.config.js`.
 - `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Small pre-rendered pictures (as
-  `relief/examples/`, ~100 KB each, or `season/examples/`, ~10 KB) are fine; never commit data rasters or parquet;
+  `relief/examples/`, ~100 KB each, `season/examples/`, ~10 KB, or `history/examples/`, ~80 KB JPEGs) are fine; never commit data rasters or parquet;
   demos read those from `https://data.source.coop/ftw/harmonized-field-data/...` with range requests.
 - `scripts/<demo>/`: Python, GDAL or node scripts that produce `<demo>/data/` or a `_demo/` file (pixi env in
   `pixi.toml`). Heavy runs happen on a machine near the data, not in CI. `scripts/png.mjs` writes the
   pre-rendered pictures.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
   BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
-- For the demos that are a map of the global PMTiles where you click a field (relief, season):
+- For the demos that are a map of the global PMTiles where you click a field (relief, season, history):
   `shared/fields.js` (gather a field from the z14 tiles, `isFields` drops the `_block` collections, `hasCrop`
   prefers a field that names its crop where collections overlap, as Spain and its regions), `shared/mask.js`
-  (rasterise its pieces), `shared/map-page.css` (map, floating panel, example cards, about section).
+  (rasterise its pieces), `shared/map-page.css` (map, floating panel, example cards, about section),
+  `shared/collections.json` (title and edition year per collection, `node scripts/collections.mjs`).
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster
@@ -113,12 +114,30 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Weather: Open-Meteo archive (ERA5), the season and 1991–2020 in two requests; rain and degree days above
   5 °C summed from the start of the season, 29 February dropped so days line up with the normal. South of the
   equator a season runs July to June and is named by its second year.
-- The year menu starts at the edition year of the collection, from `season/data/collections.json`
-  (`node scripts/season/collections.mjs`, from the published catalog; rerun when a collection gets a new
-  edition). The crop is that year's; other years get a note.
+- The year menu starts at the edition year of the collection, from `shared/collections.json`
+  (`node scripts/collections.mjs`, from the published catalog; rerun when a collection gets a new edition). The crop is that year's; other years get a note.
 - Charts are hand-drawn SVG on one time axis (`charts.js`), one crosshair through all three; the snapshot strip
   uses the same margins (40 px left, 64 px right).
 - Examples in `season/src/examples.js`, in the edition year of their collection; `node
   scripts/season/examples.mjs [id…]` pre-renders the month strip and the curve with the page's own code.
   Write the card text from the measured curve (the script's numbers), not from what the crop usually does.
 - The address keeps the field and year as `#lon,lat,year`.
+
+## history
+
+- Today's fields (magenta outlines, from zoom 12; further out the archive is a sample) over an old map left of a
+  swipe line and a recent aerial photo right of it. `history/src/swipe.js` clips layers with a canvas path in
+  `prerender`/`postrender`: the old map to the left of the line, each national aerial photo to its region.
+- Sources live in `history/src/maps.js`: `OLD_MAPS` (per region; `years` for series with a year slider,
+  `minZoom` for WMS layers with a MaxScaleDenominator) and `TODAY` (national aerial photos over Esri World
+  Imagery). Display only, so no CORS needed; IGN layers need their own style id (`BDORTHOHISTORIQUE` for the
+  1980–1995 photos), Flemish WMTS use `GoogleMapsVL` (plain XYZ in EPSG:3857).
+- Topotijdreis tiles are in RD New on Esri's own grid (origin −30515500, 31112400; 12 levels from 3251.2065 m),
+  reprojected by OpenLayers. `TOPOTIJDREIS_YEARS` is the list of `Historische_tijdreis_<year>` services on
+  tiles.arcgis.com; recheck it there when Esri adds editions.
+- Regions: Natural Earth 10m outlines simplified to ~400 m in `history/data/regions.json`
+  (`scripts/history/regions.sh`). The menu offers the maps of the region at the map centre; moving into another
+  region switches maps, a jump (address, example) or a border overlap keeps the map on show.
+- Address `#lon,lat,zoom,map[,year]`. Examples in `history/src/examples.js`; `node scripts/history/examples.mjs
+  [id…]` renders their split pictures from the same sources (tiles decoded and the JPEG written with `magick`),
+  `--at lon,lat,zoom,map[,year] file.jpg` renders any place, handy to scout new examples.
