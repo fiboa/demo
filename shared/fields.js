@@ -9,6 +9,12 @@ import { createXYZ } from 'ol/tilegrid.js';
 
 export const FIELDS_PMTILES = 'https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles';
 const Z = 14;
+
+/** Collections of field blocks repeat the fields of a country, without crops. */
+export const isFields = (collection) => !!collection && !collection.endsWith('_block');
+/** For `fieldAt`'s `prefer`: where collections overlap (Spain and its regions), the field that names its crop. */
+export const hasCrop = (feature) => (feature.get('crop:name') || feature.get('hcat:name_en') ? 1 : 0);
+
 const MAX_TILES = 25;
 const grid = createXYZ({ maxZoom: Z });
 const format = new MVT({ featureClass: Feature });
@@ -30,16 +36,18 @@ function neighbours(x, y, piece, tileExtent) {
 }
 
 /**
- * The field at `coordinate` (EPSG:3857) whose collection passes `accept`, or null. Returns
+ * The field at `coordinate` (EPSG:3857) whose collection passes `accept`, or null; where fields of several
+ * collections overlap, the one `prefer(feature)` scores highest (the first by default). Returns
  * { collection, id, properties, pieces: [Polygon|MultiPolygon], extent }: the pieces overlap where the
  * tiles carry a buffer, which does no harm when they are rasterised one by one.
  */
-export async function fieldAt(pmtiles, coordinate, accept, signal) {
+export async function fieldAt(pmtiles, coordinate, accept, signal, prefer = () => 0) {
   const [, x0, y0] = grid.getTileCoordForCoordAndZ(coordinate, Z);
-  const first = (await readTile(pmtiles, x0, y0, signal)).find(
+  const candidates = (await readTile(pmtiles, x0, y0, signal)).filter(
     (f) => accept(f.get('collection')) && f.getGeometry().intersectsCoordinate(coordinate),
   );
-  if (!first) return null;
+  if (!candidates.length) return null;
+  const first = candidates.reduce((best, f) => (prefer(f) > prefer(best) ? f : best));
   const collection = first.get('collection');
   const id = first.get('id');
 

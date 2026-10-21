@@ -1,5 +1,6 @@
 import 'ol/ol.css';
 import '../../shared/base.css';
+import '../../shared/map-page.css';
 import './style.css';
 
 import OlMap from 'ol/Map.js';
@@ -18,7 +19,7 @@ import { Fill, Stroke, Style } from 'ol/style.js';
 import { PMTilesVectorSource } from 'ol-pmtiles';
 
 import { COLLECTIONS } from './dems.js';
-import { FIELDS_PMTILES, fieldAt } from './fields.js';
+import { FIELDS_PMTILES, fieldAt } from '../../shared/fields.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { fieldRelief } from './read.js';
 import { colorize, hillshade, histogram, rampColor } from './relief.js';
@@ -98,7 +99,7 @@ const map = new OlMap({
 
 /** Padding that keeps a fitted field clear of the panel when it floats over the map. */
 function fitPadding() {
-  const panel = $('.relief-panel');
+  const panel = $('.map-panel');
   const floating = getComputedStyle(panel).position === 'absolute';
   return [40, floating ? panel.offsetWidth + 56 : 40, 40, 40];
 }

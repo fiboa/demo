@@ -8,12 +8,17 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - `index.html`: landing page; lists every demo.
 - `<demo>/index.html`, `<demo>/src/`: one directory per demo; register it in `vite.config.js`.
 - `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Small pre-rendered pictures (as
-  `relief/examples/`, ~100 KB each) are fine; never commit data rasters or parquet;
+  `relief/examples/`, ~100 KB each, or `season/examples/`, ~10 KB) are fine; never commit data rasters or parquet;
   demos read those from `https://data.source.coop/ftw/harmonized-field-data/...` with range requests.
-- `scripts/<demo>/`: Python or GDAL scripts that produce `<demo>/data/` or a `_demo/` file (pixi env in `pixi.toml`). Heavy runs happen on
-  a machine near the data, not in CI.
+- `scripts/<demo>/`: Python, GDAL or node scripts that produce `<demo>/data/` or a `_demo/` file (pixi env in
+  `pixi.toml`). Heavy runs happen on a machine near the data, not in CI. `scripts/png.mjs` writes the
+  pre-rendered pictures.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
   BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
+- For the demos that are a map of the global PMTiles where you click a field (relief, season):
+  `shared/fields.js` (gather a field from the z14 tiles, `isFields` drops the `_block` collections, `hasCrop`
+  prefers a field that names its crop where collections overlap, as Spain and its regions), `shared/mask.js`
+  (rasterise its pieces), `shared/map-page.css` (map, floating panel, example cards, about section).
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster
@@ -49,8 +54,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   `_demo/relief/field_share.tif` instead: per zoom 8 cell (611.5 m, EPSG:3857) the share covered by fields of
   `COLLECTIONS`, made on terra by `scripts/relief/field_share.sh` from the catalog's `_root_tiles/*.parquet`
   (~11 min). Rerun and upload it (with `scripts/relief/README.md`) when `COLLECTIONS` changes.
-- A field is cut at every tile edge, and tiles carry a ~76 m buffer. `fields.js` gathers all pieces with the
-  same `collection` + `id` from the z14 tiles around the click; `unionMask` rasterises each piece apart and ORs
+- A field is cut at every tile edge, and tiles carry a ~76 m buffer. `shared/fields.js` gathers all pieces with the
+  same `collection` + `id` from the z14 tiles around the click; `unionMask` (`shared/mask.js`) rasterises each piece apart and ORs
   them (rasterising the rings together lets the even-odd rule punch out the overlaps). Some collections have
   no `metrics:area` in the tiles; the page then counts the cells inside the mask.
 - Heights are read live from each publisher, in the model's own CRS; OpenLayers reprojects the image.
@@ -69,11 +74,11 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Saxony-Anhalt's WCS sends CORS headers to https origins only, so that model fails on the http dev server.
 - Checked as not usable from a browser (2026-10): Niedersachsen, Bayern, BEV Austria, Poland, Slovenia (no CORS);
   Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
-  Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open, neither started yet
-  (the demo first takes the sources that are open and browser-readable as they are):
+  Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open (the demo first takes the
+  sources that are open and browser-readable as they are):
   - Ask the publisher to send `Access-Control-Allow-Origin: *`; free, often one line of server or bucket
-    config, but weeks and uncertain. Most promising: LGLN Niedersachsen (COGs in an IBM COS bucket, OPTIONS 403)
-    and BEV Austria (perfect national COGs, no ACAO).
+    config, but weeks and uncertain. Asked in October 2026: LGLN Niedersachsen (COGs in an IBM COS bucket,
+    OPTIONS 403; `de_nds` is in the catalog) and BEV Austria (national COGs, no ACAO, OPTIONS 401).
   - A Cloudflare Worker as a narrow CORS proxy: forwards only to an allow-list of DEM hosts (never an open proxy),
     keeps tokens (Denmark's free Dataforsyningen token) as Worker secrets, free tier 100k requests/day. Opens
     Niedersachsen, Bayern's open tiles, Poland, Slovenia, BEV Austria and Denmark. Needs someone at fiboa to own
@@ -90,3 +95,30 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   picture shows; say "probably" for causes you cannot check. Flags come from `flag-icons`, imported one by one in
   `gallery.js`: add a country there with its first example. GSI (Japan) cannot render in node.
 - The address keeps the shown field as `#lon,lat`; panel and card links set it, the page follows `hashchange`.
+
+## season
+
+- Same map of the global PMTiles as relief, every collection but the `_block` ones. A click reads the field's
+  year from Sentinel-2 and the weather, all in the browser.
+- Imagery: Microsoft Planetary Computer `sentinel-2-l2a` (STAC search, anonymous SAS token from
+  `/api/sas/v1/token/sentinel-2-l2a`, shared and renewed in `s2.js`). Not Earth Search: its 10 m COGs have
+  1024 px tiles of ~1.3 MB; PC's are 512 px, ~300–450 KB, and the SCL tiles ~10 KB. PC is not harmonised: from
+  processing baseline 04.00 the numbers carry +1000 (`dnOffset`).
+- One MGRS tile per field (`chooseTile`). Scenes over 60 % cloud are skipped; the rest are read clearest first,
+  six at a time: the SCL window first (cheap), red and near infrared only when ≥ 80 % of the field is clear and
+  no measurement lies within 4 days. That keeps a field-year at ~25–45 measurements and ~20–40 MB. A lone low
+  point between two high ones within 12 days is flagged a dip (haze, missed cloud) and left out of the line.
+- `trueColour` reads the `visual` (TCI) window with 400 m around the field for the map, and an outlined
+  close-up for the month strip (`monthlyBest`, `closeUp`).
+- Weather: Open-Meteo archive (ERA5), the season and 1991–2020 in two requests; rain and degree days above
+  5 °C summed from the start of the season, 29 February dropped so days line up with the normal. South of the
+  equator a season runs July to June and is named by its second year.
+- The year menu starts at the edition year of the collection, from `season/data/collections.json`
+  (`node scripts/season/collections.mjs`, from the published catalog; rerun when a collection gets a new
+  edition). The crop is that year's; other years get a note.
+- Charts are hand-drawn SVG on one time axis (`charts.js`), one crosshair through all three; the snapshot strip
+  uses the same margins (40 px left, 64 px right).
+- Examples in `season/src/examples.js`, in the edition year of their collection; `node
+  scripts/season/examples.mjs [id…]` pre-renders the month strip and the curve with the page's own code.
+  Write the card text from the measured curve (the script's numbers), not from what the crop usually does.
+- The address keeps the field and year as `#lon,lat,year`.

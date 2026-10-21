@@ -1,0 +1,252 @@
+/* The season of one field: year menu, weather summary, and the charts on one time axis under the map. */
+:root {
+  --ndvi: #2f7d32;
+  --rain: #2a6fb0;
+  --gdd: #c0601c;
+  --normal: #8b958e;
+  --dip: #9aa39d;
+}
+
+.season-map {
+  height: min(62vh, 40rem);
+}
+
+.year-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.year-select select {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.weather-summary {
+  margin-top: 0.6rem !important;
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+}
+.weather-summary strong {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- charts */
+
+.season {
+  position: relative;
+  max-width: var(--wide);
+  margin: 1.5rem auto 0;
+  padding: 0 var(--gutter);
+}
+.season-chart {
+  margin: 0 0 0.75rem;
+}
+.season-chart figcaption {
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+  margin-left: 40px;
+}
+.season-chart figcaption strong {
+  color: var(--ink);
+}
+.season-chart svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+.season-chart .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+.season-chart .baseline {
+  stroke: var(--baseline);
+  stroke-width: 1;
+}
+.season-chart .tick {
+  font-size: 11px;
+  fill: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.season-chart .end-label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.season-chart .end-label.muted {
+  font-weight: 400;
+  fill: var(--ink-muted);
+}
+.ndvi-line {
+  fill: none;
+  stroke: var(--ndvi);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.ndvi-point {
+  fill: var(--ndvi);
+  stroke: var(--surface);
+  stroke-width: 1.5;
+}
+.ndvi-dip {
+  fill: var(--surface);
+  stroke: var(--dip);
+  stroke-width: 1.5;
+}
+.ndvi-selected {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.rain-line,
+.gdd-line,
+.normal-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.rain-line {
+  stroke: var(--rain);
+}
+.gdd-line {
+  stroke: var(--gdd);
+}
+.normal-line {
+  stroke: var(--normal);
+  stroke-dasharray: 4 3;
+  stroke-width: 1.5;
+}
+.crosshair {
+  stroke: var(--ink);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.season-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin: 0 0 0 40px;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.key {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  margin-left: 0.75rem;
+}
+.key:first-child {
+  margin-left: 0;
+}
+.key-ndvi {
+  background: var(--ndvi);
+}
+.key-dip {
+  border: 1.5px solid var(--dip);
+  background: var(--surface);
+}
+.key-normal {
+  width: 1.2rem;
+  height: 0;
+  border-radius: 0;
+  border-top: 2px dashed var(--normal);
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-width: 22rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- snapshots */
+
+/* The plot area of the charts: the same margins as charts.js (40 px left, 64 px right). */
+.snapshots {
+  position: relative;
+  height: 5.25rem;
+  margin: 0 64px 0.5rem 40px;
+}
+.snapshot {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: clamp(1.75rem, 6.5%, 4.25rem);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  font-size: 0.7rem;
+}
+.snapshot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--rule);
+  image-rendering: pixelated;
+}
+.snapshot:hover img,
+.snapshot[aria-pressed='true'] img {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.snapshot[aria-pressed='true'] {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- example cards */
+
+.example-curve {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.example-curve img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+.example-curve svg {
+  display: block;
+  width: 100%;
+  height: 4.5rem;
+  border-bottom: 1px solid var(--baseline);
+}
+.example-card:hover .example-curve {
+  border-color: var(--ink);
+}

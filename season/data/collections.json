@@ -1,0 +1,270 @@
+{
+ "at": {
+  "title": "Field boundaries for Austria",
+  "year": 2025
+ },
+ "at_block": {
+  "title": "Field blocks for Austria",
+  "year": 2021
+ },
+ "be_vlg": {
+  "title": "Field boundaries for Flanders, Belgium",
+  "year": 2026
+ },
+ "be_wal": {
+  "title": "Belgium Wallonia: Parcellaire Agricole Anonyme",
+  "year": 2023
+ },
+ "bg": {
+  "title": "Field blocks for Bulgaria",
+  "year": 2025
+ },
+ "br_conab": {
+  "title": "Brazil Crop Fields (CONAB)",
+  "year": 2026
+ },
+ "ch": {
+  "title": "Field boundaries for Switzerland",
+  "year": 2026
+ },
+ "cz": {
+  "title": "Field boundaries for Czech",
+  "year": 2026
+ },
+ "de_bb": {
+  "title": "Field boundaries for Berlin / Brandenburg, Germany",
+  "year": 2026
+ },
+ "de_bb_block": {
+  "title": "Field blocks for Berlin / Brandenburg, Germany",
+  "year": 2026
+ },
+ "de_bw": {
+  "title": "Field boundaries for Baden-Württemberg, Germany",
+  "year": 2022
+ },
+ "de_by": {
+  "title": "Field boundaries for Bavaria, Germany",
+  "year": 2026
+ },
+ "de_by_block": {
+  "title": "Field blocks for Bavaria, Germany",
+  "year": 2026
+ },
+ "de_he": {
+  "title": "Field blocks for Hesse, Germany",
+  "year": 2025
+ },
+ "de_mv": {
+  "title": "Field blocks for Mecklenburg-Western Pomerania, Germany",
+  "year": 2026
+ },
+ "de_nds": {
+  "title": "Crop Fields for Lower Saxony / Bremen / Hamburg, Germany",
+  "year": 2025
+ },
+ "de_nds_block": {
+  "title": "Field blocks for Lower Saxony / Bremen / Hamburg, Germany",
+  "year": 2026
+ },
+ "de_nrw": {
+  "title": "Field blocks for North Rhine-Westphalia (NRW), Germany",
+  "year": 2026
+ },
+ "de_sax": {
+  "title": "Field blocks for Saxony, Germany",
+  "year": 2026
+ },
+ "de_sh": {
+  "title": "Field blocks for Schleswig-Holstein (SH), Germany",
+  "year": 2026
+ },
+ "de_sl": {
+  "title": "Field boundaries for Saarland, Germany",
+  "year": 2026
+ },
+ "de_sl_block": {
+  "title": "Field blocks for Saarland, Germany",
+  "year": 2026
+ },
+ "de_st": {
+  "title": "Field blocks for Saxony-Anhalt, Germany",
+  "year": 2023
+ },
+ "de_th": {
+  "title": "Field blocks for Thuringia, Germany",
+  "year": 2026
+ },
+ "dk": {
+  "title": "Denmark Crop Fields (Marker)",
+  "year": 2026
+ },
+ "ec_lt": {
+  "title": "Field boundaries for Lithuania - Eurocrops 2021",
+  "year": 2021
+ },
+ "ec_lv": {
+  "title": "Field boundaries for Latvia - Eurocrops 2021",
+  "year": 2021
+ },
+ "ec_ro": {
+  "title": "Field boundaries for Romania - Eurocrops",
+  "year": 2026
+ },
+ "ec_si": {
+  "title": "Field boundaries for Slovenia - Eurocrops 2021",
+  "year": 2021
+ },
+ "ee": {
+  "title": "Field boundaries for Estonia",
+  "year": 2024
+ },
+ "es": {
+  "title": "Spain Declared Crops (Cultivos Declarados SIGPAC)",
+  "year": 2025
+ },
+ "es_an": {
+  "title": "Spain Andalusia Crop fields",
+  "year": 2025
+ },
+ "es_ar": {
+  "title": "Spain Aragon Crop fields",
+  "year": 2026
+ },
+ "es_cat": {
+  "title": "Catalonia Crop Fields (Mapa de cultius)",
+  "year": 2024
+ },
+ "es_cb": {
+  "title": "Spain Cantabria Crop fields",
+  "year": 2025
+ },
+ "es_cl": {
+  "title": "Spain Castile and León Crop fields",
+  "year": 2025
+ },
+ "es_cm": {
+  "title": "Spain Castilla-La Mancha Crop fields",
+  "year": 2024
+ },
+ "es_cn": {
+  "title": "Spain Crop fields of Canary Islands",
+  "year": 2026
+ },
+ "es_ex": {
+  "title": "Spain Extremadura Crop fields",
+  "year": 2026
+ },
+ "es_ga": {
+  "title": "Spain Galicia Crop fields",
+  "year": 2026
+ },
+ "es_ib": {
+  "title": "Spain Balearic Islands Crop fields",
+  "year": 2026
+ },
+ "es_md": {
+  "title": "Spain Madrid Crop fields",
+  "year": 2026
+ },
+ "es_nc": {
+  "title": "Spain Navarra Crop fields",
+  "year": 2026
+ },
+ "es_pv": {
+  "title": "Spain Basque Country Crop fields",
+  "year": 2025
+ },
+ "es_vc": {
+  "title": "Spain Valencia Crop Fields",
+  "year": 2024
+ },
+ "fi": {
+  "title": "Finnish Crop Fields (Maatalousmaa)",
+  "year": 2025
+ },
+ "fr": {
+  "title": "Registre Parcellaire Graphique; Crop Fields France",
+  "year": 2024
+ },
+ "hr": {
+  "title": "Croatian Field Boundaries",
+  "year": 2024
+ },
+ "ie": {
+  "title": "Ireland INSPIRE Geospatial aid application (GSAA) dataset",
+  "year": 2024
+ },
+ "ie_lpis": {
+  "title": "LPIS parcels for Ireland",
+  "year": 2025
+ },
+ "it_1": {
+  "title": "Italy Tuscany (ITI1) Crop Fields — EuroCropsV2",
+  "year": 2022
+ },
+ "it_bz": {
+  "title": "Field boundaries for South Tyrol, Italy",
+  "year": 2026
+ },
+ "jp": {
+  "title": "Japan Fude Parcels",
+  "year": 2026
+ },
+ "lt": {
+  "title": "Lithuania crop fields",
+  "year": 2025
+ },
+ "lu": {
+  "title": "Field blocks for Luxembourg",
+  "year": 2026
+ },
+ "lv": {
+  "title": "Latvia Lauki Parcels",
+  "year": 2025
+ },
+ "nl": {
+  "title": "BRP Crop Field Boundaries for The Netherlands (CAP-based)",
+  "year": 2026
+ },
+ "nl_block": {
+  "title": "Field blocks for The Netherlands",
+  "year": 2026
+ },
+ "nz": {
+  "title": "Irrigated land area",
+  "year": 2020
+ },
+ "pl": {
+  "title": "Field boundaries for Poland",
+  "year": 2026
+ },
+ "pl_block": {
+  "title": "Field blocks for Poland",
+  "year": 2025
+ },
+ "pt": {
+  "title": "Field boundaries for Portugal",
+  "year": 2025
+ },
+ "se": {
+  "title": "Swedish Crop Fields (Jordbruksskiften)",
+  "year": 2025
+ },
+ "si": {
+  "title": "Slovenia Crop Fields",
+  "year": 2024
+ },
+ "sk": {
+  "title": "Slovakia Agricultural Land Identification System",
+  "year": 2026
+ },
+ "us_ca_scm": {
+  "title": "California (US) Statewide Crop Mapping",
+  "year": 2024
+ },
+ "us_usda_cropland": {
+  "title": "U.S. Department of Agriculture Crop Sequence Boundaries",
+  "year": 2024
+ }
+}

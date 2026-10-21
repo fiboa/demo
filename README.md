@@ -6,6 +6,8 @@ small, working examples of what open field boundaries make possible. Published a
 | Demo | What it shows |
 |---|---|
 | [`nl_raster`](nl_raster/) | Disappearing Dutch farmland: 18 editions of the Dutch parcel register (BRP) on one 2 m Cloud-Optimized GeoTIFF, read in the browser with OpenLayers. |
+| [`relief`](relief/) | No field is flat: click a field and see its relief from the open 1 m height model of its country or state. |
+| [`season`](season/) | Every field has a season: the NDVI of a field in every clear Sentinel-2 image of a year, with the rain and warmth against a normal year. |
 
 ## Develop
 

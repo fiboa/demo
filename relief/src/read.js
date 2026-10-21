@@ -5,8 +5,9 @@ import { getTransform, toLonLat, transformExtent } from 'ol/proj.js';
 import { getDistance } from 'ol/sphere.js';
 
 import { demsFor, heights } from './dems.js';
-import { piecesRings } from './fields.js';
-import { heightStats, requestGrid, snapBbox, unionMask } from './relief.js';
+import { piecesRings } from '../../shared/fields.js';
+import { unionMask } from '../../shared/mask.js';
+import { heightStats, requestGrid, snapBbox } from './relief.js';
 
 // A height model is taken when it has heights for at least this share of the field.
 const ENOUGH = 0.5;

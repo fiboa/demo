@@ -8,13 +8,11 @@ import {
   hexToRgb,
   hillshade,
   histogram,
-  polygonMask,
-  quantile,
   rampColor,
   requestGrid,
   snapBbox,
-  unionMask,
 } from '../relief/src/relief.js';
+import { polygonMask, quantile, unionMask } from '../shared/mask.js';
 
 test('small fields are read at 0.5 m, large ones coarser', () => {
   assert.deepEqual(requestGrid([0, 0, 200, 100]), { cell: 0.5, width: 400, height: 200 });

@@ -1,0 +1,214 @@
+/* Shared by the demos that are a map of fields with a panel, examples and an about section. */
+main {
+  padding-bottom: 4rem;
+}
+
+.intro,
+.section {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.intro {
+  padding-top: clamp(2rem, 6vw, 4.5rem);
+  padding-bottom: 1.5rem;
+}
+.lede {
+  font-size: 1.15rem;
+  color: var(--ink-secondary);
+}
+
+/* ---------------------------------------------------------------- map */
+
+.map-section {
+  position: relative;
+}
+.map {
+  height: min(80vh, 54rem);
+  min-height: 28rem;
+  background: #e9ece9;
+}
+.map-panel {
+  position: absolute;
+  top: 1rem;
+  right: var(--gutter);
+  width: min(21rem, calc(100% - 2 * var(--gutter)));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.map-panel p {
+  margin: 0;
+}
+.panel-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.panel-note {
+  margin-top: 0.3rem !important;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+.panel-status {
+  margin-top: 0.75rem !important;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+.panel-status.is-error {
+  color: #a3341c;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.6rem 0 0.9rem;
+}
+.examples a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.examples a:hover {
+  border-color: var(--ink);
+}
+.flag {
+  display: inline-block;
+  width: 1.25em;
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(35, 51, 43, 0.15);
+  vertical-align: -0.1em;
+}
+.map-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------------- examples */
+
+.section-lede {
+  max-width: var(--measure);
+  color: var(--ink-secondary);
+}
+.example-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 2rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.example-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.example-picture {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.example-picture img {
+  position: absolute;
+  inset: 0.75rem;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 1.5rem);
+  object-fit: contain;
+}
+.example-card:hover .example-picture {
+  border-color: var(--ink);
+}
+.example-card h3 {
+  margin: 0.75rem 0 0.3rem;
+  font-size: 1.05rem;
+}
+.example-card:hover h3 {
+  text-decoration: underline;
+}
+.example-card p {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  color: var(--ink-secondary);
+}
+.example-card .example-facts {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+.example-facts strong {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- about */
+
+.section {
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.about dl {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, var(--measure));
+  gap: 0.75rem 1.5rem;
+  margin: 1rem 0 0;
+}
+.about dt {
+  font-weight: 700;
+}
+.about dd {
+  margin: 0;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 52rem) {
+  .about dl {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+  .about dd {
+    margin-bottom: 0.75rem;
+  }
+  .map-panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 0.75rem var(--gutter) 0;
+  }
+}
+
+.zoom-hint {
+  position: absolute;
+  bottom: 2.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
