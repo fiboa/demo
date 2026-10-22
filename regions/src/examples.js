@@ -107,6 +107,26 @@ export const EXAMPLES = [
     title: 'Rice in California',
     text: 'On the heavy clay of the Sacramento Valley, flooded every spring, rice is the largest crop: 181,000 hectares, 37% of the field area, just ahead of the nut orchards.',
   },
+  {
+    id: 'grojec',
+    center: [20.85, 51.8],
+    zoom: 9.3,
+    groups: ['fruit'],
+    country: 'pl',
+    short: 'Grójec',
+    title: 'The orchard of Europe',
+    text: 'Around Grójec, south of Warsaw, lies one of the largest fruit-growing areas of Europe: apples above all, with cherries, pears and blueberries. Fruit covers 81,000 hectares here, 57% of the field area, in fields of less than a hectare on average.',
+  },
+  {
+    id: 'opole',
+    center: [17.1, 50.85],
+    zoom: 9.3,
+    groups: ['maize'],
+    country: 'pl',
+    short: 'Silesia',
+    title: 'Maize between Wrocław and Opole',
+    text: 'On the fertile soils between Wrocław and Opole, in one of the warmest corners of Poland, maize is nearly as large a crop as wheat: 115,000 hectares, 29% of the field area.',
+  },
 ];
 
 export const FIRST_EXAMPLE = EXAMPLES[0];

@@ -41,6 +41,9 @@ function client(url) {
   const waiting = new Map();
   ws.onmessage = (event) => {
     const msg = JSON.parse(event.data);
+    if (msg.method === 'Runtime.consoleAPICalled' && msg.params.type === 'warning') {
+      console.warn('  page:', msg.params.args.map((a) => a.value ?? a.description).join(' '));
+    }
     if (msg.id && waiting.has(msg.id)) {
       const { resolve, reject } = waiting.get(msg.id);
       waiting.delete(msg.id);
@@ -57,24 +60,25 @@ function client(url) {
 
 const evaluate = async (cdp, expression) => (await cdp.send('Runtime.evaluate', { expression, returnByValue: true })).result.value;
 
+// The page without its header, intro and panel, the map filling the window: set before the page's own script runs,
+// since resizing the map while its tiles load can leave a layer undrawn.
+const LAYOUT = `new MutationObserver((_, observer) => {
+  if (!document.head) return;
+  observer.disconnect();
+  const s = document.createElement('style');
+  s.textContent = '.site-header, .intro, .map-panel, .zoom-hint, .ol-control, .ol-attribution { display: none !important } .map { height: ${H}px !important; min-height: 0 !important }';
+  document.head.append(s);
+}).observe(document, { childList: true, subtree: true });`;
+
 async function picture(cdp, example, dir) {
   // Via a blank page: a new hash on the same page would only fly the map there, not reload it.
   await cdp.send('Page.navigate', { url: 'about:blank' });
   await sleep(300);
   await cdp.send('Page.navigate', { url: `${BASE}${query}${exampleHash(example)}` });
-  await sleep(1500);
-  // Hide the page around the map, and the panel, so the map fills the window.
-  await evaluate(cdp, `(() => {
-    const s = document.createElement('style');
-    s.textContent = '.site-header, .intro, .map-panel, .zoom-hint, .ol-control, .ol-attribution { display: none !important } .map { height: ${H}px !important }';
-    document.head.append(s);
-    window.dispatchEvent(new Event('resize'));
-    delete document.documentElement.dataset.rendered;
-  })()`);
   // Wait until the map has drawn everything and stayed so for a few seconds.
   let last = null;
   for (let i = 0; i < 240; i++) {
-    await sleep(1000);
+    await sleep(2000);
     const now = await evaluate(cdp, 'document.documentElement.dataset.rendered ?? null');
     if (now && now === last) break;
     last = now;
@@ -99,6 +103,7 @@ try {
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: LAYOUT });
   for (const e of EXAMPLES.filter((e) => !ids.length || ids.includes(e.id))) await picture(cdp, e, dir);
   cdp.close();
 } finally {

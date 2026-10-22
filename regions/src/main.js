@@ -8,6 +8,7 @@ import fr from 'flag-icons/flags/4x3/fr.svg?url';
 import es from 'flag-icons/flags/4x3/es.svg?url';
 import nl from 'flag-icons/flags/4x3/nl.svg?url';
 import ie from 'flag-icons/flags/4x3/ie.svg?url';
+import pl from 'flag-icons/flags/4x3/pl.svg?url';
 import OlMap from 'ol/Map.js';
 import View from 'ol/View.js';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
@@ -20,6 +21,7 @@ import { PMTilesVectorSource } from 'ol-pmtiles';
 
 import COLLECTIONS from '../../shared/collections.json' with { type: 'json' };
 import { FIELDS_PMTILES } from '../../shared/fields.js';
+import { retryTiles } from '../../shared/pmtiles.js';
 import { EXAMPLES, FIRST_EXAMPLE, exampleHash } from './examples.js';
 import { GROUP, GROUPS, STEPS, cellShare, counted, describeCell, groupOf, stepOf } from './groups.js';
 import { OVERVIEW_PMTILES, parseHash, writeHash } from './view.js';
@@ -30,7 +32,7 @@ const pct = new Intl.NumberFormat('en-GB', { style: 'percent', maximumFractionDi
 // further out (the Netherlands at zoom 11: a third of them).
 const FIELD_ZOOM = 11;
 
-const FLAGS = { us, fr, es, nl, ie };
+const FLAGS = { us, fr, es, nl, ie, pl };
 const PICTURES = import.meta.glob('../examples/*.jpg', { eager: true, query: '?url', import: 'default' });
 const countryName = new Intl.DisplayNames(['en'], { type: 'region' });
 
@@ -74,17 +76,19 @@ function fieldStyle(feature, resolution) {
 
 const overviewUrl = new URLSearchParams(location.search).get('overview') ?? OVERVIEW_PMTILES;
 const cells = new VectorTileLayer({
-  source: new PMTilesVectorSource({ url: overviewUrl }),
+  source: retryTiles(new PMTilesVectorSource({ url: overviewUrl })),
   maxZoom: FIELD_ZOOM,
   declutter: false,
   style: cellStyle,
 });
 const fields = new VectorTileLayer({
-  source: new PMTilesVectorSource({
-    url: FIELDS_PMTILES,
-    attributions:
-      'Fields: <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>',
-  }),
+  source: retryTiles(
+    new PMTilesVectorSource({
+      url: FIELDS_PMTILES,
+      attributions:
+        'Fields: <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>',
+    }),
+  ),
   minZoom: FIELD_ZOOM,
   declutter: false,
   style: fieldStyle,

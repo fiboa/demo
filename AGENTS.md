@@ -22,6 +22,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   `preferred` also drop the copies the archive holds outside the catalog, as EuroCrops `ec_fr`), `shared/mask.js`
   (rasterise its pieces), `shared/map-page.css` (map, floating panel, example cards, about section),
   `shared/collections.json` (title and edition year per collection, `node scripts/collections.mjs`).
+- `shared/pmtiles.js`: `retryTiles(source)` gives an ol-pmtiles `PMTilesVectorSource` a tile loader that retries;
+  ol-pmtiles marks a tile failed for good on Source Coop's occasional error and leaves a hole (regions uses it).
 - `shared/planetary.js`: Planetary Computer STAC search, the anonymous SAS token per collection (shared, renewed
   before it expires), a COG window, a small `pool` (season, flood). `shared/openmeteo.js`: daily weather.
 - `tests/`: `node --test` suites, run in CI before the build.
