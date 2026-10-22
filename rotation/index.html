@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crop rotation</title>
+    <meta name="description" content="What grew on every field of the Netherlands, Flanders and Denmark, year after year, from the older editions of the Fields of the World harmonized field data: how varied the rotation is, how often a crop came back, and the crop of any year." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#examples">Examples</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>Crop rotation</h1>
+        <p class="lede">
+          The Netherlands, Flanders and Denmark publish their field registers every year, and the harmonized field
+          data keeps every edition. Laid on top of each other they tell what grew on a field, year after year:
+          potatoes every fourth year on the clay of Flevoland, maize on the same sandy field for twenty years, grass
+          that was never ploughed.
+        </p>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of fields coloured by their crops over the years">
+        <div id="map" class="map rotation-map" tabindex="0"></div>
+        <p id="zoom-hint" class="zoom-hint" hidden>Zoom in to the Netherlands, Flanders or Denmark</p>
+        <aside class="map-panel" aria-live="polite">
+          <label class="control">
+            <span>Colour fields by</span>
+            <select id="view">
+              <option value="varied">How varied the crops are</option>
+              <option value="often">How often a crop grew</option>
+              <option value="year">The crop of one year</option>
+            </select>
+          </label>
+          <label id="often-control" class="control" hidden>
+            <span>Crop</span>
+            <select id="often-group"></select>
+          </label>
+          <div id="year-control" class="control" hidden>
+            <label for="year">Year <output id="year-out" for="year"></output></label>
+            <input id="year" type="range" step="1" />
+          </div>
+          <div id="legend" class="legend"></div>
+
+          <div id="panel-start" class="panel-block">
+            <p class="panel-note">Click a field for everything that grew on it, or start with one of these:</p>
+            <div id="panel-examples" class="examples" role="group" aria-label="Example fields"></div>
+          </div>
+          <div id="panel-result" class="panel-block" hidden>
+            <p id="field-title" class="panel-title"></p>
+            <p id="field-facts" class="panel-note"></p>
+            <ol id="strip" class="strip" aria-label="Crop of each year"></ol>
+            <p id="field-summary" class="field-summary"></p>
+          </div>
+          <p id="panel-status" class="panel-status" hidden></p>
+        </aside>
+        <div id="map-tooltip" class="map-tooltip" role="status" hidden></div>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        <p class="section-lede">
+          Each picture is a few kilometres of fields coloured as on the map, with the field of the card outlined. The
+          row under it is that field, one cell per year. Click a card to see it on the map.
+        </p>
+        <div id="example-cards" class="example-cards"></div>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            Every edition of three collections in the
+            <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>:
+            the Netherlands (BRP, <span data-years="nl"></span>), Flanders (Landbouwgebruikspercelen,
+            <span data-years="be_vlg"></span>) and Denmark (Marker, <span data-years="dk"></span>). Their crops
+            are mapped to the <a href="https://github.com/maja601/EuroCrops">HCAT</a> crop codes, which this page
+            groups and names.
+          </dd>
+          <dt>Years of a field</dt>
+          <dd>
+            The map shows the fields of the newest edition. For every field a point inside it was looked up in each
+            older edition; the field there gave that year's crop. Outlines change, so a year can belong to a larger
+            or smaller field on the same spot. Where nothing was registered there, or the crop had no HCAT code, the
+            year is blank. Catch crops sown after the main crop (registered in the Netherlands since 2023) are left
+            out.
+          </dd>
+          <dt>Coverage</dt>
+          <dd id="coverage"></dd>
+          <dt>Measures</dt>
+          <dd>
+            "How varied" counts the crop groups of the legend among the years with a crop; "how often" is the share of
+            those years with the chosen group. Both need at least five years with a crop; fields with fewer are
+            drawn without colour.
+          </dd>
+          <dt>Built with</dt>
+          <dd>
+            DuckDB spatial joins the editions, tippecanoe makes one PMTiles archive of them; OpenLayers and ol-pmtiles
+            draw it. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.
+          </dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

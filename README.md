@@ -9,6 +9,7 @@ small, working examples of what open field boundaries make possible. Published a
 | [`relief`](relief/) | No field is flat: click a field and see its relief from the open 1 m height model of its country or state. |
 | [`season`](season/) | Every field has a season: the NDVI of a field in every clear Sentinel-2 image of a year, with the rain and warmth against a normal year. |
 | [`flood`](flood/) | Fields under water: click a field and see, in every Sentinel-1 radar image of a year, how much of it stood under water, next to the daily rain. |
+| [`rotation`](rotation/) | Crop rotation: what grew on every field of the Netherlands, Flanders and Denmark, year after year, from all editions of their registers. |
 | [`history`](history/) | What was here before the fields: today's fields over old maps and aerial photos of the Netherlands, Flanders, France, Switzerland and North Rhine-Westphalia, with a swipe line to today. |
 
 ## Develop

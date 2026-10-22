@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 // Every demo is a directory with its own index.html; add it here to have it built.
-const demos = ['nl_raster', 'relief', 'season', 'history', 'flood'];
+const demos = ['nl_raster', 'relief', 'season', 'history', 'flood', 'rotation'];
 
 export default defineConfig({
   base: '/demo/',

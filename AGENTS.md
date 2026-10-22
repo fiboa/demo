@@ -15,7 +15,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   pre-rendered pictures.
 - `shared/base.css`: tokens and page frame shared by all demos; `shared/rd.js`: RD New projection, PDOK tile grid,
   BRT basemap and `keepFitted` for the Dutch demos (nl_raster; `relief` reads only the EPSG:28992 definition).
-- For the demos that are a map of the global PMTiles where you click a field (relief, season, history, flood):
+- For the demos that are a map of the global PMTiles where you click a field (relief, season, history, flood; rotation uses only `fieldAt`):
   `shared/fields.js` (gather a field from the z14 tiles, `isFields` drops the `_block` collections, `hasCrop`
   prefers a field that names its crop where collections overlap, as Spain and its regions; `inCatalog` and
   `preferred` also drop the copies the archive holds outside the catalog, as EuroCrops `ec_fr`), `shared/mask.js`
@@ -144,6 +144,28 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Address `#lon,lat,zoom,map[,year]`. Examples in `history/src/examples.js`; `node scripts/history/examples.mjs
   [id…]` renders their split pictures from the same sources (tiles decoded and the JPEG written with `magick`),
   `--at lon,lat,zoom,map[,year] file.jpg` renders any place, handy to scout new examples.
+
+## rotation
+
+- What grew on each field of the newest nl, be_vlg and dk editions in every older edition, from one PMTiles
+  archive `_demo/rotation/rotation.pmtiles` (z9–14, layer `fields`, ~720 MB; tippecanoe thins below z12).
+  Properties: `collection`, `id`, `crop` (newest crop name), `y0` (first year), `crops` (HCAT codes y0..newest,
+  comma-separated, empty where none).
+- Built on terra by `scripts/rotation/build.py` (duckdb spatial, catalog staging copy): a point on each newest
+  field, transformed into each edition's CRS, joined with `ST_Contains`; catch crops (nl 2023+, "vanggewas",
+  "groenbemest") give way to the main crop, then the smallest field. Writes FlatGeobuf per collection plus
+  `<col>-match.json` and `hcat-names.json`, copied into `rotation/data/` (`match.json`, `hcat-names.json`). The
+  tippecanoe command is in the script's docstring.
+- Crop groups and their colours, the measures and the ramp live in `rotation/src/crops.js` only (HCAT prefixes,
+  longest first; silage maize 3301090400 sits under "harvested green" and goes to maize). The categorical
+  palette was validated with the dataviz validator; grass and cereals are close for protanopes, names in the
+  legend, tooltip and panel make up for it.
+- Views: how varied (number of groups), how often one group (share of the known years), the crop of one year
+  (slider). Both measures need `MIN_KNOWN` years with a crop. Address `#lon,lat,zoom,view[,fieldLon,fieldLat]`,
+  view `varied`, a group id or a year (`rotation/src/view.js`).
+- Examples in `rotation/src/examples.js`; `PMTILES=<local copy> node scripts/rotation/examples.mjs [id…]`
+  renders the neighbourhood pictures and stores each field's series; `tests/rotation.test.js` checks the card
+  texts against those series.
 
 ## flood
 
