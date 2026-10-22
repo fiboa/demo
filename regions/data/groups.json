@@ -1,0 +1,28 @@
+[
+  { "id": "maize", "name": "Maize", "prefixes": ["3301010600", "3301090400"] },
+  { "id": "wheat", "name": "Wheat", "prefixes": ["33010101", "33010102"] },
+  { "id": "barley", "name": "Barley", "prefixes": ["33010104"] },
+  { "id": "rice", "name": "Rice", "prefixes": ["3301010700"] },
+  { "id": "cereals", "name": "Other cereals", "prefixes": ["330101", "330115"] },
+  { "id": "soy", "name": "Soybeans", "prefixes": ["3301160000"] },
+  { "id": "rapeseed", "name": "Rapeseed", "prefixes": ["33010604"] },
+  { "id": "sunflower", "name": "Sunflower", "prefixes": ["33010605"] },
+  { "id": "cotton", "name": "Cotton", "prefixes": ["3301060300"] },
+  { "id": "pulses", "name": "Peas, beans and lentils", "prefixes": ["330102"] },
+  { "id": "potatoes", "name": "Potatoes", "prefixes": ["330103"] },
+  { "id": "beet", "name": "Sugar beet", "prefixes": ["3301290700"] },
+  {
+    "id": "vegetables",
+    "name": "Vegetables",
+    "prefixes": ["330107", "330112", "330113", "330114", "330120", "330121", "330122", "330128", "330129"]
+  },
+  { "id": "flowers", "name": "Flowers and bulbs", "prefixes": ["330108", "3305", "3301061232"] },
+  { "id": "fodder", "name": "Grass, clover and alfalfa in rotation", "prefixes": ["330109"] },
+  { "id": "grassland", "name": "Permanent grassland", "prefixes": ["3302"] },
+  { "id": "fallow", "name": "Fallow", "prefixes": ["330111", "3308"] },
+  { "id": "vines", "name": "Vineyards", "prefixes": ["3303060000"] },
+  { "id": "olives", "name": "Olives", "prefixes": ["3303050000"] },
+  { "id": "fruit", "name": "Fruit", "prefixes": ["330301", "330302", "330304", "330308"] },
+  { "id": "nuts", "name": "Nuts", "prefixes": ["330303"] },
+  { "id": "other", "name": "Other crops", "prefixes": ["3", "3301083900"] }
+]

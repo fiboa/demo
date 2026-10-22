@@ -11,6 +11,7 @@ small, working examples of what open field boundaries make possible. Published a
 | [`flood`](flood/) | Fields under water: click a field and see, in every Sentinel-1 radar image of a year, how much of it stood under water, next to the daily rain. |
 | [`rotation`](rotation/) | Crop rotation: what grew on every field of the Netherlands, Flanders and Denmark, year after year, from all editions of their registers. |
 | [`history`](history/) | What was here before the fields: today's fields over old maps and aerial photos of the Netherlands, Flanders, France, Switzerland and North Rhine-Westphalia, with a swipe line to today. |
+| [`regions`](regions/) | Farming regions: the Corn Belt, Napa Valley, Bordeaux and more, drawn from the crops of the fields, from an overview of A5 cells down to every field. |
 
 ## Develop
 

@@ -1,0 +1,402 @@
+{
+ "cornbelt": {
+  "box": [
+   -97.5,
+   38.5,
+   -83.0,
+   45.5
+  ],
+  "fields": 1921311,
+  "area_ha": 46362013,
+  "groups": {
+   "maize": {
+    "ha": 21459111,
+    "of_fields": 0.463,
+    "rank": 1
+   },
+   "soy": {
+    "ha": 19889860,
+    "of_fields": 0.429,
+    "rank": 2
+   }
+  },
+  "top": [
+   [
+    "maize",
+    21459111
+   ],
+   [
+    "soy",
+    19889860
+   ],
+   [
+    "grassland",
+    2150733
+   ],
+   [
+    "fodder",
+    1215858
+   ],
+   [
+    "wheat",
+    620958
+   ]
+  ]
+ },
+ "napa": {
+  "box": [
+   -122.55,
+   38.2,
+   -122.2,
+   38.65
+  ],
+  "fields": 1782,
+  "area_ha": 22912,
+  "groups": {
+   "vines": {
+    "ha": 16903,
+    "of_fields": 0.738,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "vines",
+    16903
+   ],
+   [
+    "grassland",
+    4464
+   ],
+   [
+    "cereals",
+    645
+   ],
+   [
+    "fallow",
+    87
+   ],
+   [
+    "nuts",
+    44
+   ]
+  ]
+ },
+ "bordeaux": {
+  "box": [
+   -1.2,
+   44.5,
+   0.3,
+   45.4
+  ],
+  "fields": 145981,
+  "area_ha": 306238,
+  "groups": {
+   "vines": {
+    "ha": 88386,
+    "of_fields": 0.289,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "vines",
+    88386
+   ],
+   [
+    "grassland",
+    66341
+   ],
+   [
+    "maize",
+    43872
+   ],
+   [
+    "fallow",
+    23294
+   ],
+   [
+    "fodder",
+    19107
+   ]
+  ]
+ },
+ "jaen": {
+  "box": [
+   -4.5,
+   37.5,
+   -2.8,
+   38.3
+  ],
+  "fields": 790880,
+  "area_ha": 1007894,
+  "groups": {
+   "olives": {
+    "ha": 711590,
+    "of_fields": 0.706,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "olives",
+    711590
+   ],
+   [
+    "grassland",
+    166743
+   ],
+   [
+    "other",
+    42515
+   ],
+   [
+    "fallow",
+    17895
+   ],
+   [
+    "wheat",
+    16191
+   ]
+  ]
+ },
+ "centralvalley": {
+  "box": [
+   -121.6,
+   35.3,
+   -118.9,
+   39.8
+  ],
+  "fields": 105239,
+  "area_ha": 2414414,
+  "groups": {
+   "nuts": {
+    "ha": 918805,
+    "of_fields": 0.381,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "nuts",
+    918805
+   ],
+   [
+    "grassland",
+    278827
+   ],
+   [
+    "vines",
+    235601
+   ],
+   [
+    "fruit",
+    167447
+   ],
+   [
+    "fodder",
+    123149
+   ]
+  ]
+ },
+ "bulbs": {
+  "box": [
+   4.6,
+   52.7,
+   5.05,
+   53.0
+  ],
+  "fields": 27602,
+  "area_ha": 45288,
+  "groups": {
+   "flowers": {
+    "ha": 8422,
+    "of_fields": 0.186,
+    "rank": 2
+   }
+  },
+  "top": [
+   [
+    "fodder",
+    8543
+   ],
+   [
+    "flowers",
+    8422
+   ],
+   [
+    "grassland",
+    7722
+   ],
+   [
+    "potatoes",
+    5554
+   ],
+   [
+    "vegetables",
+    4779
+   ]
+  ]
+ },
+ "ireland": {
+  "box": [
+   -10.7,
+   51.3,
+   -5.9,
+   55.5
+  ],
+  "fields": 1454469,
+  "area_ha": 5206752,
+  "groups": {
+   "grassland": {
+    "ha": 4472772,
+    "of_fields": 0.859,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "grassland",
+    4472772
+   ],
+   [
+    "other",
+    271893
+   ],
+   [
+    "barley",
+    174697
+   ],
+   [
+    "fodder",
+    92480
+   ],
+   [
+    "wheat",
+    65206
+   ]
+  ]
+ },
+ "texas": {
+  "box": [
+   -102.5,
+   32.5,
+   -101.0,
+   34.5
+  ],
+  "fields": 58282,
+  "area_ha": 1700927,
+  "groups": {
+   "cotton": {
+    "ha": 1156898,
+    "of_fields": 0.68,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "cotton",
+    1156898
+   ],
+   [
+    "wheat",
+    173756
+   ],
+   [
+    "grassland",
+    144621
+   ],
+   [
+    "fallow",
+    91709
+   ],
+   [
+    "cereals",
+    64337
+   ]
+  ]
+ },
+ "palouse": {
+  "box": [
+   -118.0,
+   46.3,
+   -116.8,
+   47.3
+  ],
+  "fields": 16204,
+  "area_ha": 629695,
+  "groups": {
+   "wheat": {
+    "ha": 343412,
+    "of_fields": 0.545,
+    "rank": 1
+   },
+   "pulses": {
+    "ha": 94393,
+    "of_fields": 0.15,
+    "rank": 3
+   }
+  },
+  "top": [
+   [
+    "wheat",
+    343412
+   ],
+   [
+    "fallow",
+    94460
+   ],
+   [
+    "pulses",
+    94393
+   ],
+   [
+    "grassland",
+    37149
+   ],
+   [
+    "rapeseed",
+    28298
+   ]
+  ]
+ },
+ "sacramento": {
+  "box": [
+   -122.3,
+   38.8,
+   -121.4,
+   39.8
+  ],
+  "fields": 14949,
+  "area_ha": 495164,
+  "groups": {
+   "rice": {
+    "ha": 181458,
+    "of_fields": 0.366,
+    "rank": 1
+   }
+  },
+  "top": [
+   [
+    "rice",
+    181458
+   ],
+   [
+    "nuts",
+    175176
+   ],
+   [
+    "fallow",
+    38822
+   ],
+   [
+    "grassland",
+    23472
+   ],
+   [
+    "vegetables",
+    15909
+   ]
+  ]
+ }
+}

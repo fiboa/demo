@@ -168,6 +168,31 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   renders the neighbourhood pictures and stores each field's series; `tests/rotation.test.js` checks the card
   texts against those series.
 
+## regions
+
+- Farming regions drawn by their crops. Zoomed out (below `FIELD_ZOOM` = 11) the overview
+  `harmonized-field-data-overview.pmtiles` next to the global PMTiles: one layer `cells`, A5 resolution R at zoom
+  R − 4 (r4 at z0 to r13 at z9, overzoomed beyond), per cell `count`, `area_ha`, `pct_covered` and `ha_<group>`;
+  from zoom 11 the fields of the global PMTiles. That archive thins its fields in dense regions up to z13 (around
+  the Kop van Noord-Holland z11 holds a third of them, Napa and Iowa are complete), hence cells up to zoom 11. Before the upload, test with `?overview=/demo/.local/<file>`
+  (`.local/` is gitignored).
+- Built on terra by `scripts/regions/cells.py` (catalog pixi env, DuckDB a5 extension, tippecanoe) from the inputs
+  of the global PMTiles (`catalog-staging/_root_tiles/`), modelled on FTW's `ftw-global-data-catalog/pipeline/
+  web_cells.py`: r7–r13 from the field centroids, r4–r6 from the r7 cell centres (A5 is not nested). Also writes
+  `cells_a5r{R}.parquet`. Fields without `metrics:area` get one from the geometry.
+- Every field counts once: `counted` in `regions/src/groups.js` and `skipped` in the script are the same rule (no
+  `_block`, no `ec_*` but `ec_ro`, no `es_*` regions, no `ie`); `tests/regions.test.js` checks they agree. The US
+  crop sequence boundaries also cover forest, water and towns, so `pct_covered` is high there; shares per crop
+  are of the cell's land and stay right.
+- Crop groups (HCAT prefixes, longest first) in `regions/data/groups.json`, read by the script and the page;
+  changing them means rebuilding the overview. Colours in `regions/src/groups.js`; the pairs shown together in an
+  example were checked with the dataviz validator.
+- Address `#lon,lat,zoom,group+group`. Examples in `regions/src/examples.js`; `scripts/regions/examples.py` sums
+  the cells in a box per example into `regions/data/examples.json`, which `tests/regions.test.js` checks the card
+  texts against; `scripts/regions/pictures.mjs` screenshots the page at each example's address in headless Chrome
+  over the DevTools protocol, waiting for OpenLayers' `rendercomplete` (a plain `--screenshot` fires before the
+  tiles are in).
+
 ## flood
 
 - Click a field, see per Sentinel-1 image of a year the share of it that is open water, and the rain of each day.

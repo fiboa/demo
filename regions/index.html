@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Farming regions</title>
+    <meta name="description" content="The Corn Belt, Napa Valley, Bordeaux, the olive groves of Jaén: farming regions drawn from the crops of the Fields of the World harmonized field data, from the whole region down to every field." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#examples">Examples</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>Farming regions</h1>
+        <p class="lede">
+          Some landscapes are named after what grows in them: the Corn Belt, the wine country of Napa and Bordeaux,
+          the sea of olive trees around Jaén. Colour the fields of one crop and the region draws itself, from a
+          thousand kilometres across down to the single field.
+        </p>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of the fields of the chosen crops">
+        <div id="map" class="map regions-map" tabindex="0"></div>
+        <p id="zoom-hint" class="zoom-hint" hidden></p>
+        <aside class="map-panel" aria-live="polite">
+          <p class="panel-note panel-intro">Go to a region:</p>
+          <div id="panel-examples" class="examples" role="group" aria-label="Example regions"></div>
+
+          <div class="panel-block">
+            <p class="panel-label">Coloured crops</p>
+            <ul id="chosen" class="chosen"></ul>
+            <label class="control add-crop">
+              <span class="visually-hidden">Add a crop</span>
+              <select id="add-group"></select>
+            </label>
+            <div id="legend" class="legend"></div>
+          </div>
+        </aside>
+        <div id="map-tooltip" class="map-tooltip" role="status" hidden></div>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        <p class="section-lede">
+          Each picture is the region as the map draws it, coloured by the crops of its card. Click a card to go
+          there on the map.
+        </p>
+        <div id="example-cards" class="example-cards"></div>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            The newest edition of every collection in the
+            <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>
+            with a crop, mapped to the <a href="https://github.com/maja601/EuroCrops">HCAT</a> crop codes, which this
+            page sorts into <span id="group-count"></span> groups. Collections without crops show as fields
+            without colour.
+          </dd>
+          <dt>Zoomed out</dt>
+          <dd>
+            Further out than a few kilometres per field, the map shows an overview: the land in five-sided
+            <a href="https://a5geo.org">A5</a> cells of equal area, from 133,000 km² to 700 m across, coloured by
+            the share of the cell covered by fields of the chosen crops. Every field counts once, in the cell of its
+            centre: collections that repeat another (field blocks, EuroCrops copies of a national register, the
+            Spanish regions within Spain's own register) are left out.
+          </dd>
+          <dt>Coverage</dt>
+          <dd>
+            Only countries and regions that publish their fields are on the map: most of Europe and the United
+            States (the USDA crop sequence boundaries), not yet South America, Africa or most of Asia.
+          </dd>
+          <dt>Built with</dt>
+          <dd>
+            DuckDB with the A5 extension sums the fields per cell, tippecanoe makes the overview PMTiles; OpenLayers
+            and ol-pmtiles draw it and the fields. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.
+          </dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>
