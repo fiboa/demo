@@ -23,19 +23,46 @@
         list-style: none;
         padding: 0;
         margin: 2.5rem 0 0;
-        border-top: 1px solid var(--rule);
-      }
-      .demos li {
-        padding: 1.25rem 0;
-        border-bottom: 1px solid var(--rule);
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+        gap: 2rem 1.5rem;
       }
       .demos a {
-        font-size: 1.35rem;
-        font-weight: 700;
+        display: block;
+        height: 100%;
+        color: inherit;
+        text-decoration: none;
+      }
+      .demos img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 8 / 5;
+        object-fit: cover;
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+      }
+      .demos h2 {
+        margin: 0.8rem 0 0.3rem;
+        font-size: 1.2rem;
+        line-height: 1.25;
       }
       .demos p {
-        margin: 0.35rem 0 0;
+        margin: 0;
         color: var(--ink-secondary);
+      }
+      .demos a:hover img,
+      .demos a:focus-visible img {
+        border-color: var(--ink);
+      }
+      .demos a:hover h2 {
+        text-decoration: underline;
+      }
+      .demos .external {
+        color: var(--ink-muted);
+        font-weight: 400;
+        font-size: 0.9rem;
       }
     </style>
   </head>
@@ -57,47 +84,75 @@
       </p>
       <ul class="demos">
         <li>
-          <a href="./nl_raster/">Disappearing Dutch farmland</a>
-          <p>
+          <a href="https://fiboa.org/map/">
+            <img src="./cards/map.jpg" alt="" width="640" height="400" loading="lazy" />
+            <h2>Map of all field data <span class="external">(fiboa.org/map)</span></h2>
+            <p>
+              All 159 million field boundaries of the harmonized field data on one map, every collection at once,
+              with a switch to colour them by crop.
+            </p>
+          </a>
+        </li>
+        <li>
+          <a href="./nl_raster/">
+            <img src="./cards/nl_raster.png" alt="" width="640" height="400" loading="lazy" />
+            <h2>Disappearing Dutch farmland</h2>
+            <p>
             Eighteen years of the Dutch parcel register on one 2 m raster: how much land left farming, where, and
             what grew there last.
           </p>
+          </a>
         </li>
         <li>
-          <a href="./relief/">No field is flat</a>
-          <p>
+          <a href="./relief/">
+            <img src="./cards/relief.png" alt="" width="640" height="400" loading="lazy" />
+            <h2>No field is flat</h2>
+            <p>
             Click a field in the Netherlands, Belgium, France, Germany, Switzerland, Austria, the United States and more,
             and see its relief from that country's open 1 m height model, with the colours stretched over that one field.
           </p>
+          </a>
         </li>
         <li>
-          <a href="./season/">Every field has a season</a>
-          <p>
+          <a href="./season/">
+            <img src="./cards/season.jpg" alt="" width="640" height="400" loading="lazy" />
+            <h2>Every field has a season</h2>
+            <p>
             Click a field anywhere in the catalog and follow its year: how green it is in every clear Sentinel-2
             image, and the rain and warmth it got compared with a normal year.
           </p>
+          </a>
         </li>
         <li>
-          <a href="./flood/">Fields under water</a>
-          <p>
+          <a href="./flood/">
+            <img src="./cards/flood.jpg" alt="" width="640" height="400" loading="lazy" />
+            <h2>Fields under water</h2>
+            <p>
             Click a field and see, in every Sentinel-1 radar image of a year, how much of it stood under water,
             next to the rain of each day. Radar sees through the clouds that come with a flood.
           </p>
+          </a>
         </li>
         <li>
-          <a href="./rotation/">Crop rotation</a>
-          <p>
+          <a href="./rotation/">
+            <img src="./rotation/examples/flevoland.png" alt="" width="640" height="400" loading="lazy" />
+            <h2>Crop rotation</h2>
+            <p>
             Every edition of the Dutch, Flemish and Danish registers laid on top of each other: what grew on a field
             year after year, how varied the rotation is and how often a crop came back.
           </p>
+          </a>
         </li>
         <li>
-          <a href="./history/">What was here before the fields</a>
-          <p>
+          <a href="./history/">
+            <img src="./history/examples/urk.jpg" alt="" width="640" height="400" loading="lazy" />
+            <h2>What was here before the fields</h2>
+            <p>
             Today's fields over old maps and aerial photos, from the eighteenth century on, with a line to drag
             between then and now: polders where the sea was, heath and marsh turned into farmland, strips merged
             into blocks.
           </p>
+          </a>
         </li>
       </ul>
     </main>

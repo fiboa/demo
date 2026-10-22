@@ -5,7 +5,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 
 ## Layout
 
-- `index.html`: landing page; lists every demo.
+- `index.html`: landing page; a tile per demo (and the fiboa.org map) with a 640×400 picture: an example picture of
+  the demo where one fits, else one in `cards/` (screenshots or offline renders). Add a tile with a new demo.
 - `<demo>/index.html`, `<demo>/src/`: one directory per demo; register it in `vite.config.js`.
 - `<demo>/data/`: small precomputed JSON/GeoJSON, committed and bundled. Small pre-rendered pictures (as
   `relief/examples/`, ~100 KB each, `season/examples/`, ~10 KB, or `history/examples/`, ~80 KB JPEGs) are fine; never commit data rasters or parquet;
