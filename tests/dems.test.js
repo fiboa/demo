@@ -25,3 +25,13 @@ test('every height model names its source, licence and coordinate system', () =>
     }
   }
 });
+
+test('the Niedersachsen index lists each tile newest first, ending at the newest full tile if there is one', async () => {
+  const { prefixes, tiles } = (await import('../relief/data/nds_dgm1.json', { with: { type: 'json' } })).default;
+  const full = (p) => prefixes[p].endsWith('/Vollkacheln');
+  for (const [tile, files] of Object.entries(tiles)) {
+    assert.ok(files.length > 0, tile);
+    assert.ok(files.slice(0, -1).every(([p]) => !full(p)), tile);
+    assert.ok(files.every(([, y], i) => i === 0 || y <= files[i - 1][1]), tile);
+  }
+});

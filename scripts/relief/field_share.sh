@@ -16,7 +16,7 @@ SRC=${1:?directory with <collection>.parquet}
 WORK=${2:?scratch directory}
 OUT=${3:-field_share.tif}
 
-EUROPE="nl be_vlg fr lu de_nrw de_he de_bb de_mv de_st ch at it_bz es_pv ee"
+EUROPE="nl be_vlg fr lu de_nrw de_he de_bb de_mv de_st de_nds ch at it_bz es_pv ee"
 AMERICA="us_usda_cropland"
 JAPAN="jp"
 ZEALAND="nz"

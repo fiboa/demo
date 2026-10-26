@@ -100,6 +100,11 @@ const DGM1_MV = { ...DGM1('Mecklenburg-Vorpommern', '2017–2022', 'LAiV M-V', '
 // It sends CORS headers to https origins only: on the http dev server this model fails, live it works.
 const DGM1_ST = { ...DGM1('Sachsen-Anhalt', '2019–2023', 'LVermGeo Sachsen-Anhalt', 'dl-de/by-2.0', 'EPSG:25832', wcs10('https://geodatenportal.sachsen-anhalt.de/ows_INSPIRE_LVermGeo_ATKIS_EL_DGM_WCS', '1', 'EPSG:25832')), link: 'https://www.lvermgeo.sachsen-anhalt.de/' };
 const DGM1_HE = { ...DGM1('Hessen', '2019–2023', 'HVBG Hessen', 'dl-de/zero-2.0', 'EPSG:25832', wcs20('https://inspire-hessen.de/raster/dgm1/ows', 'he_dgm1', { axes: ['E', 'N'] })), link: 'https://gds.hessen.de/' };
+const DGM1_NI = {
+  ...DGM1('Niedersachsen', '2010–2025', 'GeoBasis-DE/LGLN', 'CC BY 4.0', 'EPSG:25832'),
+  link: 'https://ni-lgln-opengeodata.hub.arcgis.com/',
+  read: readNds,
+};
 const EE_DTM = {
   name: 'Estonian DTM',
   res: 1,
@@ -219,6 +224,7 @@ export const COLLECTIONS = {
   de_bb: { region: 'Brandenburg', dems: [DGM1_BB] },
   de_mv: { region: 'Mecklenburg-Western Pomerania', dems: [DGM1_MV] },
   de_st: { region: 'Saxony-Anhalt', dems: [DGM1_ST] },
+  de_nds: { region: 'Lower Saxony', dems: [DGM1_NI] },
   ch: { region: 'Switzerland', dems: [ALTI3D] },
   at: {
     region: 'Austria',
@@ -284,14 +290,14 @@ const openTiff = (url) => {
 
 /**
  * Read a grid of `width` × `height` cells over `bbox` from one or more cloud-optimised GeoTIFFs in the same
- * coordinate system. Each cell takes the value of the file its centre falls in; geotiff.js picks the
- * overview that fits the cell size.
+ * coordinate system. Each cell takes the value of the file its centre falls in; where files overlap, the first
+ * in `urls` with a value there. geotiff.js picks the overview that fits the cell size.
  */
 async function mosaic(urls, bbox, width, height, signal) {
   const values = new Float32Array(width * height).fill(NaN);
   const cw = (bbox[2] - bbox[0]) / width;
   const ch = (bbox[3] - bbox[1]) / height;
-  await Promise.all(urls.map(async (url) => {
+  const parts = await Promise.all(urls.map(async (url) => {
     const tiff = await openTiff(url);
     const image = await tiff.getImage();
     const [ix0, iy0, ix1, iy1] = image.getBoundingBox();
@@ -323,15 +329,40 @@ async function mosaic(urls, bbox, width, height, signal) {
     const [raster] = huge
       ? await tiff.readRasters({ bbox: part, ...options })
       : await image.readRasters({ window, ...options });
-    const nodata = image.getGDALNoData();
+    return { raster, nodata: image.getGDALNoData(), r0, c0, w, h };
+  }));
+  for (const { raster, nodata, r0, c0, w, h } of parts.filter(Boolean)) {
     for (let r = 0; r < h; r++) {
       for (let c = 0; c < w; c++) {
         const v = raster[r * w + c];
-        if (valid(v, nodata)) values[(r0 + r) * width + c0 + c] = v;
+        const i = (r0 + r) * width + c0 + c;
+        if (Number.isNaN(values[i]) && valid(v, nodata)) values[i] = v;
       }
     }
-  }));
+  }
   return { values, width, height, bbox };
+}
+
+const NDS_BUCKET = 'https://dgm1.s3.eu-de.cloud-object-storage.appdomain.cloud';
+let ndsIndex;
+
+/**
+ * Niedersachsen's DGM1 comes in 1 km tiles, filed per flight campaign; a prebuilt index (1.2 MB, loaded on the
+ * first field there) lists each tile's files newest first, down to the newest full tile. The newest campaign
+ * with a value fills each cell.
+ */
+async function readNds(bbox, width, height, signal) {
+  ndsIndex ??= import('./nds_index.js').then((m) => m.default);
+  const { prefixes, tiles } = await ndsIndex;
+  const urls = [];
+  for (let e = Math.floor(bbox[0] / 1000); e < Math.ceil(bbox[2] / 1000); e++) {
+    for (let n = Math.floor(bbox[1] / 1000); n < Math.ceil(bbox[3] / 1000); n++) {
+      for (const [p, year] of tiles[`${e}_${n}`] ?? []) {
+        urls.push(`${NDS_BUCKET}/${prefixes[p]}/dgm1_32_${e}_${n}_1_ni_${year}.tif`);
+      }
+    }
+  }
+  return mosaic(urls, bbox, width, height, signal);
 }
 
 const SWISSALTI3D = 'https://data.geo.admin.ch/ch.swisstopo.swissalti3d';

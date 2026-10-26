@@ -78,14 +78,21 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - New Zealand: one LINZ COG (LERC) per NZTopo50 sheet; `relief/data/nz_dem_1m.json` holds their EPSG:2193
   extents, made by `node scripts/relief/nz_sheets.mjs` (rerun when LINZ adds sheets).
 - Japan: GSI `dem1a_png` tiles at z17, heights coded in RGB (`gsiHeight`); a 404 means no 1 m data there.
+- Niedersachsen: LGLN's DGM1 COGs in an IBM COS bucket, 1 km tiles in EPSG:25832, filed per flight campaign as
+  full tile, edge tile or outside the state; a tile is in the bucket up to six times (2010–2025).
+  `relief/data/nds_dgm1.json` (1.2 MB, made by `node scripts/relief/nds_tiles.mjs`, ~1 min; rerun when LGLN adds
+  a campaign) lists per tile the files newest first down to the newest full tile; `mosaic` fills each cell from
+  the first file with a value. `nds_index.js` wraps the JSON so it loads only on the first field there (a dynamic
+  import of the JSON itself fails in the Vite dev server). LGLN enabled CORS on request (October 2026): GET
+  with `*`, but a preflight with `Range` is refused; Chrome sends a single byte range without preflight.
 - Saxony-Anhalt's WCS sends CORS headers to https origins only, so that model fails on the http dev server.
-- Checked as not usable from a browser (2026-10): Niedersachsen, Bayern, BEV Austria, Poland, Slovenia (no CORS);
+- Checked as not usable from a browser (2026-10): Bayern, BEV Austria, Poland, Slovenia (no CORS);
   Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
   Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open (the demo first takes the
   sources that are open and browser-readable as they are):
   - Ask the publisher to send `Access-Control-Allow-Origin: *`; free, often one line of server or bucket
-    config, but weeks and uncertain. Asked in October 2026: LGLN Niedersachsen (COGs in an IBM COS bucket,
-    OPTIONS 403; `de_nds` is in the catalog) and BEV Austria (national COGs, no ACAO, OPTIONS 401).
+    config, but weeks and uncertain. Asked in October 2026: LGLN Niedersachsen (done within a
+    week, see above) and BEV Austria (national COGs, no ACAO, OPTIONS 401).
   - A Cloudflare Worker as a narrow CORS proxy: forwards only to an allow-list of DEM hosts (never an open proxy),
     keeps tokens (Denmark's free Dataforsyningen token) as Worker secrets, free tier 100k requests/day. Opens
     Niedersachsen, Bayern's open tiles, Poland, Slovenia, BEV Austria and Denmark. Needs someone at fiboa to own

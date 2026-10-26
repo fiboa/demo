@@ -6,7 +6,7 @@ no STAC metadata and may change or disappear.
 `field_share.tif` is the overview that [No field is flat](https://fiboa.org/demo/relief/) shows when zoomed
 out, where the catalog's PMTiles only hold a thinned sample of the fields. For every Web Mercator cell of
 zoom level 8 (611.5 m) it tells which share of the cell is covered by fields of the collections the demo
-covers with an open 1 m height model: `nl be_vlg fr lu de_nrw de_he de_bb de_mv de_st ch at it_bz es_pv ee
+covers with an open 1 m height model: `nl be_vlg fr lu de_nrw de_he de_bb de_mv de_st de_nds ch at it_bz es_pv ee
 us_usda_cropland nz jp`, newest edition of each.
 
 | Pixel value | Meaning |
