@@ -65,6 +65,12 @@
         font-size: 0.9rem;
       }
     </style>
+    <script type="module">
+      import { addPromptButton } from './shared/prompt.js';
+      import PROMPT from './prompt.js';
+
+      addPromptButton(PROMPT);
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -81,6 +87,10 @@
         Small, working examples on top of the Fields of the World harmonized field data: agricultural field
         boundaries from many countries in one schema, published as GeoParquet, PMTiles and Cloud-Optimized
         GeoTIFF. Every demo runs in the browser and reads the data straight from the catalog.
+      </p>
+      <p class="lede">
+        Every page was built with an AI coding agent, in plain language. The "Built with a prompt" button on each
+        page shows the prompt that builds it and how the conversation went.
       </p>
       <ul class="demos">
         <li>

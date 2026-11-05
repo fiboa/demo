@@ -22,6 +22,10 @@ import { SeasonCharts } from './charts.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { closeUp, flagDips, monthlyBest, pool, season, trueColour } from './s2.js';
 import { seasonWeather } from './weather.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const oneDecimal = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });

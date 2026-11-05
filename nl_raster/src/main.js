@@ -33,6 +33,10 @@ import {
 } from './map.js';
 import { countClasses, LGN_LEGEND_URL, lgnImage } from './lgn.js';
 import { outline, readPatch } from './patch.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const LOST_YEARS = Array.from({ length: years.lost_max_year - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i);
 const sum = (values) => values.reduce((a, b) => a + b, 0);

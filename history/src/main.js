@@ -18,6 +18,10 @@ import { FIELDS_PMTILES, fieldAt, hasCrop, isFields } from '../../shared/fields.
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { REGION_NAMES, REGIONS, TODAY, WORLD_IMAGERY, mapById, mapLabel, mapsIn, nearestYear, regionsAt } from './maps.js';
 import { Swipe, clipToOutline } from './swipe.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const oneDecimal = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });

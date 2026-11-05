@@ -29,6 +29,8 @@ Every push to `main` is tested, built and deployed to GitHub Pages by `.github/w
 1. Create a directory `<name>/` with an `index.html` and its code under `<name>/src/`.
 2. Add `<name>` to the `demos` list in `vite.config.js`.
 3. Link it from the landing page `index.html` and from the table above.
+4. Write `<name>/src/prompt.js`: the prompt that builds the demo and the conversation it came from, and call
+   `addPromptButton(PROMPT)` (`shared/prompt.js`) in its `main.js`. It shows as "Built with a prompt" in the header.
 
 Shared tokens and page frame live in `shared/base.css`. Data that a demo precomputes lives in `<name>/data/`,
 and the script that produces it in `scripts/<name>/`.

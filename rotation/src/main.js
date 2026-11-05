@@ -20,6 +20,10 @@ import { GROUP, GROUPS, MIN_KNOWN, RAMP, counts, cropName, groupIn, series, shar
 import { exampleHash } from './examples.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { ROTATION_PMTILES, parseHash, writeHash } from './view.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const pct = new Intl.NumberFormat('en-GB', { style: 'percent', maximumFractionDigits: 0 });

@@ -22,6 +22,10 @@ import { daily } from '../../shared/openmeteo.js';
 import { FloodCharts } from './charts.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { floodSpells, series, waterMap } from './s1.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const oneDecimal = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });

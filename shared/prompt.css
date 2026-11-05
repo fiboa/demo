@@ -1,0 +1,134 @@
+/* The "Built with a prompt" button in the header and its dialog. */
+.prompt-button {
+  margin-left: auto;
+  padding: 0.3rem 0.8rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.prompt-button:hover {
+  border-color: var(--ink);
+}
+
+.prompt-dialog {
+  width: min(46rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: 0;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25);
+}
+.prompt-dialog::backdrop {
+  background: rgba(35, 51, 43, 0.45);
+}
+.prompt-content {
+  position: relative;
+  padding: 1.5rem clamp(1rem, 4vw, 2rem) 1rem;
+}
+.prompt-content h2 {
+  margin-right: 2.5rem;
+}
+.prompt-content h3 {
+  margin: 1.5rem 0 0.5rem;
+}
+.prompt-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink-secondary);
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.prompt-close:hover {
+  color: var(--ink);
+  background: var(--grid);
+}
+.prompt-lede {
+  color: var(--ink-secondary);
+}
+.prompt-note {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.prompt-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.prompt-copy {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--link);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.prompt-copy:hover {
+  text-decoration: underline;
+}
+.prompt-text {
+  margin: 0;
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+
+.prompt-turns {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.prompt-turns li {
+  margin: 0 0 1rem;
+}
+.prompt-turns p {
+  max-width: none;
+  margin: 0;
+}
+.prompt-you {
+  padding: 0.6rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px 6px 6px 0;
+}
+.prompt-you::before {
+  content: 'You: ';
+  font-weight: 700;
+}
+.prompt-claude {
+  padding: 0.4rem 0.9rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+}
+.prompt-claude::before {
+  content: 'Claude: ';
+  font-weight: 700;
+}
+.prompt-tips {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+}
+.prompt-tips li {
+  margin-bottom: 0.4rem;
+}
