@@ -23,6 +23,10 @@ import { FIELDS_PMTILES, fieldAt } from '../../shared/fields.js';
 import { FIRST_EXAMPLE, renderExamples } from './gallery.js';
 import { fieldRelief } from './read.js';
 import { colorize, hillshade, histogram, rampColor } from './relief.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const twoDecimals = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

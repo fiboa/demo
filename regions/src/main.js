@@ -25,6 +25,10 @@ import { retryTiles } from '../../shared/pmtiles.js';
 import { EXAMPLES, FIRST_EXAMPLE, exampleHash } from './examples.js';
 import { GROUP, GROUPS, STEPS, cellShare, counted, describeCell, groupOf, stepOf } from './groups.js';
 import { OVERVIEW_PMTILES, parseHash, writeHash } from './view.js';
+import { addPromptButton } from '../../shared/prompt.js';
+import PROMPT from './prompt.js';
+
+addPromptButton(PROMPT);
 
 const $ = (selector) => document.querySelector(selector);
 const pct = new Intl.NumberFormat('en-GB', { style: 'percent', maximumFractionDigits: 0 });
