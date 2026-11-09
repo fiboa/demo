@@ -64,6 +64,15 @@ export const EXAMPLES = [
     text: 'The Oderbruch was the marshy floodplain of the Oder until it was drained in the 18th century. The dark streaks through this field are lower ground, probably along old river arms.',
   },
   {
+    id: 'krummhoern',
+    lon: 7.12,
+    lat: 53.43,
+    country: 'de',
+    short: 'Beds',
+    title: 'Raised beds in East Frisia',
+    text: 'A mowing pasture in the Krummhörn, the marsh west of Emden, less than a metre above sea level. Narrow ridges run side by side across it: probably the beds between old Grüppen, the shallow trenches dug by hand to drain the heavy clay.',
+  },
+  {
     id: 'seeland',
     lon: 7.05158,
     lat: 46.97875,

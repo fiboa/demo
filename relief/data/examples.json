@@ -130,5 +130,17 @@
   "dem": "3DEP",
   "width": 636,
   "height": 548
+ },
+ "krummhoern": {
+  "collection": "de_nds",
+  "crop": "Mowing pastures",
+  "crop_en": "Mowing pastures",
+  "area": 68252,
+  "low": 0.09,
+  "high": 0.75,
+  "spread": 0.651,
+  "dem": "DGM1 Niedersachsen",
+  "width": 304,
+  "height": 430
  }
 }
