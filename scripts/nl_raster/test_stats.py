@@ -39,11 +39,11 @@ def test_count_codes_only_where_year_matches() -> None:
 
 def test_cell_counts_pads_partial_blocks() -> None:
     years = np.zeros((CELL + 1, CELL), np.uint8)
-    years[:CELL, :] = 9
+    years[:CELL, :] = FIRST_YEAR - 2000
     years[CELL, 0] = 26
     cells = cell_counts(years)
     assert cells.shape == (len(YEAR_VALUES), 2, 1)
-    assert cells[0, 0, 0] == CELL * CELL  # all 2009 in the first cell
+    assert cells[0, 0, 0] == CELL * CELL  # all of the first year in the first cell
     assert cells[-1, 1, 0] == 1  # the single 2026 pixel in the padded second cell
 
 
@@ -83,6 +83,6 @@ def test_every_lgn_class_belongs_to_exactly_one_group_and_nodata_to_none() -> No
 
 
 def test_landuse_block_keeps_the_group_only_where_there_ever_was_a_field() -> None:
-    years = np.array([[0, 9], [26, 25]], np.uint8)
+    years = np.array([[0, 5], [26, 25]], np.uint8)  # 5: a 2005 field, on the map though not counted
     lgn = np.array([[18, 18], [1, 65535]], np.uint16)
     assert landuse_block(years, lgn, group_lookup()).tolist() == [[0, 1], [7, 0]]

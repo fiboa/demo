@@ -34,8 +34,13 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 
 ## nl_raster
 
-- Reads `_demo/nl/nl_years.tif` (EPSG:28992, Byte, value = last BRP edition − 2000, 0 = never). OpenLayers
+- Reads `_demo/nl/nl_years.tif` (EPSG:28992, Byte, value = last BRP edition − 2000, 5 … 26 = 2005 … 2026, 0 = never),
+  made on terra by `scripts/nl_raster/years_cog.sh` from the catalog's staging. Only Bouwland and Grasland count as
+  a field (`FIELD_WHERE` in stats.py): the catalog also keeps fallow and parcels without a category. OpenLayers
   renders it in RD New with the PDOK BRT background; MapLibre cannot, its COG protocol only reads EPSG:3857.
+- The map shows the editions from 2005 (`FIRST_YEAR` in colors.js, `MAP_FIRST_YEAR` in stats.py), every figure counts
+  from 2009 (`FIRST_YEAR` in stats.py, `first_year` in years.json): RVO drew 2005-2008 wider, so 2008 would hold
+  ~60,000 ha of field edges and ditches.
 - "Disappeared" = last year ≤ 2025 (not in the 2026 concept edition). Keep `LOST_MAX_YEAR` in
   `scripts/nl_raster/stats.py` and `lost_max_year` in `years.json` the single source of that rule.
 - All statistics are counted on the COG's 2 m grid, so they add up; `tests/data.test.js` checks that.
@@ -53,7 +58,8 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   4-connected cells with the same last year, and counts the LGN2025 classes in one PDOK WMS image requested on
   exactly that 2 m grid. That works because the WMS draws the exact colours of `LGN2025.sld`; `LGN_CLASSES` is
   copied from it. Four colours are shared by several classes and are reported as one.
-- Regenerate the data on terra:
+- Regenerate the data on terra, after `years_cog.sh` (a new grid or new years make every step stale, so use an
+  empty `--work`):
   `pixi run python scripts/nl_raster/stats.py all --cog nl_years.tif --source '<nl>/year={year}/nl-{year}.parquet' --lgn /opt/ca_reference/data/raster/LGN2025/LGN2025.tif --work <scratch> --out nl_raster/data`
 
 ## relief

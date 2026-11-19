@@ -38,7 +38,9 @@ import PROMPT from './prompt.js';
 
 addPromptButton(PROMPT);
 
-const LOST_YEARS = Array.from({ length: years.lost_max_year - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i);
+// The map shows the editions from FIRST_YEAR (2005); the figures count from years.first_year (2009),
+// because the editions before it are drawn wider and their edges would read as lost land.
+const LOST_YEARS = Array.from({ length: years.lost_max_year - years.first_year + 1 }, (_, i) => years.first_year + i);
 const sum = (values) => values.reduce((a, b) => a + b, 0);
 const lostOf = (byYear) => sum(LOST_YEARS.map((y) => byYear[y] ?? 0));
 const everOf = (byYear) => sum(Object.values(byYear));
@@ -490,7 +492,8 @@ const TOP_CROPS = 12;
 const cropRows = [
   ...mapped.slice(0, TOP_CROPS).map(([code, ha]) => [humanize(crops.crops[code]?.name ?? code), ha]),
   ['All other crops', sum(mapped.slice(TOP_CROPS).map(([, ha]) => ha))],
-  ['Crop not mapped to HCAT', unmapped],
+  // since the code list maps every crop of every edition, this bar shows only when that changes
+  ...(unmapped ? [['Crop not mapped to HCAT', unmapped]] : []),
 ];
 barChart($('#chart-crops'), {
   labels: cropRows.map(([name]) => name),
@@ -500,5 +503,6 @@ barChart($('#chart-crops'), {
   details: $('#table-crops'),
 });
 $('#crop-unmapped').textContent = pct.format(unmapped / sum(cropTotals.map(([, ha]) => ha)));
+$('#crop-unmapped-note').hidden = !unmapped;
 
 $('#generated').textContent = years.generated;

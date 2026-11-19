@@ -28,7 +28,7 @@
         <h1><span id="lost-ha">…</span> hectares of Dutch farmland have dropped out of the field register since 2009</h1>
         <p class="lede">
           Every year, Dutch farmers declare their fields to the government for subsidies. Those declarations form the
-          BRP, the national register of agricultural parcels. Stack eighteen editions of it on a 2-metre grid and
+          BRP, the national register of agricultural parcels. Stack twenty-two editions of it on a 2-metre grid and
           you can see, for every patch of land, the last year it was farmed. Where that year is before 2026, the
           land has left the register: built over, turned into nature, or no longer declared.
         </p>
@@ -60,7 +60,7 @@
           </div>
           <div id="legend" class="legend">
             <span class="legend-ramp" aria-hidden="true"></span>
-            <span class="legend-ends"><span>2009</span><span>last farmed</span><span>2025</span></span>
+            <span class="legend-ends"><span>2005</span><span>last farmed</span><span>2025</span></span>
             <span class="legend-farmed"><span class="swatch" aria-hidden="true"></span>Farmed after the chosen year</span>
           </div>
           <ul id="legend-landuse" class="swatch-legend swatch-legend-stacked" aria-label="Legend" hidden></ul>
@@ -81,8 +81,9 @@
         <h2>Year by year</h2>
         <p>
           Each bar is the land whose <em>last</em> year as a declared field was that year. The colours are the
-          ones on the map. Two bars need care. The 2009 bar holds land that was a field in 2009 and never again,
-          but loss before 2009 is not in this data at all. And <span id="fig-2025">…</span> hectares were
+          ones on the map. Two bars need care. The 2009 bar holds land that was a field in 2009 and never again.
+          The map also shows 2005 to 2008, but these years are not counted: RVO drew those editions wider than
+          the ones from 2009 on, so field edges and ditches would show up as land lost in 2008. And <span id="fig-2025">…</span> hectares were
           declared in 2025 but are missing from the 2026 edition, which is still a concept: some of it may
           return when the final edition comes out.
         </p>
@@ -172,8 +173,9 @@
         <h2>What grew there last</h2>
         <p>
           The crop declared on the land in its last year, using the HCAT crop classification. Grassland
-          dominates, as it does in Dutch farming overall. In the early editions not every Dutch crop code has an
-          HCAT match; <span id="crop-unmapped">…</span> of the lost land has no mapped crop.
+          dominates, as it does in Dutch farming overall. Every Dutch crop code of these editions has an HCAT
+          match<span id="crop-unmapped-note" hidden>, except on <span id="crop-unmapped">…</span> of the lost
+          land</span>.
         </p>
         <div class="chart chart-crops"><canvas id="chart-crops" aria-label="Hectares gone by last crop" role="img"></canvas></div>
         <details id="table-crops"><summary>Show as a table</summary></details>
@@ -184,14 +186,15 @@
         <dl>
           <dt>Source</dt>
           <dd>
-            The BRP (Basisregistratie Gewaspercelen) by RVO, published through PDOK, editions 2009 to 2026, as
+            The BRP (Basisregistratie Gewaspercelen) by RVO, editions 2005 to 2026: 2009 onwards as published
+            through PDOK, 2005–2008 from copies of RVO's original files, which PDOK no longer offers. All are
             harmonized in the <a href="https://source.coop/ftw/harmonized-field-data/nl">Fields of the World
             catalog</a> (CC0).
           </dd>
           <dt>The raster</dt>
           <dd>
-            One <a data-cog-url href="#">Cloud-Optimized GeoTIFF</a> of 314 MB in RD New (EPSG:28992) with
-            2 m pixels. A pixel holds the last edition in which a field covered its centre, as year − 2000; 0
+            One <a data-cog-url href="#">Cloud-Optimized GeoTIFF</a> of 353 MB in RD New (EPSG:28992) with
+            2 m pixels. A pixel holds the last edition in which an arable or grassland field covered its centre, as year − 2000; 0
             means never. This page reads it with HTTP range requests: only the tiles you look at are downloaded.
             See its <a href="https://data.source.coop/ftw/harmonized-field-data/_demo/nl/README.md">README</a>
             and <a href="https://data.source.coop/ftw/harmonized-field-data/_demo/nl/AGENTS.md">AGENTS.md</a>.
@@ -205,8 +208,10 @@
           </dd>
           <dt>Caveats</dt>
           <dd>
-            The 2026 edition is still a concept. Loss before 2009 is invisible. Hotspots, municipalities and crops
-            are all counted on the same 2 m grid, so their totals add up to the national figure.
+            The 2026 edition is still a concept. The figures start in 2009; the map shows 2005–2008 as well,
+            but those editions are drawn wider (field edges, ditches) and are not counted. Loss before 2005 is
+            invisible. Hotspots, municipalities and crops are all counted on the same 2 m grid, so their totals
+            add up to the national figure.
           </dd>
           <dt>Built with</dt>
           <dd>

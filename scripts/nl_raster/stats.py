@@ -35,7 +35,14 @@ from rasterio.windows import Window
 from scipy import ndimage
 
 COG_URL = "https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif"
+# nl_years.tif holds the editions from 2005, but every statistic counts from 2009: the RVO files of
+# 2005-2008 are drawn wider than PDOK's editions from 2009 (field edges, ditches), so land last farmed
+# in 2008 is mostly a change of drawing, not lost land. The map shows 2005-2008; the figures do not.
+MAP_FIRST_YEAR = 2005
 FIRST_YEAR, LAST_YEAR = 2009, 2026
+# Only arable land and grassland count as a field, as in nl_years.tif (years_cog.sh): the catalog also
+# keeps fallow (Braakland) and parcels without a category, such as the nature parcels of 2009-2011.
+FIELD_WHERE = "coverage IN ('Bouwland', 'Grasland')"
 # A pixel has "disappeared" when its last edition is before the last one (2026, concept).
 LOST_MAX_YEAR = LAST_YEAR - 1
 N_VALUES = LAST_YEAR - 2000 + 1  # pixel values 0..26
@@ -151,7 +158,7 @@ def group_lookup() -> np.ndarray:
 
 def landuse_block(years: np.ndarray, lgn: np.ndarray, lut: np.ndarray) -> np.ndarray:
     """The LGN group on every pixel that was ever a field, 0 elsewhere."""
-    return np.where(years >= FIRST_YEAR - 2000, lut[lgn], 0).astype(np.uint8)
+    return np.where(years >= MAP_FIRST_YEAR - 2000, lut[lgn], 0).astype(np.uint8)
 
 
 # ---------------------------------------------------------------- raster plumbing
@@ -226,13 +233,13 @@ def _parallel(fn: Callable, cog: Path, *args: Any) -> Iterable:
         yield from pool.map(fn, *[[a] * len(chunks) for a in (cog, *args)], chunks)
 
 
-def rasterize(vector: str, attribute: str, out: Path, cog: Path, dtype: str) -> None:
-    """Burn `attribute` onto exactly the grid of the COG (pixel-centre rule)."""
+def rasterize(vector: str, attribute: str, out: Path, cog: Path, dtype: str, where: str | None = None) -> None:
+    """Burn `attribute` onto exactly the grid of the COG (pixel-centre rule), of the features `where` selects."""
     with rasterio.open(cog) as ds:
         b = ds.bounds
         res = ds.res[0]
     subprocess.run(
-        ["gdal_rasterize", "-q", "-a", attribute, "-ot", dtype, "-init", "0",
+        ["gdal_rasterize", "-q", "-a", attribute, *(["-where", where] if where else []), "-ot", dtype, "-init", "0",
          "-te", str(b.left), str(b.bottom), str(b.right), str(b.top), "-tr", str(res), str(res),
          "-co", "TILED=YES", "-co", "BLOCKXSIZE=512", "-co", "BLOCKYSIZE=512",
          "-co", "COMPRESS=DEFLATE", "-co", "BIGTIFF=YES", vector, str(out)],
@@ -272,6 +279,7 @@ def step_years(cog: Path, work: Path, out: Path) -> None:
     write_json(out / "years.json", {
         "cog": COG_URL,
         "generated": date.today().isoformat(),
+        "map_first_year": MAP_FIRST_YEAR,
         "first_year": FIRST_YEAR,
         "last_year": LAST_YEAR,
         "lost_max_year": LOST_MAX_YEAR,
@@ -319,13 +327,13 @@ def step_crops(cog: Path, work: Path, out: Path, source: str) -> None:
     names = duckdb.sql(f"""
         SELECT "hcat:code" AS code, any_value("hcat:name") AS name, any_value("hcat:name_en") AS name_en
         FROM read_parquet({[source.format(year=y) for y in range(FIRST_YEAR, LOST_MAX_YEAR + 1)]})
-        WHERE "hcat:code" IS NOT NULL GROUP BY 1
+        WHERE "hcat:code" IS NOT NULL AND {FIELD_WHERE} GROUP BY 1
     """).fetchall()
 
     def burn(year: int) -> Path:
         path = work / f"hcat-{year}.tif"
         if not path.exists():
-            rasterize(source.format(year=year), "hcat:code", path, cog, "UInt32")
+            rasterize(source.format(year=year), "hcat:code", path, cog, "UInt32", FIELD_WHERE)
         return path
 
     years = list(range(FIRST_YEAR, LOST_MAX_YEAR + 1))

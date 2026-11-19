@@ -39,6 +39,14 @@ Precompute the statistics in Python on the raster's own 2 m grid, so every break
       you: 'When I click a lost field, show which land-use classes lie on it now. And add a toggle to hide the land that is still farmed, so you see exactly what disappeared.',
     },
     { you: 'Looks good. Commit and push.' },
+    {
+      you: 'The catalog now also holds the editions 2005-2008. Extend the demo so it uses 2005-2026.',
+      claude: 'Rebuilt the raster from all 22 editions on the same grid, counting only arable land and grassland as before. Found that the 2005-2008 files are drawn wider, so 75,000 ha would show as lost in 2008, and asked how to handle it.',
+    },
+    {
+      you: 'Show 2005-2026 on the map, but count from 2009.',
+      claude: 'Kept the figures from 2009, let the map and slider start in 2005, explained why on the page, and rechecked every claim against the new statistics.',
+    },
   ],
   tips: [
     'Give the exact address of the data and say what a pixel value means. The agent cannot guess that.',

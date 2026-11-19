@@ -1,12 +1,16 @@
 // Colours shared by the map and the charts: one per last year, so the bar chart doubles as the map legend.
 
-export const FIRST_YEAR = 2009;
+// The first edition in nl_years.tif. The statistics count from years.json's first_year (2009).
+export const FIRST_YEAR = 2005;
 export const LAST_YEAR = 2026;
 
-// 2009 … 2025, light (long ago) to dark (recent). One hue, validated as an ordinal ramp.
+// 2005 … 2025, light (long ago) to dark (recent): one hue, monotone lightness. With 21 steps the
+// neighbours are closer than the ordinal validator's minimum step, so the year is named by the slider,
+// the bar under the cursor and the map tooltip, never by colour alone.
 export const LOST_RAMP = [
-  '#e5893f', '#dd823c', '#d67b38', '#ce7435', '#c66e32', '#bf672e', '#b7602b', '#b05a28', '#a85325',
-  '#a14d21', '#99461e', '#92401b', '#8b3918', '#843315', '#7c2c12', '#75260f', '#6e1f0c',
+  '#e5893f', '#df843c', '#d97e3a', '#d37937', '#cd7435', '#c76e32', '#c16930', '#bb642d', '#b55f2b',
+  '#af5928', '#aa5426', '#a44f23', '#9e4920', '#98441e', '#923f1b', '#8c3a19', '#863416', '#802f14',
+  '#7a2a11', '#74240f', '#6e1f0c',
 ];
 export const FARMED = '#9db893';
 
@@ -19,8 +23,8 @@ export function hexToRgba(hex, alpha = 1) {
  * RGBA colour of a pixel of nl_years.tif when the map shows the land that disappeared up to and
  * including `maxYear`.
  *
- * value: the pixel value, 0 (no field ever) or year − 2000 (9 = 2009 … 26 = 2026).
- * maxYear: the slider year, 2009 … 2025.
+ * value: the pixel value, 0 (no field ever) or year − 2000 (5 = 2005 … 26 = 2026).
+ * maxYear: the slider year, 2005 … 2025.
  */
 export function yearColor(value, maxYear, showFarmed = true) {
   const year = 2000 + value;
