@@ -47,6 +47,26 @@ export const EXAMPLES = [
     title: 'Rice, flooded on purpose',
     text: 'The paddies around the Albufera of Valencia are flooded for sowing in May; the radar sees open water until the rice grows over it in June, though wind on the water hides some of it. In October 2025, after some 115 mm of rain in five days, the harvested field stood under water again.',
   },
+  {
+    id: 'missouri',
+    lon: -95.63305,
+    lat: 40.62046,
+    year: 2019,
+    country: 'us',
+    short: 'Hamburg, Iowa',
+    title: 'The Missouri breaks its levees',
+    text: 'In March 2019 heavy rain on snow and frozen ground pushed the Missouri through its levees around Hamburg, Iowa. On 18 March the radar finds most of this field under water; by the next image the water has gone.',
+  },
+  {
+    id: 'tulare',
+    lon: -119.71347,
+    lat: 36.02218,
+    year: 2023,
+    country: 'us',
+    short: 'Tulare Lake',
+    title: 'A lost lake comes back',
+    text: 'The atmospheric rivers of winter 2023 and the snowmelt after them refilled Tulare Lake, drained for farming a century ago. This field in the old lake bed was under water from May, almost all of it from June to mid-July, and dry again by September. Twice in late May, wind on the water hid it from the radar.',
+  },
 ];
 
 export const FIRST_EXAMPLE = EXAMPLES[0];

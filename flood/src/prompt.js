@@ -21,6 +21,10 @@ Find a few known floods on fields in the catalog for pre-rendered examples, and 
       claude: 'Built it on the season demo\'s code. It dropped one example, the Valencia floods of 2024: the water was gone before the next satellite passed.',
     },
     { you: 'Yes, commit and push.' },
+    {
+      you: 'Add a few examples from the USA, from well-known storms and floods such as Katrina in New Orleans.',
+      claude: 'Explained that Sentinel-1 starts in 2014, so Katrina (2005) is out of reach, and proposed later floods. Found clearly flooded fields at the Missouri levee breaches of 2019 and in Tulare Lake in 2023, but none for Hurricane Ida, and left out a field whose later "water" came from one radar track only.',
+    },
   ],
   tips: [
     'Point to an earlier demo ("like the season demo"): the agent reuses its code and its look.',

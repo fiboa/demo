@@ -3,6 +3,7 @@ import de from 'flag-icons/flags/4x3/de.svg?url';
 import es from 'flag-icons/flags/4x3/es.svg?url';
 import fr from 'flag-icons/flags/4x3/fr.svg?url';
 import pl from 'flag-icons/flags/4x3/pl.svg?url';
+import us from 'flag-icons/flags/4x3/us.svg?url';
 
 import COLLECTIONS from '../../shared/collections.json' with { type: 'json' };
 import FACTS from '../data/examples.json' with { type: 'json' };
@@ -11,7 +12,7 @@ import { EXAMPLES, FIRST_EXAMPLE } from './examples.js';
 export { FIRST_EXAMPLE };
 
 // Only the flags of countries with an example are bundled; add one here with a new country.
-const FLAGS = { de, es, fr, pl };
+const FLAGS = { de, es, fr, pl, us };
 const PICTURES = import.meta.glob('../examples/*.png', { eager: true, query: '?url', import: 'default' });
 const countryName = new Intl.DisplayNames(['en'], { type: 'region' });
 const pct = new Intl.NumberFormat('en-GB', { style: 'percent', maximumFractionDigits: 0 });

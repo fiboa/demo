@@ -228,3 +228,9 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   Flooded fields were found by scanning a few km around known floods for the wettest scene and ranking the
   fields in it by water share; a flash flood (Valencia, October 2024) drains before the next pass and shows
   nothing.
+- `node scripts/flood/scan.mjs <lon> <lat> <km> <start> <end> [dry start] [dry end]` does that scan: the
+  wettest scene of the span, and the fields ranked by water in it minus water in the driest scene of the same
+  track. `node scripts/flood/curve.mjs <lon> <lat> <year>` prints a candidate's curve with the track of each
+  image. Check it before picking: a field that reads as water in one track only (Hamburg, Iowa, after March
+  2019: sand left by the river, or smooth wet soil) is not flooded. Both read ~1 MB per image, so run them on
+  terra (node via `pixi global install nodejs`). Hurricane Ida (2021) showed no flooded fields near New Orleans.
