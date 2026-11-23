@@ -10,10 +10,11 @@ test('GSI colours decode to heights in centimetres, negative from 2^23, (128, 0,
   assert.ok(Number.isNaN(gsiHeight(128, 0, 0)));
 });
 
-test('Austria tries Styria or a Tyrol zone by where the field lies; elsewhere none', () => {
-  assert.deepEqual(demsFor('at', [15.6, 46.9]).map((d) => d.name), ['ALS DGM Steiermark']);
-  assert.deepEqual(demsFor('at', [12.75, 46.83]).map((d) => d.name), ['Geländemodell Tirol', 'Geländemodell Tirol']);
-  assert.deepEqual(demsFor('at', [16.4, 48.2]), []);
+test('Austria tries Styria or a Tyrol zone by where the field lies, then BEV everywhere', () => {
+  const BEV = 'ALS-DGM Österreich';
+  assert.deepEqual(demsFor('at', [15.6, 46.9]).map((d) => d.name), ['ALS DGM Steiermark', BEV]);
+  assert.deepEqual(demsFor('at', [12.75, 46.83]).map((d) => d.name), ['Geländemodell Tirol', 'Geländemodell Tirol', BEV]);
+  assert.deepEqual(demsFor('at', [16.4, 48.2]).map((d) => d.name), [BEV]);
   assert.deepEqual(demsFor('dk', [9.5, 56]), []);
 });
 

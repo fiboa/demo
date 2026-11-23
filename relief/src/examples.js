@@ -83,6 +83,15 @@ export const EXAMPLES = [
     text: 'The Grosses Moos was a peat marsh until it was drained in the 19th century; the peat has been shrinking since. Lighter, higher bands meander through the field where firmer ground lies.',
   },
   {
+    id: 'marchfeld',
+    lon: 16.62,
+    lat: 48.22,
+    country: 'at',
+    short: 'Channel',
+    title: 'Lucerne in the Marchfeld',
+    text: 'The plain east of Vienna, built up by the Danube. Across this lucerne field runs a dark hollow about a metre deep: probably an old arm of the river, silted up long ago.',
+  },
+  {
     id: 'suedtirol',
     lon: 11.19085,
     lat: 46.54546,

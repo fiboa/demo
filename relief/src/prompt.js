@@ -36,6 +36,10 @@ When zoomed out, show where the fields with relief are, so the map is never empt
       you: 'Draft the e-mails to the publishers whose servers block browsers; I will send them.',
       claude: 'Drafted them. When Lower Saxony enabled access weeks later, it tested their bucket and added the state.',
     },
+    {
+      you: 'The Austrian BEV has fixed its CORS headers. Can we add their height model?',
+      claude: 'Tested the national 1 m files from the browser, found the 55 tiles that exist, and added them after Styria and Tyrol, with an example from the Marchfeld.',
+    },
   ],
   tips: [
     'Ask the agent to "think along" before choosing: you get options with their trade-offs.',

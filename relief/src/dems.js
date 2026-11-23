@@ -18,6 +18,7 @@ proj4.defs([
   ['EPSG:3301', '+proj=lcc +lat_0=57.5175539305556 +lon_0=24 +lat_1=59.3333333333333 +lat_2=58 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'],
   ['EPSG:2056', '+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'],
   ['EPSG:2193', '+proj=tmerc +lat_0=0 +lon_0=173 +k=0.9996 +x_0=1600000 +y_0=10000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'],
+  ['EPSG:3035', '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'],
   ['EPSG:2169', '+proj=tmerc +lat_0=49.8333333333333 +lon_0=6.16666666666667 +k=1 +x_0=80000 +y_0=100000 +ellps=intl +towgs84=-189.6806,18.3463,-42.7695,-0.33746,-3.09264,2.53861,0.4598 +units=m +no_defs'],
 ]);
 register(proj4);
@@ -148,6 +149,16 @@ const STMK = {
   bounds: [13.5, 46.6, 16.2, 47.9],
   url: imageServer('https://gis.stmk.gv.at/image/rest/services/OGD_Hoehen/ALS_Hoehen_aktuell_DGM_UTM33N_32633/ImageServer', 3857),
 };
+const BEV = {
+  name: 'ALS-DGM Österreich',
+  res: 1,
+  years: '2006–2022',
+  licence: 'free, BEV terms of use',
+  link: 'https://www.bev.gv.at/Services/Produkte/Digitales-Gelaendehoehenmodell/ALS-Hoehenraster.html',
+  by: 'BEV',
+  crs: 'EPSG:3035',
+  read: readBev,
+};
 const TIROL = (coverage, bounds) => ({
   name: 'Geländemodell Tirol',
   res: 0.5,
@@ -228,9 +239,9 @@ export const COLLECTIONS = {
   ch: { region: 'Switzerland', dems: [ALTI3D] },
   at: {
     region: 'Austria',
+    // Styria and Tyrol publish 0.5 m, so they go first; BEV's 1 m model covers the rest of the country.
     // Tyrol publishes its west (M28) and east (M31) zones apart; a zone answers 404 outside itself.
-    dems: [STMK, TIROL('Gelaendemodell_50cm_M28', [10.0, 46.75, 13.0, 47.8]), TIROL('Gelaendemodell_50cm_M31', [12.0, 46.6, 13.0, 47.2])],
-    partly: 'Styria and Tyrol',
+    dems: [STMK, TIROL('Gelaendemodell_50cm_M28', [10.0, 46.75, 13.0, 47.8]), TIROL('Gelaendemodell_50cm_M31', [12.0, 46.6, 13.0, 47.2]), BEV],
   },
   it_bz: { region: 'South Tyrol', dems: [SUEDTIROL] },
   es_pv: { region: 'the Basque Country', dems: [EUSKADI] },
@@ -360,6 +371,30 @@ async function readNds(bbox, width, height, signal) {
       for (const [p, year] of tiles[`${e}_${n}`] ?? []) {
         urls.push(`${NDS_BUCKET}/${prefixes[p]}/dgm1_32_${e}_${n}_1_ni_${year}.tif`);
       }
+    }
+  }
+  return mosaic(urls, bbox, width, height, signal);
+}
+
+const BEV_BASE = 'https://data.bev.gv.at/download/ALS/DTM/20230915/ALS_DTM_CRS3035RES50000m';
+// The 55 tiles of 50 km (EPSG:3035) that exist, by their south-west corner in km: north edge → east edges.
+// BEV lists no directory, and a burst of HEAD requests gets the address blocked for a while.
+const BEV_TILES = {
+  2550: [4650],
+  2600: [4300, 4350, 4400, 4450, 4500, 4550, 4600, 4650, 4700, 4750],
+  2650: [4250, 4300, 4350, 4400, 4450, 4500, 4550, 4600, 4650, 4700, 4750, 4800],
+  2700: [4250, 4300, 4350, 4400, 4450, 4500, 4550, 4600, 4650, 4700, 4750, 4800],
+  2750: [4500, 4550, 4600, 4650, 4700, 4750, 4800, 4850],
+  2800: [4500, 4550, 4600, 4650, 4700, 4750, 4800],
+  2850: [4600, 4650, 4700, 4750, 4800],
+};
+
+/** BEV's national ALS-DGM: one 1 m COG (12 GB, CORS on request since November 2026) per 50 km tile. */
+function readBev(bbox, width, height, signal) {
+  const urls = [];
+  for (let e = Math.floor(bbox[0] / 50000) * 50; e < bbox[2] / 1000; e += 50) {
+    for (let n = Math.floor(bbox[1] / 50000) * 50; n < bbox[3] / 1000; n += 50) {
+      if (BEV_TILES[n]?.includes(e)) urls.push(`${BEV_BASE}N${n * 1000}E${e * 1000}.tif`);
     }
   }
   return mosaic(urls, bbox, width, height, signal);

@@ -1,4 +1,5 @@
 /** The example fields: short flagged links in the map panel, and a card with picture and text for each. */
+import at from 'flag-icons/flags/4x3/at.svg?url';
 import be from 'flag-icons/flags/4x3/be.svg?url';
 import ch from 'flag-icons/flags/4x3/ch.svg?url';
 import de from 'flag-icons/flags/4x3/de.svg?url';
@@ -12,7 +13,7 @@ import FACTS from '../data/examples.json' with { type: 'json' };
 import { EXAMPLES } from './examples.js';
 
 // Only the flags of countries with an example are bundled; add one here with a new country.
-const FLAGS = { be, ch, de, ee, fr, it, nl, us };
+const FLAGS = { at, be, ch, de, ee, fr, it, nl, us };
 const PICTURES = import.meta.glob('../examples/*.png', { eager: true, query: '?url', import: 'default' });
 const countryName = new Intl.DisplayNames(['en'], { type: 'region' });
 const oneDecimal = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });

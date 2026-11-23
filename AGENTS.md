@@ -78,7 +78,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - Heights are read live from each publisher, in the model's own CRS; OpenLayers reprojects the image.
   `dems.js` has one entry per model (`url(bbox, w, h)` for services answering one GeoTIFF, `read()` for COGs)
   and per collection the models to try in order: the first with heights for ≥ 50 % of the field wins (LiDAR HD
-  → RGE ALTI in France, Styria and both Tyrol zones in Austria). Several ArcGIS WCS servers wrap 2.0.1 answers
+  → RGE ALTI in France, Styria, both Tyrol zones and then BEV in Austria). Several ArcGIS WCS servers wrap 2.0.1 answers
   in multipart, so use 1.0.0 there.
 - swissALTI3D: the STAC search takes 3–8 s, so `readSwissAlti3d` sends a HEAD per year for each 1 km tile and
   keeps the newest file found.
@@ -96,16 +96,20 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   import of the JSON itself fails in the Vite dev server). LGLN enabled CORS on request (October 2026): GET
   with `*`, but a preflight with `Range` is refused; Chrome sends a single byte range without preflight.
 - Saxony-Anhalt's WCS sends CORS headers to https origins only, so that model fails on the http dev server.
-- Checked as not usable from a browser (2026-10): Bayern, BEV Austria, Poland, Slovenia (no CORS);
+- Austria: BEV's national ALS-DGM, one 1 m COG of 12 GB per 50 km tile in EPSG:3035 (`readBev`). BEV lists
+  no directory, so `BEV_TILES` holds the 55 tiles that exist (probed November 2026); about 100 quick HEAD requests
+  got the address blocked for some minutes, so probe slowly. BEV enabled CORS on request (November 2026), with
+  preflight. Licence: free under BEV's terms of use (credit BEV), not CC BY.
+- Checked as not usable from a browser (2026-10): Bayern, Poland, Slovenia (no CORS);
   Denmark, Sweden, Portugal (token or login); Wallonia, Slovakia, Croatia, Ireland (rendered images only);
   Czechia, Finland (2 m). fiboa.org is static (GitHub Pages), so two ways are open (the demo first takes the
   sources that are open and browser-readable as they are):
   - Ask the publisher to send `Access-Control-Allow-Origin: *`; free, often one line of server or bucket
     config, but weeks and uncertain. Asked in October 2026: LGLN Niedersachsen (done within a
-    week, see above) and BEV Austria (national COGs, no ACAO, OPTIONS 401).
+    week, see above) and BEV Austria (done in November, see above).
   - A Cloudflare Worker as a narrow CORS proxy: forwards only to an allow-list of DEM hosts (never an open proxy),
     keeps tokens (Denmark's free Dataforsyningen token) as Worker secrets, free tier 100k requests/day. Opens
-    Niedersachsen, Bayern's open tiles, Poland, Slovenia, BEV Austria and Denmark. Needs someone at fiboa to own
+    Bayern's open tiles, Poland, Slovenia and Denmark. Needs someone at fiboa to own
     the Cloudflare account; a `dem.fiboa.org` route only if fiboa.org's DNS moves to Cloudflare, else
     `*.workers.dev`. Sweden would mean sharing one personal Geotorget login through it: ask Lantmäteriet first.
   - Mirroring the models on Source Coop is not worth it: hundreds of GB per country, and it is the slowest link.
