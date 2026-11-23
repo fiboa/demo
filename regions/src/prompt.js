@@ -1,9 +1,5 @@
 export default {
-  prompt: `Add a demo regions/ to this repository: farming regions drawn by their crops. The world map zooms to a region, such as the Corn Belt, Napa Valley, Bordeaux or the olive groves of Jaén, and colours the crops that make it (maize and soybeans for the Corn Belt), the rest faint. Under the map, example cards with a picture and a short text; a click on one flies there and changes the colours.
-
-Large regions need an overview, because the global PMTiles thins its low zoom levels. Build one on the server near the data, the way the FTW global data catalog does (https://github.com/fieldsoftheworld/ftw-global-data-catalog): per A5 cell the number of fields, their area and the hectares per crop group, from a fixed list of crop groups defined by HCAT code prefixes. Publish it as a new PMTiles file next to the existing one, which stays as it is.
-
-Check every number in the example texts against the data in a test. Tell me which regions you expected but could not find in the data, and why.`,
+  prompt: `Make a world map of farming regions drawn by their crops, such as the Corn Belt, Bordeaux or the olive groves of Jaén, from the Fields of the World harmonized field data: colour the crops that make each region, and add example cards that fly there.`,
   conversation: [
     {
       you: 'Shall we work out a few more examples? Farming regions by crop: the Corn Belt, Napa Valley, a French wine region. Zoom the world map to the area, colour the relevant crops and leave the rest faint. Under the map a list of examples with a picture and a text; a click zooms there and changes the colours.',

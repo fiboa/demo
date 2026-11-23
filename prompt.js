@@ -1,5 +1,5 @@
 export default {
-  prompt: `Make the landing page of this demo site a grid of tiles: one per demo, with a picture (one of the demo's example pictures, or a screenshot) and the current text below it. Add a tile for the map at https://fiboa.org/map/. Then add a link to the demos on https://fiboa.org, in the header and on the home page.`,
+  prompt: `Make the landing page of these demos a grid of tiles, one per demo, each with a picture and a short text.`,
   conversation: [
     {
       you: 'fiboa.org needs a link to the demos. Can you make the demo index nicer, with a tile and a picture per demo? You already have pictures for every demo; pick one. Also add a tile for the map at fiboa.org/map.',

@@ -27,9 +27,12 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
 - `shared/planetary.js`: Planetary Computer STAC search, the anonymous SAS token per collection (shared, renewed
   before it expires), a COG window, a small `pool` (season, flood). `shared/openmeteo.js`: daily weather.
 - `shared/prompt.js`: the "Built with a prompt" button and dialog in every page header, filled from
-  `<demo>/src/prompt.js` (`prompt.js` at the root for the landing page): one prompt that builds the page, the
-  conversation it grew from (requests rewritten in English, one line of what the agent did), and a few tips. The
-  page is a teaching example, so keep the prompt self-contained and update it when a demo changes substantially.
+  `<demo>/src/prompt.js` (`prompt.js` at the root for the landing page): the shortest prompt that builds
+  roughly this page, the conversation it grew from (requests rewritten in English, one line of what the agent did),
+  and a few tips. The page teaches what the data can do and how to ask for it: the prompt starts with what to make
+  ("Make a map …"), names the data and the one or two sources and constraints that matter, and leaves out the
+  repository, the directory and the details; those belong in the conversation. Update it when a demo changes
+  substantially.
 - `tests/`: `node --test` suites, run in CI before the build.
 
 ## nl_raster

@@ -1,13 +1,5 @@
 export default {
-  prompt: `Add a demo history/ to this repository: today's fields of the Fields of the World global PMTiles over old maps, with a vertical line you can drag. Left of the line an old map, right of it a recent aerial photo, and the field outlines over both.
-
-- A menu of the old maps that cover the place you are looking at: for example the Dutch Topotijdreis (1815–2016), Ferraris and Vandermaelen in Flanders, Cassini, the État-Major maps and the 1950s aerial photos of IGN in France, swisstopo's Journey through time, the Prussian surveys of North Rhine-Westphalia. Add a year slider where a map has many editions.
-- Today: the national aerial photo where there is one, a global imagery layer elsewhere.
-- Start in the Noordoostpolder on the map of 1930, when it was still sea.
-- The line must work with a mouse, a finger and the keyboard.
-- Add five or six pre-rendered examples as split pictures, old on the left and today on the right: polders, heath turned into farmland, strips merged into blocks.
-
-Use only tile services that a browser can read without a key, and check each one before you use it.`,
+  prompt: `Make a page that shows the fields of the Fields of the World harmonized field data over old maps, with a line you can drag between the old map and a recent aerial photo. Offer the historical maps that cover the place you look at, and add examples such as polders and strips merged into blocks.`,
   conversation: [
     {
       you: 'Start with the historical maps with a swipe line.',

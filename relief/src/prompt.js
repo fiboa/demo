@@ -1,9 +1,5 @@
 export default {
-  prompt: `Add a demo relief/ to this repository. Show the fields of the Fields of the World global PMTiles (https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles, layer "fields") on a map. When I click a field, read the elevation model under that one field and show it as a relief map clipped to the field, with the colours stretched from its lowest to its highest point, and a histogram of its heights.
-
-Only use open elevation models of 1 m or finer that a browser can read directly: the site runs on GitHub Pages, so there is no server of our own. First make a list of candidate models per country or region (https://opendem.info/ is a start), test each one as a browser would (CORS, format, speed) and match them to the collections in the catalog. Show only the collections that have a working model, and tell me which sources fail and why.
-
-When zoomed out, show where the fields with relief are, so the map is never empty. Under the map, add an examples section with interesting fields (old creek beds, terraces, banks of former hedges), each with a pre-rendered picture and a short text.`,
+  prompt: `Make a map of the Fields of the World harmonized field data where a click on a field shows its relief: the elevation under that one field, coloured from its lowest to its highest point. Use only open elevation models of 1 m or finer that a browser can read directly, and add examples such as old creek beds and terraces.`,
   conversation: [
     {
       you: 'What other demos would be interesting? One idea: find public elevation models like the Dutch AHN, and when you click a field, show a contrast-stretched height map inside it. Or an NDVI chart, or statistics per dataset. Think along.',

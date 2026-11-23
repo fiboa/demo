@@ -1,9 +1,5 @@
 export default {
-  prompt: `Add a demo rotation/ to this repository: what grew on every field, year after year.
-
-The Dutch, Flemish and Danish registers in the catalog have an edition for almost every year since 2008, as GeoParquet, and field outlines change between years. For every field of the newest edition, take a point inside it, find the field that held that point in every earlier edition (skip catch crops), and keep its HCAT crop code per year. Do this offline with DuckDB on a machine near the data, and turn the result into a PMTiles file. Ask me before you upload it.
-
-The map gets a menu with three views: how varied the rotation is (the number of different crops), how often one crop came back (maize, potatoes, wheat, …), and the crop in a chosen year, with a slider. Group the crops into at most eight colour-blind-safe groups. A click on a field shows its whole series as a row of coloured cells. Add pre-rendered examples of typical rotations.`,
+  prompt: `Make a map that shows what grew on every field, year after year, from the Dutch, Flemish and Danish parcel registers in the Fields of the World harmonized field data: how varied each rotation is, and a field's whole series when you click it.`,
   conversation: [
     {
       you: 'Get going with crop rotation.',

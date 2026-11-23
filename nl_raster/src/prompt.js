@@ -1,16 +1,5 @@
 export default {
-  prompt: `Create a GitHub repository fiboa/demo for small web demos on the Fields of the World harmonized field data, clone it locally and publish it with GitHub Pages at https://fiboa.org/demo/: a Vite multi-page site, one directory per demo, and a GitHub Action that tests, builds and deploys every push to main.
-
-The first demo, nl_raster, is a dashboard in English about Dutch farmland that disappeared. Its data is a Cloud-Optimized GeoTIFF: https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif. It is a 2 m Byte raster in EPSG:28992; a pixel holds the last year it was a field in the Dutch parcel register (BRP) minus 2000, and 0 means it never was.
-
-The dashboard needs:
-- a short explanation of the data;
-- key figures: how much land disappeared per year, and in total since 2009;
-- a map that reads the COG directly, coloured by last year, with a year slider, that you can zoom into;
-- a few small maps of the clearest clusters of lost farmland;
-- whatever else belongs on such a dashboard: propose it first.
-
-Precompute the statistics in Python on the raster's own 2 m grid, so every breakdown adds up to the national total, and commit them as small JSON files with tests that check the sums. Before you build, ask me about the choices that matter, one at a time.`,
+  prompt: `Make a dashboard about Dutch farmland that disappeared, from https://data.source.coop/ftw/harmonized-field-data/_demo/nl/nl_years.tif: a 2 m raster in which every pixel holds the last year it was a field in the Dutch parcel register, minus 2000 (0: never). Show how much land was lost per year and where, with a map that reads the file directly.`,
   conversation: [
     {
       you: 'Our catalog holds many years of Dutch crop fields. Build a raster that shows, per pixel, the last year a field was there: one byte (0 = no data, 9 = 2009, 26 = 2026), 2 × 2 m, as a Cloud-Optimized GeoTIFF.',

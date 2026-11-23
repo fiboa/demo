@@ -1,12 +1,5 @@
 export default {
-  prompt: `Add a demo flood/ to this repository: click a field of the Fields of the World global PMTiles and see, for a whole year, how much of it stood under water.
-
-- Use Sentinel-1 radar, which sees through the clouds that come with a flood. Calm water reflects little, so a 10 m cell with a low VV backscatter counts as water: start at −18 dB and tune it on real floods. Read the terrain-corrected images (sentinel-1-rtc) from Microsoft Planetary Computer directly in the browser.
-- Draw the share of the field under water in every image of the year, with the daily rain from Open-Meteo as bars on the same time axis.
-- A click on a point of the curve shows the water around the field, about 2 km, on the map for that image.
-- A year menu like the season demo; reuse its Planetary Computer and weather code.
-
-Find a few known floods on fields in the catalog for pre-rendered examples, and say in the page what radar gets wrong: wet bare soil looks like water, flooded crops do not.`,
+  prompt: `Make a page where you click a field of the Fields of the World harmonized field data and see how much of it stood under water through the year, from Sentinel-1 radar on Microsoft Planetary Computer, with the daily rain from Open-Meteo. Add examples of known floods, and say what radar gets wrong.`,
   conversation: [
     {
       you: 'Let us do floods.',

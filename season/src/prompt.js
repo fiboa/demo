@@ -1,12 +1,5 @@
 export default {
-  prompt: `Add a demo season/ to this repository: click any field of the Fields of the World global PMTiles and follow its year, on a page of its own, like the relief demo.
-
-- Vegetation: the NDVI of the field in every clear Sentinel-2 image of the year, as a curve (the median of the field, with a band for the spread), and a true-colour snapshot per month. Read the imagery in the browser from a public STAC catalog of Cloud-Optimized GeoTIFFs. Mask clouds with the scene classification layer and skip images in which the field is not clear.
-- Weather: from Open-Meteo, the rain and the growing degree days since the start of the season, each against the 1991–2020 normal, on the same time axis as the NDVI.
-- A year menu that starts on the edition year of the field's collection, the year its crop label belongs to. South of the equator the season runs from July to June.
-- Plot the points as they come in; a field may take a few seconds.
-
-Before you build, check the imagery sources from the browser's point of view (CORS, tile size, speed) and choose the fastest. Reuse the field selection code of the relief demo. Add pre-rendered examples of contrasting crops: wheat, maize, potatoes, grass, rice.`,
+  prompt: `Make a page where you click a field of the Fields of the World harmonized field data and follow its year: the NDVI from Sentinel-2 as a curve and a picture per month, with rain and warmth from Open-Meteo. Add examples of contrasting crops.`,
   conversation: [
     {
       you: 'What other demos of our field boundaries would be interesting? Combining them with other GIS data often is.',
