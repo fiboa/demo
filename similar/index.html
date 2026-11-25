@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fields like this one</title>
+    <meta name="description" content="Click a field from the Fields of the World harmonized field data and see which fields around it look alike to a satellite foundation model, from the AlphaEarth Foundations embeddings." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#map-section">Map</a>
+        <a href="#examples">Examples</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>Fields like this one</h1>
+        <p class="lede">
+          Click a field. A satellite model has summed up a year of images of every 10 m of land in 64 numbers, an
+          embedding. This page averages them over the field you click, does the same for every field around it, and
+          lights up the ones that come closest. Nobody told the model about crops, yet the fields it finds alike
+          mostly grow the same one.
+        </p>
+      </section>
+
+      <section id="map-section" class="map-section" aria-label="Map of fields, coloured by how alike they are to the chosen one">
+        <div id="map" class="map" tabindex="0"></div>
+        <p id="zoom-hint" class="zoom-hint">Zoom in to see the fields</p>
+        <aside class="map-panel" aria-live="polite">
+          <div id="panel-start">
+            <p class="panel-title">Click any outlined field</p>
+            <p class="panel-note">Zoom in until the outlines show, or start with one of these:</p>
+          </div>
+          <div id="panel-examples" class="examples" role="group" aria-label="Example fields"></div>
+          <p id="panel-status" class="panel-status" role="status" hidden></p>
+          <div id="panel-result" hidden>
+            <p id="field-title" class="panel-title"></p>
+            <p id="field-facts" class="panel-note"></p>
+            <p id="field-verdict" class="verdict"></p>
+            <ol id="field-list" class="alike-list" aria-label="The fields most alike"></ol>
+          </div>
+          <div class="controls">
+            <label>Embeddings of
+              <select id="year" aria-label="Year of the embeddings"></select>
+            </label>
+            <label class="toggle"><input type="checkbox" id="pixels" /> every 10 m pixel</label>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span class="legend-ramp"></span>
+            <span class="legend-labels"><span id="legend-low">less alike</span><span>the same</span></span>
+          </div>
+        </aside>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        <p class="section-lede">
+          A field in white and the fields within 1.5 km of it, the more alike the brighter. The counts under each
+          picture are measured from the same data the map reads; click one to see it there.
+        </p>
+        <div id="example-cards" class="example-cards"></div>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            The newest edition of each collection in the
+            <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World harmonized field data</a>,
+            read from its single PMTiles archive, with the crop each farmer or agency named, in the HCAT crop
+            categories where the collection has them. Field blocks, which several crops can share, are left out.
+          </dd>
+          <dt>Embeddings</dt>
+          <dd>
+            <a href="https://source.coop/tge-labs/aef-mosaic">AlphaEarth Foundations Satellite Embeddings</a>, one
+            64-number summary per 10 m pixel and year (2017–2025), made by Google DeepMind's model from Sentinel-1
+            and -2, Landsat and more. The page reads a mosaic of them as Zarr straight from Source Cooperative,
+            about 2 MB per square of 2.5 km, and averages the pixels whose centre lies in a field.
+          </dd>
+          <dt>Alike</dt>
+          <dd>
+            The cosine similarity of two fields' average embeddings: 1 is the same, and fields of one area land
+            mostly between 0.4 and 1. The colours start at the middle of the fields compared (the median), so half
+            of them stay dark. Fields are compared within a square of 3 km around the one clicked.
+          </dd>
+          <dt>What it gets wrong</dt>
+          <dd>
+            Ten metres is coarse: a field narrower than a few pixels is mostly its edges, hedges and neighbours.
+            Alike means a similar year as the satellites saw it, not the same crop: winter wheat and barley grow and
+            ripen together, and a field that was flooded, mown late or left fallow parts from its crop. The crops on
+            the map are those of the field data's own year, which can differ from the year of the embeddings.
+          </dd>
+          <dt>Inspired by</dt>
+          <dd>
+            Development Seed's
+            <a href="https://developmentseed.org/deck.gl-raster/examples/onnx-embeddings/">deck.gl-raster embeddings example</a>,
+            which runs similarity search, clusters and a classifier on every pixel of the
+            <a href="https://source.coop/tge-labs/aef-mosaic">AEF mosaic on Source Cooperative</a>. This page asks
+            the same question of whole fields.
+          </dd>
+          <dt>Built with</dt>
+          <dd>
+            MapLibre GL, deck.gl, zarrita and PMTiles; everything is computed in your browser. Embeddings: "The
+            AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind" (CC BY
+            4.0). Imagery: Esri World Imagery. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.
+          </dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

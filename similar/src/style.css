@@ -1,0 +1,104 @@
+/* The similarity panel: the verdict, the list of fields most alike, the year menu and the legend. */
+:root {
+  /* The one hue of the similarity scale: on the aerial photo, more alike is brighter and more opaque. */
+  --alike: #ffd23f;
+}
+/* deck.gl draws on a canvas of its own over the map; keep the panel and the hint above it. */
+.map-panel,
+.zoom-hint {
+  z-index: 3;
+}
+.verdict {
+  margin-top: 0.75rem !important;
+  font-size: 0.95rem;
+}
+.verdict strong {
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+.alike-list {
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.alike-list li {
+  display: grid;
+  grid-template-columns: 1.4rem 1fr auto;
+  gap: 0.4rem;
+  align-items: baseline;
+  padding: 0.15rem 0.25rem;
+  border-radius: 3px;
+  cursor: default;
+}
+.alike-list li:hover,
+.alike-list li.is-hover {
+  background: var(--grid);
+}
+.alike-list .rank {
+  color: var(--ink-muted);
+}
+.alike-list .same {
+  font-weight: 700;
+}
+.alike-list .score {
+  color: var(--ink-secondary);
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+}
+.controls select {
+  margin-left: 0.3rem;
+  font: inherit;
+}
+.toggle {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+.legend {
+  margin-top: 0.6rem;
+}
+.legend-ramp {
+  display: block;
+  height: 0.7rem;
+  border-radius: 2px;
+  /* Over a dark ground, as on the map: transparent at the median, the full hue for the field itself. */
+  background: linear-gradient(to right, rgba(255, 210, 63, 0), var(--alike)), #2d3a33;
+}
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--ink-secondary);
+}
+.maplibregl-ctrl-attrib {
+  font-size: 0.7rem;
+}
+
+/* Only the result scrolls, so the examples, the year menu and the legend stay in view. */
+@media (min-width: 52.01rem) {
+  .map-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .map-panel > * {
+    flex: none;
+  }
+  .map-panel > #panel-result {
+    flex: 0 1 auto;
+    min-height: 4rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}

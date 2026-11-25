@@ -1,5 +1,5 @@
 export default {
-  prompt: `Make a page where you click a field of the Fields of the World harmonized field data and see how much of it stood under water through the year, from Sentinel-1 radar on Microsoft Planetary Computer, with the daily rain from Open-Meteo. Add examples of known floods, and say what radar gets wrong.`,
+  prompt: `Make a page where you click a field of the Fields of the World harmonized field data (https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles) and see how much of it stood under water through the year, from Sentinel-1 radar on Microsoft Planetary Computer, with the daily rain from Open-Meteo. Add examples of known floods, and say what radar gets wrong.`,
   conversation: [
     {
       you: 'Let us do floods.',

@@ -10,13 +10,18 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
+    "@deck.gl/core": "9.4.1",
+    "@deck.gl/layers": "9.4.1",
+    "@deck.gl/mapbox": "9.4.1",
     "chart.js": "4.5.1",
     "flag-icons": "7.5.0",
     "geotiff": "3.1.0-beta.0",
+    "maplibre-gl": "6.17.0",
     "ol": "10.11.0",
     "ol-pmtiles": "2.0.2",
     "pmtiles": "4.5.0",
-    "proj4": "2.22.0"
+    "proj4": "2.22.0",
+    "zarrita": "0.7.5"
   },
   "devDependencies": {
     "vite": "8.3.4"

@@ -1,5 +1,5 @@
 export default {
-  prompt: `Make a map of the Fields of the World harmonized field data where a click on a field shows its relief: the elevation under that one field, coloured from its lowest to its highest point. Use only open elevation models of 1 m or finer that a browser can read directly, and add examples such as old creek beds and terraces.`,
+  prompt: `Make a map of the Fields of the World harmonized field data (https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles) where a click on a field shows its relief: the elevation under that one field, coloured from its lowest to its highest point. Use only open elevation models of 1 m or finer that a browser can read directly, and add examples such as old creek beds and terraces.`,
   conversation: [
     {
       you: 'What other demos would be interesting? One idea: find public elevation models like the Dutch AHN, and when you click a field, show a contrast-stretched height map inside it. Or an NDVI chart, or statistics per dataset. Think along.',

@@ -1,0 +1,174 @@
+{
+ "iowa": {
+  "collection": "us_usda_cropland",
+  "crop": "Soybeans",
+  "year": 2024,
+  "fields": 17,
+  "hits": 5,
+  "top": 8,
+  "base": 5,
+  "median": 0.546,
+  "top_crops": [
+   [
+    "Soybeans",
+    5
+   ],
+   [
+    "Corn",
+    3
+   ]
+  ]
+ },
+ "jaen": {
+  "collection": "es",
+  "crop": "OLIVE",
+  "year": 2025,
+  "fields": 299,
+  "hits": 20,
+  "top": 20,
+  "base": 222,
+  "median": 0.945,
+  "top_crops": [
+   [
+    "OLIVE",
+    20
+   ]
+  ]
+ },
+ "champagne": {
+  "collection": "fr",
+  "crop": "Non-forage beet / Swiss chard",
+  "year": 2024,
+  "fields": 241,
+  "hits": 10,
+  "top": 20,
+  "base": 26,
+  "median": 0.857,
+  "top_crops": [
+   [
+    "Non-forage beet / Swiss chard",
+    10
+   ],
+   [
+    "Maize",
+    10
+   ]
+  ]
+ },
+ "bulbs": {
+  "collection": "nl",
+  "crop": "Tulip flower bulbs and tubers",
+  "year": 2025,
+  "fields": 304,
+  "hits": 10,
+  "top": 20,
+  "base": 68,
+  "median": 0.896,
+  "top_crops": [
+   [
+    "Tulip flower bulbs and tubers",
+    10
+   ],
+   [
+    "Dahlia",
+    3
+   ],
+   [
+    "sunflowers",
+    2
+   ],
+   [
+    "Perennials open ground",
+    1
+   ],
+   [
+    "Hyacinth flower bulbs and tubers",
+    1
+   ],
+   [
+    "Gladiolus flower bulbs and tubers",
+    1
+   ],
+   [
+    "Japanese oats",
+    1
+   ],
+   [
+    "Onions leg and plant first year",
+    1
+   ]
+  ]
+ },
+ "krakow": {
+  "collection": "pl",
+  "crop": "grain maize",
+  "year": 2025,
+  "fields": 493,
+  "hits": 13,
+  "top": 20,
+  "base": 100,
+  "median": 0.839,
+  "top_crops": [
+   [
+    "grain maize",
+    13
+   ],
+   [
+    "spring wheat",
+    3
+   ],
+   [
+    "winter wheat",
+    2
+   ],
+   [
+    "sorghum",
+    1
+   ],
+   [
+    "fallow",
+    1
+   ]
+  ]
+ },
+ "grass": {
+  "collection": "pl",
+  "crop": "grasses on arable land",
+  "year": 2025,
+  "fields": 317,
+  "hits": 6,
+  "top": 20,
+  "base": 38,
+  "median": 0.881,
+  "top_crops": [
+   [
+    "permanent grassland",
+    10
+   ],
+   [
+    "grasses on arable land",
+    5
+   ],
+   [
+    "perennial grass mixture",
+    1
+   ],
+   [
+    "grain maize",
+    1
+   ],
+   [
+    "oats",
+    1
+   ],
+   [
+    "mixed crop",
+    1
+   ],
+   [
+    "grasses on fallow land",
+    1
+   ]
+  ]
+ }
+}

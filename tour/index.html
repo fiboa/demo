@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A tour of the field catalog</title>
+    <meta name="description" content="A tour on a globe of the Fields of the World harmonized field data, continent by continent: who publishes field boundaries, how many and why." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="site-name">fiboa demos</a>
+      <nav aria-label="Sections">
+        <a href="#start">Story</a>
+        <a href="#about">About the data</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="story" class="story" aria-label="Story: a tour of the field catalog"></section>
+
+      <section id="about" class="section about">
+        <h2>About the data</h2>
+        <dl>
+          <dt>Fields</dt>
+          <dd>
+            The collections of the <a href="https://source.coop/ftw/harmonized-field-data">Fields of the World
+            harmonized field data</a>, each read from its own PMTiles file of its newest edition. Each collection
+            states how its outlines were made in its <code>boundaries</code> property: <em>declared</em> (by farmers
+            or their paying agency), <em>mapped</em> (drawn by hand from imagery) or <em>inferred</em> (derived by a
+            model). The figures count the fields of the newest edition of each collection, without the collections
+            of field blocks.
+          </dd>
+          <dt>Inspired by</dt>
+          <dd>
+            <a href="https://narrative.allen.ai/olmoearth-embeddings">Another way to view our planet</a>, Ai2's
+            scrolling story about OlmoEarth embeddings: we borrowed its form, a globe that flies to one place per
+            step while the story scrolls past.
+          </dd>
+          <dt>Globe</dt>
+          <dd>MapLibre GL with Esri World Imagery. Code on <a href="https://github.com/fiboa/demo">GitHub</a>.</dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

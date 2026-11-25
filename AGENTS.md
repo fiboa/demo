@@ -30,7 +30,7 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   `<demo>/src/prompt.js` (`prompt.js` at the root for the landing page): the shortest prompt that builds
   roughly this page, the conversation it grew from (requests rewritten in English, one line of what the agent did),
   and a few tips. The page teaches what the data can do and how to ask for it: the prompt starts with what to make
-  ("Make a map …"), names the data and the one or two sources and constraints that matter, and leaves out the
+  ("Make a map …"), names the data (with the PMTiles URL where the page shows the fields) and the one or two sources and constraints that matter, and leaves out the
   repository, the directory and the details; those belong in the conversation. Update it when a demo changes
   substantially.
 - `tests/`: `node --test` suites, run in CI before the build.
@@ -241,3 +241,56 @@ deployed to GitHub Pages at https://fiboa.org/demo/ (the `fiboa` org's custom do
   image. Check it before picking: a field that reads as water in one track only (Hamburg, Iowa, after March
   2019: sand left by the river, or smooth wet soil) is not flooded. Both read ~1 MB per image, so run them on
   terra (node via `pixi global install nodejs`). Hurricane Ida (2021) showed no flooded fields near New Orleans.
+
+## similar
+
+- Click a field: the mean AlphaEarth Foundations (AEF) embedding of its pixels is compared, by cosine, with that
+  of every field in a 3 × 3 km square around it, and the fields light up by how alike they are. The panel says
+  how often the clicked field's crop comes back among the most alike (20, or half the fields where there are
+  fewer than 40) against its share of all fields compared. Address `#lon,lat[,year]`; the year defaults to the
+  edition year of the field's collection, clamped to the mosaic's 2017–2025.
+- Embeddings: the AEF mosaic as Zarr v3 on Source Cooperative (`tge-labs/aef-mosaic`, array `embeddings`
+  [year, 64 bands, y, x], int8, EPSG:4326, 0.0000898° pixels, shards of 4096² holding chunks of 64 × 256 × 256,
+  zstd, about 2 MB each). Dequantise `(q / 127.5)² · sign(q)`, -128 is no data; each pixel's vector has length 1,
+  so the dot product is the cosine. Read with zarrita `getChunk` (`similar/src/data.js`), cached per chunk.
+  Now and then one range request to Source Cooperative never answers: `patientFetch` gives up after 10 s and
+  tries again (up to three times).
+- Fields: the z14 tiles of the global PMTiles that touch the square, read with OL's MVT parser (also in node),
+  the pieces of a field joined by collection/id. Pixels count when their centre is inside (`scanPolygon`,
+  even-odd). Where collections overlap (Spain and its regions) one field per place is kept: the clicked one,
+  then those with an HCAT crop.
+- Map: MapLibre GL 6 with Esri World Imagery and the fields via the pmtiles protocol, coloured with a `match`
+  expression on `collection/id` (one hue, opacity from the median of the fields compared to 1). MapLibre 6 looks
+  for its worker next to its own module, which Vite moves: `setWorkerUrl` with a `?worker&url` import fixes dev
+  and build. deck.gl 9.4's interleaved mode fails with MapLibre 6 (`getViewport` reads `height` of undefined on
+  every frame and the map stops drawing), so the `MapboxOverlay` is not interleaved: the per-pixel similarity
+  (`BitmapLayer` per chunk) lies over the map, and the panel needs a z-index above it.
+- Examples in `similar/src/examples.js`; `node scripts/similar/examples.mjs [id…]` renders the square around
+  each (`similar/src/picture.js`: fields from dark to the hue, the clicked one white) and the counts into
+  `similar/data/examples.json`. Write the card text from those counts. Inspired by Development Seed's
+  deck.gl-raster ONNX embeddings example, credited in the page.
+- Crops are compared on the HCAT code (`cropKey`), by name only where the clicked field has no code: names fail
+  across collections (Spain's OLIVE against Andalusia's OLIVAR, which has no HCAT in the global PMTiles) and
+  between variants. Fields whose crop cannot be compared that way are left out of the counts, not counted as
+  another crop. Only `#panel-result` scrolls, so the examples, year menu and legend stay in view.
+
+## outlines and tour
+
+- Two scrolling stories on a MapLibre globe, on one engine: `shared/story.js` (sticky globe, cards scrolling
+  over it, an IntersectionObserver picks the card at mid-screen and flies there) and `shared/story-facts.js`
+  (the pure part, tested in node: kinds and colours, totals, field counts, the fact list of a card). Steps live in
+  `<demo>/src/steps.js`: `view`, `show` (filled) and `outline` (lines only) collection ids, and the card's HTML.
+- Every figure in the cards comes from `shared/collections.json`, which `node scripts/collections.mjs` makes from
+  the STAC collections: `boundaries` (declared, mapped or inferred), `fields` (`table:row_count` of the newest
+  edition), first and newest year, licence, publisher, bbox and the collection's own PMTiles (its `visual`
+  asset). Rerun it when the catalog changes; the stories follow.
+- Each stop reads the collection's own PMTiles (layer named after the collection, from zoom 0): the global
+  PMTiles lacks the newest collections (Africa, South America, the Prairies, Thünen, California, India…).
+  Zoomed out, each collection is a bubble at the centre of its bbox, area by its number of fields.
+- Colours by kind: declared `#3987e5`, mapped `#d95926`, inferred `#199e70` (dark-mode slots 1–3, validated with the
+  dataviz validator); an outline-only collection of the same kind as a filled one is drawn white.
+- MapLibre 6: a zoom expression must be the outer one (`circle-radius`), or the whole style is refused without an
+  error event before `error` is listened to (`validateStyle` on, errors logged as `[story]`). `isStyleLoaded()` is
+  false while tiles load, so the engine keeps its own `ready` flag. Its worker is set with `setWorkerUrl` from a
+  `?worker&url` import (as in similar/), since Vite moves the module it would load.
+- The form follows Ai2's OlmoEarth embeddings story (narrative.allen.ai/olmoearth-embeddings); both pages credit it.

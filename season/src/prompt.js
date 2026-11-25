@@ -1,5 +1,5 @@
 export default {
-  prompt: `Make a page where you click a field of the Fields of the World harmonized field data and follow its year: the NDVI from Sentinel-2 as a curve and a picture per month, with rain and warmth from Open-Meteo. Add examples of contrasting crops.`,
+  prompt: `Make a page where you click a field of the Fields of the World harmonized field data (https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles) and follow its year: the NDVI from Sentinel-2 as a curve and a picture per month, with rain and warmth from Open-Meteo. Add examples of contrasting crops.`,
   conversation: [
     {
       you: 'What other demos of our field boundaries would be interesting? Combining them with other GIS data often is.',

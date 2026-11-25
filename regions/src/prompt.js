@@ -1,5 +1,5 @@
 export default {
-  prompt: `Make a world map of farming regions drawn by their crops, such as the Corn Belt, Bordeaux or the olive groves of Jaén, from the Fields of the World harmonized field data: colour the crops that make each region, and add example cards that fly there.`,
+  prompt: `Make a world map of farming regions drawn by their crops, such as the Corn Belt, Bordeaux or the olive groves of Jaén, from the Fields of the World harmonized field data (https://data.source.coop/ftw/harmonized-field-data/harmonized-field-data.pmtiles): colour the crops that make each region, and add example cards that fly there.`,
   conversation: [
     {
       you: 'Shall we work out a few more examples? Farming regions by crop: the Corn Belt, Napa Valley, a French wine region. Zoom the world map to the area, colour the relevant crops and leave the rest faint. Under the map a list of examples with a picture and a text; a click zooms there and changes the colours.',

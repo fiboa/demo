@@ -1,270 +1,1266 @@
 {
+ "ai4sf_ml": {
+  "title": "Field boundaries for Cambodia and Vietnam (AI4SmallFarms) with splits",
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "mapped",
+  "fields": 439001,
+  "license": "CC-BY-4.0",
+  "publisher": "DATA Archiving and Networked Services (DANS)",
+  "bbox": [
+   102.9,
+   9.64,
+   109.04,
+   21.34
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ai4sf_ml/year=2021/ai4sf_ml-2021.pmtiles"
+ },
  "at": {
   "title": "Field boundaries for Austria",
-  "year": 2025
+  "year": 2025,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 2944397,
+  "license": "CC-BY-4.0",
+  "publisher": "Agrarmarkt Austria",
+  "bbox": [
+   9.41,
+   46.35,
+   17.23,
+   49.02
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/at/year=2025/at-2025.pmtiles"
  },
  "at_block": {
   "title": "Field blocks for Austria",
-  "year": 2021
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 1299745,
+  "license": "CC-BY-4.0",
+  "publisher": "Agrarmarkt Austria",
+  "bbox": [
+   9.53,
+   46.4,
+   17.16,
+   49.02
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/at_block/year=2021/at_block-2021.pmtiles"
  },
  "be_vlg": {
   "title": "Field boundaries for Flanders, Belgium",
-  "year": 2026
+  "year": 2026,
+  "first": 2008,
+  "boundaries": "declared",
+  "fields": 597088,
+  "license": "other",
+  "publisher": "Agentschap Landbouw & Zeevisserij (Government)",
+  "bbox": [
+   2.53,
+   50.67,
+   5.93,
+   51.5
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/be_vlg/year=2026/be_vlg-2026.pmtiles"
  },
  "be_wal": {
   "title": "Belgium Wallonia: Parcellaire Agricole Anonyme",
-  "year": 2023
+  "year": 2023,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 342315,
+  "license": "CC-BY-4.0",
+  "publisher": null,
+  "bbox": [
+   2.84,
+   49.5,
+   6.41,
+   50.81
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/be_wal/year=2023/be_wal-2023.pmtiles"
  },
  "bg": {
   "title": "Field blocks for Bulgaria",
-  "year": 2025
+  "year": 2025,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 226592,
+  "license": "CC-BY-4.0",
+  "publisher": "Ministry of Agriculture and Food",
+  "bbox": [
+   22.23,
+   41.19,
+   28.62,
+   44.28
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/bg/year=2025/bg-2025.pmtiles"
+ },
+ "br_ba_lem": {
+  "title": "Field boundaries for the west of Bahia state, Brazil",
+  "year": 2020,
+  "first": 2020,
+  "boundaries": "mapped",
+  "fields": 1854,
+  "license": "CC-BY-4.0",
+  "publisher": "Mendeley Data",
+  "bbox": [
+   -46.4,
+   -14.01,
+   -45.49,
+   -11.76
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/br_ba_lem/year=2020/br_ba_lem-2020.pmtiles"
  },
  "br_conab": {
   "title": "Brazil Crop Fields (CONAB)",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "mapped",
+  "fields": 390805,
+  "license": "CC-BY-NC-4.0",
+  "publisher": "Conab",
+  "bbox": [
+   -57.57,
+   -33.67,
+   -39.02,
+   -6.38
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/br_conab/year=2026/br_conab-2026.pmtiles"
+ },
+ "ca_prairies": {
+  "title": "Field boundaries for the Canadian Prairies, derived from Sentinel-2",
+  "year": 2024,
+  "first": 2024,
+  "boundaries": "inferred",
+  "fields": 656082,
+  "license": "CC-BY-4.0",
+  "publisher": "University of Saskatchewan",
+  "bbox": [
+   -120,
+   48.97,
+   -95.47,
+   58.6
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ca_prairies/year=2024/ca_prairies-2024.pmtiles"
  },
  "ch": {
   "title": "Field boundaries for Switzerland",
-  "year": 2026
+  "year": 2026,
+  "first": 2017,
+  "boundaries": "declared",
+  "fields": 1520805,
+  "license": "other",
+  "publisher": "Kanton Aargau, via geodienste.ch",
+  "bbox": [
+   5.92,
+   45.86,
+   10.49,
+   47.81
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ch/latest/ch.pmtiles"
  },
  "cz": {
   "title": "Field boundaries for Czech",
-  "year": 2026
+  "year": 2026,
+  "first": 2019,
+  "boundaries": "declared",
+  "fields": 415300,
+  "license": "CC0-1.0",
+  "publisher": "Czech Ministry of Agriculture (Ministr Zemědělství)",
+  "bbox": [
+   12.1,
+   48.55,
+   18.85,
+   51.04
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/cz/year=2026/cz-2026.pmtiles"
  },
  "de_bb": {
   "title": "Field boundaries for Berlin / Brandenburg, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2010,
+  "boundaries": "declared",
+  "fields": 181768,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Land Brandenburg",
+  "bbox": [
+   11.27,
+   51.36,
+   14.76,
+   53.56
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_bb/year=2026/de_bb-2026.pmtiles"
  },
  "de_bb_block": {
   "title": "Field blocks for Berlin / Brandenburg, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 90849,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Land Brandenburg",
+  "bbox": [
+   11.27,
+   51.36,
+   14.76,
+   53.56
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_bb_block/year=2026/de_bb_block-2026.pmtiles"
  },
  "de_bw": {
   "title": "Field boundaries for Baden-Württemberg, Germany",
-  "year": 2022
+  "year": 2022,
+  "first": 2018,
+  "boundaries": "declared",
+  "fields": 4363087,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Ministerium für Ländlichen Raum und Verbraucherschutz Baden-Württemberg",
+  "bbox": [
+   7.51,
+   47.53,
+   10.48,
+   49.79
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_bw/year=2022/de_bw-2022.pmtiles"
  },
  "de_by": {
   "title": "Field boundaries for Bavaria, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 1296105,
+  "license": "CC-BY-4.0",
+  "publisher": "Bayerische Vermessungsverwaltung",
+  "bbox": [
+   8.98,
+   47.27,
+   13.84,
+   50.56
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_by/year=2026/de_by-2026.pmtiles"
  },
  "de_by_block": {
   "title": "Field blocks for Bavaria, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 1691708,
+  "license": "CC-BY-4.0",
+  "publisher": "Bayerisches Staatsministerium für Ernährung, Landwirtschaft, Forsten und Tourismus",
+  "bbox": [
+   8.98,
+   47.27,
+   13.84,
+   50.56
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_by_block/year=2026/de_by_block-2026.pmtiles"
  },
  "de_he": {
   "title": "Field blocks for Hesse, Germany",
-  "year": 2025
+  "year": 2025,
+  "first": 2023,
+  "boundaries": "declared",
+  "fields": 618218,
+  "license": "CC-BY-4.0",
+  "publisher": "Land Hessen",
+  "bbox": [
+   7.74,
+   49.39,
+   10.24,
+   51.65
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_he/year=2025/de_he-2025.pmtiles"
  },
  "de_mv": {
   "title": "Field blocks for Mecklenburg-Western Pomerania, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 71551,
+  "license": "other",
+  "publisher": "Ministerium für Landwirtschaft und Umwelt M-V",
+  "bbox": [
+   10.59,
+   53.11,
+   14.41,
+   54.68
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_mv/year=2026/de_mv-2026.pmtiles"
  },
  "de_nds": {
   "title": "Crop Fields for Lower Saxony / Bremen / Hamburg, Germany",
-  "year": 2025
+  "year": 2025,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 881956,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "ML/SLA Niedersachsen",
+  "bbox": [
+   6.61,
+   51.28,
+   11.65,
+   53.91
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_nds/year=2025/de_nds-2025.pmtiles"
  },
  "de_nds_block": {
   "title": "Field blocks for Lower Saxony / Bremen / Hamburg, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 539834,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "ML/SLA Niedersachsen",
+  "bbox": [
+   6.67,
+   51.3,
+   11.6,
+   53.93
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_nds_block/year=2026/de_nds_block-2026.pmtiles"
  },
  "de_nrw": {
   "title": "Field blocks for North Rhine-Westphalia (NRW), Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2019,
+  "boundaries": "declared",
+  "fields": 743072,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Land Nordrhein-Westfalen / Open.NRW",
+  "bbox": [
+   5.87,
+   50.32,
+   9.46,
+   52.53
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_nrw/year=2026/de_nrw-2026.pmtiles"
  },
  "de_sax": {
   "title": "Field blocks for Saxony, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 95305,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Sächsisches Landesamt für Umwelt, Landwirtschaft und Geologie",
+  "bbox": [
+   11.87,
+   50.17,
+   15.04,
+   51.68
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_sax/year=2026/de_sax-2026.pmtiles"
  },
  "de_sh": {
   "title": "Field blocks for Schleswig-Holstein (SH), Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2023,
+  "boundaries": "declared",
+  "fields": 194503,
+  "license": "DL-DE-ZERO-2.0",
+  "publisher": "Land Schleswig-Holstein",
+  "bbox": [
+   7.85,
+   53.35,
+   11.35,
+   55.04
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_sh/year=2026/de_sh-2026.pmtiles"
  },
  "de_sl": {
   "title": "Field boundaries for Saarland, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 54038,
+  "license": "CC-BY-4.0",
+  "publisher": "Ministerium für Umwelt, Klima, Mobilität, Agrar und Verbraucherschutz",
+  "bbox": [
+   6.36,
+   49.11,
+   7.4,
+   49.63
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_sl/year=2026/de_sl-2026.pmtiles"
  },
  "de_sl_block": {
   "title": "Field blocks for Saarland, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 62981,
+  "license": "CC-BY-4.0",
+  "publisher": "Ministerium für Umwelt, Klima, Mobilität, Agrar und Verbraucherschutz",
+  "bbox": [
+   6.36,
+   49.11,
+   7.4,
+   49.64
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_sl_block/year=2026/de_sl_block-2026.pmtiles"
  },
  "de_st": {
   "title": "Field blocks for Saxony-Anhalt, Germany",
-  "year": 2023
+  "year": 2023,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 78714,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Ministerium für Wirtschaft, Tourismus, Landwirtschaft und Forsten (MWL) Sachsen-Anhalt",
+  "bbox": [
+   10.56,
+   50.94,
+   13.17,
+   53.04
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_st/year=2023/de_st-2023.pmtiles"
  },
  "de_th": {
   "title": "Field blocks for Thuringia, Germany",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 102174,
+  "license": "DL-DE-BY-2.0",
+  "publisher": "Thüringer Landesamt für Landwirtschaft und Ländlichen Raum",
+  "bbox": [
+   9.88,
+   50.21,
+   12.65,
+   51.64
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_th/year=2026/de_th-2026.pmtiles"
+ },
+ "de_thuenen": {
+  "title": "Crop type map of Germany from Sentinel-1, Sentinel-2 and Landsat (Thünen Institute)",
+  "year": 2021,
+  "first": 2017,
+  "boundaries": "inferred",
+  "fields": 5220733,
+  "license": "CC-BY-4.0",
+  "publisher": "Johann Heinrich von Thünen-Institut",
+  "bbox": [
+   5.87,
+   47.27,
+   15.04,
+   55.05
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/de_thuenen/year=2021/de_thuenen-2021.pmtiles"
  },
  "dk": {
   "title": "Denmark Crop Fields (Marker)",
-  "year": 2026
+  "year": 2026,
+  "first": 2008,
+  "boundaries": "declared",
+  "fields": 604689,
+  "license": "CC0-1.0",
+  "publisher": "Danish Agricultural Agency",
+  "bbox": [
+   8.03,
+   54.44,
+   15.57,
+   57.75
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/dk/year=2026/dk-2026.pmtiles"
  },
  "ec_lt": {
   "title": "Field boundaries for Lithuania - Eurocrops 2021",
-  "year": 2021
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 439199,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Construction Sector Development Agency",
+  "bbox": [
+   21.08,
+   53.91,
+   26.84,
+   56.44
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ec_lt/year=2021/ec_lt-2021.pmtiles"
  },
  "ec_lv": {
   "title": "Field boundaries for Latvia - Eurocrops 2021",
-  "year": 2021
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 432188,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Lauku atbalsta dienests",
+  "bbox": [
+   20.98,
+   55.68,
+   28.22,
+   58.08
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ec_lv/year=2021/ec_lv-2021.pmtiles"
  },
  "ec_ro": {
   "title": "Field boundaries for Romania - Eurocrops",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 259852,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Ministry of Regional Development and Public Administration",
+  "bbox": [
+   22.03,
+   43.63,
+   28.91,
+   45.11
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ec_ro/year=2026/ec_ro-2026.pmtiles"
  },
  "ec_si": {
   "title": "Field boundaries for Slovenia - Eurocrops 2021",
-  "year": 2021
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 828157,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Ministrstvo za kmetijstvo, gozdarstvo in prehrano",
+  "bbox": [
+   13.41,
+   45.42,
+   16.6,
+   46.87
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ec_si/year=2021/ec_si-2021.pmtiles"
  },
  "ee": {
   "title": "Field boundaries for Estonia",
-  "year": 2024
+  "year": 2024,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 166500,
+  "license": "CC-BY-SA-3.0",
+  "publisher": "Põllumajanduse Registrite ja Informatsiooni Amet",
+  "bbox": [
+   21.78,
+   57.52,
+   28.16,
+   59.65
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ee/year=2024/ee-2024.pmtiles"
  },
  "es": {
   "title": "Spain Declared Crops (Cultivos Declarados SIGPAC)",
-  "year": 2025
+  "year": 2025,
+  "first": 2021,
+  "boundaries": "declared",
+  "fields": 17844643,
+  "license": "CC-BY-4.0",
+  "publisher": "Fondo Español de Garantía Agraria (FEGA)",
+  "bbox": [
+   -18.15,
+   27.66,
+   4.31,
+   43.79
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es/year=2025/es-2025.pmtiles"
  },
  "es_an": {
   "title": "Spain Andalusia Crop fields",
-  "year": 2025
+  "year": 2025,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 4415113,
+  "license": "other",
+  "publisher": "Junta de Andalucía",
+  "bbox": [
+   -7.59,
+   35.96,
+   -1.6,
+   38.74
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_an/year=2025/es_an-2025.pmtiles"
  },
  "es_ar": {
   "title": "Spain Aragon Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 2585753,
+  "license": "CC-BY-4.0",
+  "publisher": "Gobierno de Aragon",
+  "bbox": [
+   -2.17,
+   39.85,
+   0.76,
+   42.92
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_ar/year=2026/es_ar-2026.pmtiles"
  },
  "es_cat": {
   "title": "Catalonia Crop Fields (Mapa de cultius)",
-  "year": 2024
+  "year": 2024,
+  "first": 2024,
+  "boundaries": "declared",
+  "fields": 723039,
+  "license": "other",
+  "publisher": "Catalonia Department of Agriculture, Livestock, Fisheries and Food",
+  "bbox": [
+   0.12,
+   40.52,
+   3.3,
+   42.84
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_cat/year=2024/es_cat-2024.pmtiles"
  },
  "es_cb": {
   "title": "Spain Cantabria Crop fields",
-  "year": 2025
+  "year": 2025,
+  "first": 2010,
+  "boundaries": "declared",
+  "fields": 608752,
+  "license": "other",
+  "publisher": "Gobierno de Cantabria",
+  "bbox": [
+   -4.85,
+   42.76,
+   -3.15,
+   43.51
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_cb/year=2025/es_cb-2025.pmtiles"
  },
  "es_cl": {
   "title": "Spain Castile and León Crop fields",
-  "year": 2025
+  "year": 2025,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 9109125,
+  "license": "other",
+  "publisher": "Junta de Castilla y León",
+  "bbox": [
+   -7.08,
+   40.08,
+   -1.77,
+   43.23
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_cl/year=2025/es_cl-2025.pmtiles"
  },
  "es_cm": {
   "title": "Spain Castilla-La Mancha Crop fields",
-  "year": 2024
+  "year": 2024,
+  "first": 2024,
+  "boundaries": "declared",
+  "fields": 6453236,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Unidad de Cartografía. Secretaría General. Consejería de Agricultura, Ganadería y Desarrollo Rural.",
+  "bbox": [
+   -5.41,
+   38.02,
+   -0.92,
+   41.33
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_cm/year=2024/es_cm-2024.pmtiles"
  },
  "es_cn": {
   "title": "Spain Crop fields of Canary Islands",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "mapped",
+  "fields": 461729,
+  "license": "CC-BY-4.0",
+  "publisher": "Gobierno de Canarias - Consejería de Agricultura, Ganadería, Pesca y Soberanía Alimentaria",
+  "bbox": [
+   -18.15,
+   27.65,
+   -13.45,
+   29.28
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_cn/year=2026/es_cn-2026.pmtiles"
  },
  "es_ex": {
   "title": "Spain Extremadura Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 1549765,
+  "license": "CC-BY-4.0",
+  "publisher": "Fondo Español de Garantía Agraria (FEGA)",
+  "bbox": [
+   -7.54,
+   37.94,
+   -4.65,
+   40.48
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_ex/year=2026/es_ex-2026.pmtiles"
  },
  "es_ga": {
   "title": "Spain Galicia Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2014,
+  "boundaries": "declared",
+  "fields": 4978799,
+  "license": "CC-BY-4.0",
+  "publisher": "Virtual Office for Rural Environment",
+  "bbox": [
+   -9.29,
+   41.81,
+   -6.74,
+   43.79
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_ga/year=2026/es_ga-2026.pmtiles"
  },
  "es_ib": {
   "title": "Spain Balearic Islands Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2022,
+  "boundaries": "declared",
+  "fields": 349087,
+  "license": "CC-BY-4.0",
+  "publisher": "Govern de les Illes Balears",
+  "bbox": [
+   1.21,
+   38.64,
+   4.33,
+   40.09
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_ib/year=2026/es_ib-2026.pmtiles"
  },
  "es_md": {
   "title": "Spain Madrid Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 636756,
+  "license": "CC0-1.0",
+  "publisher": "Comunidad de Madrid",
+  "bbox": [
+   -4.58,
+   39.88,
+   -3.05,
+   41.17
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_md/year=2026/es_md-2026.pmtiles"
  },
  "es_nc": {
   "title": "Spain Navarra Crop fields",
-  "year": 2026
+  "year": 2026,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 663167,
+  "license": "CC-BY-4.0",
+  "publisher": "Fondo Español de Garantía Agraria (FEGA)",
+  "bbox": [
+   -2.5,
+   41.91,
+   -0.77,
+   43.31
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_nc/year=2026/es_nc-2026.pmtiles"
  },
  "es_pv": {
   "title": "Spain Basque Country Crop fields",
-  "year": 2025
+  "year": 2025,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 562040,
+  "license": "CC-BY-4.0",
+  "publisher": "Gobierno Vasco",
+  "bbox": [
+   -3.45,
+   42.47,
+   -1.73,
+   43.46
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_pv/year=2025/es_pv-2025.pmtiles"
  },
  "es_vc": {
   "title": "Spain Valencia Crop Fields",
-  "year": 2024
+  "year": 2024,
+  "first": 2024,
+  "boundaries": "declared",
+  "fields": 2319893,
+  "license": "CC-BY-4.0",
+  "publisher": "Spanish Agricultural Guarantee Fund (FEGA) of the Ministry of Agriculture, Fisheries and Food",
+  "bbox": [
+   -1.56,
+   37.82,
+   0.53,
+   40.81
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/es_vc/year=2024/es_vc-2024.pmtiles"
  },
  "fi": {
   "title": "Finnish Crop Fields (Maatalousmaa)",
-  "year": 2025
+  "year": 2025,
+  "first": 2020,
+  "boundaries": "declared",
+  "fields": 985483,
+  "license": "CC-BY-4.0",
+  "publisher": "Finnish Food Authority",
+  "bbox": [
+   19.33,
+   59.81,
+   31.38,
+   70.08
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/fi/year=2025/fi-2025.pmtiles"
  },
  "fr": {
   "title": "Registre Parcellaire Graphique; Crop Fields France",
-  "year": 2024
+  "year": 2024,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 9671468,
+  "license": "other",
+  "publisher": "Anstitut National de l'Information Géographique et Forestière",
+  "bbox": [
+   -5.13,
+   41.37,
+   9.56,
+   51.08
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/fr/year=2024/fr-2024.pmtiles"
+ },
+ "glocab": {
+  "title": "GloCAB cropland field boundaries (Brazil, Canada, Russia, Ukraine, USA)",
+  "year": 2020,
+  "first": 2016,
+  "boundaries": "mapped",
+  "fields": 124417,
+  "license": "CC-BY-4.0",
+  "publisher": "University of Maryland",
+  "bbox": [
+   -102.38,
+   -20.47,
+   75.09,
+   53.94
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/glocab/year=2020/glocab-2020.pmtiles"
  },
  "hr": {
   "title": "Croatian Field Boundaries",
-  "year": 2024
+  "year": 2024,
+  "first": 2011,
+  "boundaries": "declared",
+  "fields": 1284769,
+  "license": "other",
+  "publisher": "Agencija za plaćanja u poljoprivredi, ribarstvu i ruralnom razvoju",
+  "bbox": [
+   13.44,
+   42.39,
+   19.52,
+   46.5
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/hr/year=2024/hr-2024.pmtiles"
  },
  "ie": {
   "title": "Ireland INSPIRE Geospatial aid application (GSAA) dataset",
-  "year": 2024
+  "year": 2024,
+  "first": 2022,
+  "boundaries": "declared",
+  "fields": 1119949,
+  "license": "CC-BY-4.0",
+  "publisher": "Department of Agriculture, Food and the Marine",
+  "bbox": [
+   -10.59,
+   51.42,
+   -5.99,
+   55.38
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ie/year=2024/ie-2024.pmtiles"
  },
  "ie_lpis": {
   "title": "LPIS parcels for Ireland",
-  "year": 2025
+  "year": 2025,
+  "first": 2017,
+  "boundaries": "declared",
+  "fields": 1454480,
+  "license": "CC-BY-4.0",
+  "publisher": "Department of Agriculture, Food and the Marine",
+  "bbox": [
+   -10.59,
+   51.42,
+   -5.99,
+   55.38
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ie_lpis/year=2025/ie_lpis-2025.pmtiles"
+ },
+ "in_10k_ml": {
+  "title": "10,000 Crop Field Boundaries across India with splits",
+  "year": 2020,
+  "first": 2020,
+  "boundaries": "mapped",
+  "fields": 10013,
+  "license": "CC-BY-4.0",
+  "publisher": "Zenodo",
+  "bbox": [
+   68.8,
+   9.25,
+   96.24,
+   34.53
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/in_10k_ml/year=2020/in_10k_ml-2020.pmtiles"
  },
  "it_1": {
   "title": "Italy Tuscany (ITI1) Crop Fields — EuroCropsV2",
-  "year": 2022
+  "year": 2022,
+  "first": 2016,
+  "boundaries": "declared",
+  "fields": 667107,
+  "license": "CC-BY-4.0",
+  "publisher": null,
+  "bbox": [
+   9.72,
+   42.32,
+   12.37,
+   44.47
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/it_1/year=2022/it_1-2022.pmtiles"
  },
  "it_bz": {
   "title": "Field boundaries for South Tyrol, Italy",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 152990,
+  "license": "CC0-1.0",
+  "publisher": "Autonome Provinz Bozen - Südtirol",
+  "bbox": [
+   10.38,
+   46.22,
+   12.48,
+   47.08
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/it_bz/year=2026/it_bz-2026.pmtiles"
  },
  "jp": {
   "title": "Japan Fude Parcels",
-  "year": 2026
+  "year": 2026,
+  "first": 2021,
+  "boundaries": "mapped",
+  "fields": 28103804,
+  "license": "CC-BY-4.0",
+  "publisher": "Japanese Ministry of Agriculture, Forestry and Fisheries (MAFF, 農林水産省)",
+  "bbox": [
+   122.95,
+   24.05,
+   145.8,
+   45.52
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/jp/year=2026/jp-2026.pmtiles"
+ },
+ "ke_ecaas": {
+  "title": "Crop-cut farm polygons with crop type and yield for Kenya (ECAAS Bird's-Eye)",
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "mapped",
+  "fields": 1349,
+  "license": "GPL-2.0-or-later",
+  "publisher": "Pula Advisors",
+  "bbox": [
+   34.11,
+   -3.87,
+   38.72,
+   1.22
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/ke_ecaas/year=2021/ke_ecaas-2021.pmtiles"
+ },
+ "lacuna": {
+  "title": "Mapping Africa: crop field boundary labels for Africa, 2017-2023",
+  "year": 2023,
+  "first": 2017,
+  "boundaries": "mapped",
+  "fields": 88573,
+  "license": "other",
+  "publisher": "Agricultural Impacts Research Group, Clark University",
+  "bbox": [
+   -17.14,
+   -29.98,
+   47.25,
+   18.27
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/lacuna/year=2023/lacuna-2023.pmtiles"
  },
  "lt": {
   "title": "Lithuania crop fields",
-  "year": 2025
+  "year": 2025,
+  "first": 2024,
+  "boundaries": "declared",
+  "fields": 1156767,
+  "license": "CC-BY-4.0",
+  "publisher": "Nacionalinė mokėjimo agentūra prie Žemės ūkio ministerijos",
+  "bbox": [
+   21.07,
+   53.9,
+   26.84,
+   56.44
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/lt/year=2025/lt-2025.pmtiles"
  },
  "lu": {
   "title": "Field blocks for Luxembourg",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 87997,
+  "license": "CC-BY-4.0",
+  "publisher": "Administration des services techniques de l'agriculture",
+  "bbox": [
+   5.74,
+   49.45,
+   6.53,
+   50.18
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/lu/year=2026/lu-2026.pmtiles"
  },
  "lv": {
   "title": "Latvia Lauki Parcels",
-  "year": 2025
+  "year": 2025,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 417383,
+  "license": "CC-BY-SA-4.0",
+  "publisher": "Rural Support Service Republic of Latvia (Lauku atbalsta dienests)",
+  "bbox": [
+   20.84,
+   55.63,
+   28.43,
+   58.04
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/lv/year=2025/lv-2025.pmtiles"
  },
  "nl": {
   "title": "BRP Crop Field Boundaries for The Netherlands (CAP-based)",
-  "year": 2026
+  "year": 2026,
+  "first": 2005,
+  "boundaries": "declared",
+  "fields": 1266361,
+  "license": "CC0-1.0",
+  "publisher": "RVO / PDOK",
+  "bbox": [
+   3.36,
+   50.75,
+   7.22,
+   53.51
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/nl/year=2026/nl-2026.pmtiles"
  },
  "nl_block": {
   "title": "Field blocks for The Netherlands",
-  "year": 2026
+  "year": 2026,
+  "first": 2026,
+  "boundaries": "declared",
+  "fields": 534786,
+  "license": "CC0-1.0",
+  "publisher": "RVO / PDOK",
+  "bbox": [
+   3.36,
+   50.75,
+   7.22,
+   53.5
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/nl_block/year=2026/nl_block-2026.pmtiles"
  },
  "nz": {
   "title": "Irrigated land area",
-  "year": 2020
+  "year": 2020,
+  "first": 2017,
+  "boundaries": "mapped",
+  "fields": 42133,
+  "license": "CC-BY-4.0",
+  "publisher": "Aqualinc Research Limited",
+  "bbox": [
+   167.63,
+   -46.33,
+   178.88,
+   -34.78
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/nz/year=2020/nz-2020.pmtiles"
  },
  "pl": {
   "title": "Field boundaries for Poland",
-  "year": 2026
+  "year": 2026,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 10653830,
+  "license": "other",
+  "publisher": "Agencja Restrukturyzacji i Modernizacji Rolnictwa",
+  "bbox": [
+   14.13,
+   49.05,
+   24.15,
+   54.83
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/pl/year=2026/pl-2026.pmtiles"
  },
  "pl_block": {
   "title": "Field blocks for Poland",
-  "year": 2025
+  "year": 2025,
+  "first": 2025,
+  "boundaries": "declared",
+  "fields": 12955563,
+  "license": "other",
+  "publisher": "Agencja Restrukturyzacji i Modernizacji Rolnictwa",
+  "bbox": [
+   14.12,
+   49.01,
+   24.15,
+   54.84
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/pl_block/year=2025/pl_block-2025.pmtiles"
  },
  "pt": {
   "title": "Field boundaries for Portugal",
-  "year": 2025
+  "year": 2025,
+  "first": 2017,
+  "boundaries": "declared",
+  "fields": 3568823,
+  "license": "other",
+  "publisher": "IPAP - Instituto de Financiamento da Agricultura e Pescas",
+  "bbox": [
+   -31.27,
+   32.63,
+   -6.19,
+   42.15
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/pt/year=2025/pt-2025.pmtiles"
+ },
+ "rw_rwanda_ml": {
+  "title": "Rwanda Crop Field Boundaries with splits",
+  "year": 2021,
+  "first": 2021,
+  "boundaries": "mapped",
+  "fields": 1532,
+  "license": "CC-BY-4.0",
+  "publisher": "NASA Harvest",
+  "bbox": [
+   30.29,
+   -1.59,
+   30.42,
+   -1.39
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/rw_rwanda_ml/year=2021/rw_rwanda_ml-2021.pmtiles"
  },
  "se": {
   "title": "Swedish Crop Fields (Jordbruksskiften)",
-  "year": 2025
+  "year": 2025,
+  "first": 2015,
+  "boundaries": "declared",
+  "fields": 1207889,
+  "license": "CC0-1.0",
+  "publisher": "Jordbruksverket (The Swedish Board of Agriculture)",
+  "bbox": [
+   10.97,
+   55.34,
+   24.13,
+   68.91
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/se/year=2025/se-2025.pmtiles"
  },
  "si": {
   "title": "Slovenia Crop Fields",
-  "year": 2024
+  "year": 2024,
+  "first": 2019,
+  "boundaries": "declared",
+  "fields": 809044,
+  "license": "other",
+  "publisher": "Ministry of Agriculture, Forestry and Food (Ministrstvo za kmetijstvo, gozdarstvo in prehrano)",
+  "bbox": [
+   13.39,
+   45.41,
+   16.61,
+   46.87
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/si/year=2024/si-2024.pmtiles"
  },
  "sk": {
   "title": "Slovakia Agricultural Land Identification System",
-  "year": 2026
+  "year": 2026,
+  "first": 2018,
+  "boundaries": "declared",
+  "fields": 271807,
+  "license": "CC0-1.0",
+  "publisher": "Pôdohospodárska platobná agentúra",
+  "bbox": [
+   16.67,
+   47.65,
+   22.58,
+   49.7
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/sk/year=2026/sk-2026.pmtiles"
  },
  "us_ca_scm": {
   "title": "California (US) Statewide Crop Mapping",
-  "year": 2024
+  "year": 2024,
+  "first": 2014,
+  "boundaries": "mapped",
+  "fields": 447944,
+  "license": "CC0-1.0",
+  "publisher": "California Department of Water Resources",
+  "bbox": [
+   -124.38,
+   32.54,
+   -114.49,
+   42.01
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/us_ca_scm/year=2024/us_ca_scm-2024.pmtiles"
  },
  "us_usda_cropland": {
   "title": "U.S. Department of Agriculture Crop Sequence Boundaries",
-  "year": 2024
+  "year": 2024,
+  "first": 2017,
+  "boundaries": "inferred",
+  "fields": 7541673,
+  "license": "other",
+  "publisher": "United States Department of Agriculture",
+  "bbox": [
+   -124.56,
+   25.21,
+   -66.97,
+   49.36
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/us_usda_cropland/year=2024/us_usda_cropland-2024.pmtiles"
+ },
+ "wri_trazo_ml": {
+  "title": "Trazo field boundary annotations for South America with splits",
+  "year": 2024,
+  "first": 2020,
+  "boundaries": "mapped",
+  "fields": 6092,
+  "license": "CC-BY-4.0",
+  "publisher": "World Resources Institute and Arizona State University",
+  "bbox": [
+   -76.76,
+   -38.92,
+   -39.01,
+   1.74
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/wri_trazo_ml/year=2024/wri_trazo_ml-2024.pmtiles"
+ },
+ "za_fusion_ml": {
+  "title": "South Africa Crop Field Boundaries (Fusion Competition) with splits",
+  "year": 2017,
+  "first": 2017,
+  "boundaries": "mapped",
+  "fields": 6568,
+  "license": "CC-BY-4.0",
+  "publisher": "ESA Fusion Competition via Source Cooperative",
+  "bbox": [
+   20.52,
+   -34.4,
+   21.04,
+   -33.98
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/za_fusion_ml/year=2017/za_fusion_ml-2017.pmtiles"
+ },
+ "zm_ecaas": {
+  "title": "Crop-cut farm polygons with crop type and yield for Zambia (ECAAS Bird's-Eye)",
+  "year": 2022,
+  "first": 2022,
+  "boundaries": "mapped",
+  "fields": 2711,
+  "license": "GPL-2.0-or-later",
+  "publisher": "Pula Advisors",
+  "bbox": [
+   22.1,
+   -17.87,
+   33.51,
+   -8.4
+  ],
+  "pmtiles": "https://data.source.coop/ftw/harmonized-field-data/zm_ecaas/year=2022/zm_ecaas-2022.pmtiles"
  }
 }
